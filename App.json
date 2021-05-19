@@ -1,4 +1,10 @@
 [
+ 
+ {
+'image':'https://raw.githubusercontent.com/PipoDelgiudice/personal/main/images/icon.png',
+'text':'Web personal',
+'url':'http://www.pipo.ga/'
+},
 {
 'image':'https://raw.githubusercontent.com/PipoDelgiudice/personal/main/images/bitcoin.png',
 'text':'Inicia en el mundo de BTC',
@@ -14,3 +20,5 @@
 'url':'https://www.taringa.net/pipo1995_2'
 }
 ]
+
+
