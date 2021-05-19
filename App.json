@@ -3,21 +3,21 @@
  {
 'image':'https://raw.githubusercontent.com/PipoDelgiudice/personal/main/images/icon.png',
 'text':'Web personal',
-'url':'http://www.pipo.ga/'
+'Link':'http://www.pipo.ga/'
 },
 {
 'image':'https://raw.githubusercontent.com/PipoDelgiudice/personal/main/images/bitcoin.png',
 'text':'Inicia en el mundo de BTC',
-'url':'https://www.binance.com/es-LA/register?ref=AOO7JT41'
+'Link':'https://www.binance.com/es-LA/register?ref=AOO7JT41'
 },{
 'image':'https://raw.githubusercontent.com/PipoDelgiudice/personal/main/images/dinero.png',
 'text':'Aprendé a hacer traiding',
-'url':'https://www.taringa.net/+economia_negocios/como-hacer-trading-en-binance_33e9k8'
+'Link':'https://www.taringa.net/+economia_negocios/como-hacer-trading-en-binance_33e9k8'
 },
  {
 'image':'https://raw.githubusercontent.com/PipoDelgiudice/personal/main/images/Tnewlogo.jpg',
 'text':'Seguime en T!',
-'url':'https://www.taringa.net/pipo1995_2'
+'Link':'https://www.taringa.net/pipo1995_2'
 }
 ]
 
