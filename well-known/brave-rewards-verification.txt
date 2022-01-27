@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: pipo.ga
+Token: 991bf321342ece48efac14d25422d6f6c81fb013702e49712d0c94d005932107
