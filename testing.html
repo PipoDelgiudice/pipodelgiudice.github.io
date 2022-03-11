@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<!-- Head -->
+<head>
+<script data-ad-client="ca-pub-3561826385481829" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<title>Pipo Del Giudice</title>
+<link rel="icon" href="images/icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="keywords" content="Professional CV a Responsive web template, Bootstrap Web, Pipo Del Giudice, Pipo, aplicaciones, Android, tecnologia, Argentina, Cordoba, Rio Cuarto, python, C++, C, UNRC, Universidad Nacional de Rio Cuarto, Taringa, bitcoin, binance, criptomonedas" />
+
+
+<style>
+table, th, td {
+  border: 1px solid;
+}
+</style>
+</head>
+<!-- Body -->
+<body>
+test
+<p id="title"></p>
+<p id="contact"></p>
+<p id="description"></p>
+<p id="demo"></p>
+<p id="demoAll"></p>
+<p id="ID"></p>
+<p id="Auth"></p>
+<p id="data"></p>
+<table id="demo2"></table>
+<script>
+
+    function httpGetList(theUrl)
+      {
+        var xmlHttp = new XMLHttpRequest();
+        console.log(theUrl)
+        xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+        xmlHttp.send( null );
+        console.log(xmlHttp.status)
+        console.log(xmlHttp.responseText)
+        //console.log(JSON.stringify(xmlHttp.responseText));
+        //return JSON.stringify(xmlHttp.responseText);
+        return JSON.parse(xmlHttp.responseText);
+    }
+
+	let url = document.URL;
+	let params = (new URL(url)).searchParams;
+	console.log(params.get('ID').split('-')[0]);
+	var event_code=params.get('ID').split('-')[0]
+	var invite_code=params.get('ID').split('-')[1]
+	document.getElementById("demo").innerHTML = 'Codigo evento: ' +params.get('ID').split('-')[0];
+	document.getElementById("demoAll").innerHTML = 'Codigo invitado: '+ params.get('ID').split('-')[1];
+	document.getElementById("ID").innerHTML = params.getAll('ID');
+	ID = params.get('ID');
+
+	var event = httpGetList("https://taxidriver-38912-default-rtdb.firebaseio.com/"+event_code+"/"+invite_code+".json");
+	if (event != null){
+	    document.getElementById("Auth").innerHTML = "Esaa";
+        var Info = httpGetList("https://taxidriver-38912-default-rtdb.firebaseio.com/"+event_code+"/Info.json");
+        document.getElementById("title").innerHTML = Info.Title
+        document.getElementById("description").innerHTML = Info.Description
+        document.getElementById("contact").innerHTML = Info.Contact
+        var List = httpGetList("https://taxidriver-38912-default-rtdb.firebaseio.com/"+event_code+"/"+invite_code+".json");
+
+        var table =''
+        console.log(List.Invitados.length)
+        if(List.Invitados.length>0){
+          table = '<tr>'+'<td>Nombre</td>'+'</tr>';
+        }
+
+        for (x of List.Invitados) {
+          if (x != null){
+          console.log(x);
+          table +='<tr><td>'+ x +'</td></tr>';
+          }
+        }
+        document.getElementById("demo2").innerHTML = table;
+	}
+	else{
+	    document.getElementById("Auth").innerHTML = "Sabes que no";
+	}
+
+
+</script>
+</body>
+<!-- //Body -->
+</html>
