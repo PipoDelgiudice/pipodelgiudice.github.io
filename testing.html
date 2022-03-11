@@ -11,11 +11,17 @@
 <meta name="keywords" content="Professional CV a Responsive web template, Bootstrap Web, Pipo Del Giudice, Pipo, aplicaciones, Android, tecnologia, Argentina, Cordoba, Rio Cuarto, python, C++, C, UNRC, Universidad Nacional de Rio Cuarto, Taringa, bitcoin, binance, criptomonedas" />
 
 
-<style>
-table, th, td {
-  border: 1px solid;
-}
-</style>
+
+    <!-- Bootstrap core CSS -->
+    <link type="text/css" rel="stylesheet" href="css/cm-overlay.css" />
+    <!-- custom css theme files -->
+	<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" media="all">
+	<link rel="stylesheet" href="css/font-awesome.min.css" />
+	<link rel="stylesheet" href="css/style.css" type="text/css" media="all">
+<!-- //custom css theme files -->
+
+    <!-- Custom styles for this template -->
+    <link href="narrow-jumbotron.css" rel="stylesheet">
 </head>
 <!-- Body -->
 <body>
@@ -29,6 +35,13 @@ test
 <p id="Auth"></p>
 <p id="data"></p>
 <table id="demo2"></table>
+
+<div class="container">
+    <h2>Invitados</h2>
+    <ul class="list-group" style="float: none; text-align: center; text-decoration-color: rgb(233, 28, 28); text-decoration-line: none;" id="Lista">
+    </ul>
+</div>
+
 <script>
 
     function httpGetList(theUrl)
@@ -64,18 +77,22 @@ test
         var List = httpGetList("https://taxidriver-38912-default-rtdb.firebaseio.com/"+event_code+"/"+invite_code+".json");
 
         var table =''
+        lista = ''
         console.log(List.Invitados.length)
         if(List.Invitados.length>0){
           table = '<tr>'+'<td>Nombre</td>'+'</tr>';
-        }
+          lista += '<li class="list-group-item list-group-item-info">'+'Invitados'+'</li>'
+         }
 
         for (x of List.Invitados) {
           if (x != null){
           console.log(x);
           table +='<tr><td>'+ x +'</td></tr>';
+          lista += '<li class="list-group-item">'+x+'</li>'
           }
         }
-        document.getElementById("demo2").innerHTML = table;
+        //document.getElementById("demo2").innerHTML = table;
+        document.getElementById("Lista").innerHTML = lista;
 	}
 	else{
 	    document.getElementById("Auth").innerHTML = "Sabes que no";
@@ -83,6 +100,8 @@ test
 
 
 </script>
+
+
 </body>
 <!-- //Body -->
 </html>
