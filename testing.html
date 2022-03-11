@@ -37,7 +37,10 @@ test
 <table id="demo2"></table>
 
 <div class="container">
-    <h2>Invitados</h2>
+
+    <div class="jumbotron" id="info">
+    </div>
+
     <ul class="list-group" style="float: none; text-align: center; text-decoration-color: rgb(233, 28, 28); text-decoration-line: none;" id="Lista">
     </ul>
 </div>
@@ -74,6 +77,11 @@ test
         document.getElementById("title").innerHTML = Info.Title
         document.getElementById("description").innerHTML = Info.Description
         document.getElementById("contact").innerHTML = Info.Contact
+        var contact_url = "https://api.whatsapp.com/send/?phone=" + Info.Contact + "&text=Hola+queria+consultarte+por+el+evento+" + Info.Title;
+
+        document.getElementById("info").innerHTML = '<h1 class="display-3">' + Info.Title + '</h1><p class="lead">' + Info.Description + '</p><p><a class="btn btn-lg btn-success" href="' + contact_url + '" role="button"> Contacto </a></p>';
+
+
         var List = httpGetList("https://taxidriver-38912-default-rtdb.firebaseio.com/"+event_code+"/"+invite_code+".json");
 
         var table =''
@@ -96,6 +104,7 @@ test
 	}
 	else{
 	    document.getElementById("Auth").innerHTML = "Sabes que no";
+	    document.getElementById("info").innerHTML = '<p class="lead">' + 'No hay invitados registrado a ' + event_code +'-'+invite_code+ '</p>';
 	}
 
 
