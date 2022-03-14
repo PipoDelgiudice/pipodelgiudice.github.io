@@ -25,22 +25,17 @@
 </head>
 <!-- Body -->
 <body>
-test
-<p id="title"></p>
-<p id="contact"></p>
-<p id="description"></p>
-<p id="demo"></p>
-<p id="demoAll"></p>
-<p id="ID"></p>
-<p id="Auth"></p>
-<p id="data"></p>
-<table id="demo2"></table>
+
+
+
 
 <div class="container">
 
     <div class="jumbotron" id="info">
     </div>
-
+    <br>
+    <div id="principal"></div>
+    <br>
     <ul class="list-group" style="float: none; text-align: center; text-decoration-color: rgb(233, 28, 28); text-decoration-line: none;" id="Lista">
     </ul>
 </div>
@@ -65,25 +60,19 @@ test
 	console.log(params.get('ID').split('-')[0]);
 	var event_code=params.get('ID').split('-')[0]
 	var invite_code=params.get('ID').split('-')[1]
-	document.getElementById("demo").innerHTML = 'Codigo evento: ' +params.get('ID').split('-')[0];
-	document.getElementById("demoAll").innerHTML = 'Codigo invitado: '+ params.get('ID').split('-')[1];
-	document.getElementById("ID").innerHTML = params.getAll('ID');
 	ID = params.get('ID');
 
 	var event = httpGetList("https://taxidriver-38912-default-rtdb.firebaseio.com/"+event_code+"/"+invite_code+".json");
 	if (event != null){
-	    document.getElementById("Auth").innerHTML = "Esaa";
         var Info = httpGetList("https://taxidriver-38912-default-rtdb.firebaseio.com/"+event_code+"/Info.json");
-        document.getElementById("title").innerHTML = Info.Title
-        document.getElementById("description").innerHTML = Info.Description
-        document.getElementById("contact").innerHTML = Info.Contact
         var contact_url = "https://api.whatsapp.com/send/?phone=" + Info.Contact + "&text=Hola+queria+consultarte+por+el+evento+" + Info.Title;
 
         document.getElementById("info").innerHTML = '<h1 class="display-3">' + Info.Title + '</h1><p class="lead">' + Info.Description + '</p><p><a class="btn btn-lg btn-success" href="' + contact_url + '" role="button"> Contacto </a></p>';
 
 
         var List = httpGetList("https://taxidriver-38912-default-rtdb.firebaseio.com/"+event_code+"/"+invite_code+".json");
-
+        console.log(List.Principal)
+        document.getElementById("principal").innerHTML = '<h2 class="display-3"> ' + List.Principal.Nombre + ' esta coordialmente invitado a '+Info.Title+'</h1>';
         var table =''
         lista = ''
         console.log(List.Invitados.length)
@@ -103,7 +92,7 @@ test
         document.getElementById("Lista").innerHTML = lista;
 	}
 	else{
-	    document.getElementById("Auth").innerHTML = "Sabes que no";
+	    //document.getElementById("Auth").innerHTML = "Sabes que no";
 	    document.getElementById("info").innerHTML = '<p class="lead">' + 'No hay invitados registrado a ' + event_code +'-'+invite_code+ '</p>';
 	}
 
