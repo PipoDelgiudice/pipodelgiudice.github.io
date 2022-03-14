@@ -75,20 +75,19 @@
         document.getElementById("principal").innerHTML = '<h2 class="display-3"> ' + List.Principal.Nombre + ' esta coordialmente invitado a '+Info.Title+'</h1>';
         var table =''
         lista = ''
-        console.log(List.Invitados.length)
-        if(List.Invitados.length>0){
-          table = '<tr>'+'<td>Nombre</td>'+'</tr>';
-          lista += '<li class="list-group-item list-group-item-info">'+'Invitados'+'</li>'
-         }
+        //console.log(List.Invitados.length)
+        //if(List.Invitados.length>0){
 
-        for (x of List.Invitados) {
-          if (x != null){
-          console.log(x);
-          table +='<tr><td>'+ x +'</td></tr>';
-          lista += '<li class="list-group-item">'+x+'</li>'
-          }
+        lista += '<li class="list-group-item list-group-item-info">'+'Invitados'+'</li>';
+        lista += '<li class="list-group-item">'+List.Principal.Nombre+'</li>';
+         //}
+        if(List.hasOwnProperty('Invitados')){
+            for (x of List.Invitados) {
+              if (x != null){
+              lista += '<li class="list-group-item">'+x+'</li>'
+              }
+            }
         }
-        //document.getElementById("demo2").innerHTML = table;
         document.getElementById("Lista").innerHTML = lista;
 	}
 	else{
