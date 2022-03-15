@@ -30,3 +30,4 @@ function validateCode(){
         alert('El código ' + code + ' no es válido');
 	}
 }
+
