@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="images/icon.png">
+
+    <title>Analizador de Post</title>
+  <!-- PLUGINS CSS STYLE -->
+  <link rel="stylesheet" href="plugins/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="plugins/themify-icons/themify-icons.css">
+  <link rel="stylesheet" href="plugins/aos/aos.css">
+
+
+  <!-- CUSTOM CSS -->
+  <link href="css/style_project.css" rel="stylesheet">
+
+<!-- //custom css theme files -->
+
+    <!-- Custom styles for this template -->
+    <link href="narrow-jumbotron.css" rel="stylesheet">
+  </head>
+
+<body>
+
+<section class="section gradient-banner2">
+	<div class="shapes-container">
+		<div class="shape" data-aos="fade-down-left" data-aos-duration="1500" data-aos-delay="100"></div>
+		<div class="shape" data-aos="fade-down" data-aos-duration="1000" data-aos-delay="100"></div>
+		<div class="shape" data-aos="fade-up-right" data-aos-duration="1000" data-aos-delay="200"></div>
+		<div class="shape" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200"></div>
+		<div class="shape" data-aos="fade-down-left" data-aos-duration="1000" data-aos-delay="100"></div>
+		<div class="shape" data-aos="fade-down-left" data-aos-duration="1000" data-aos-delay="100"></div>
+		<div class="shape" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="300"></div>
+		<div class="shape" data-aos="fade-down-right" data-aos-duration="500" data-aos-delay="200"></div>
+		<div class="shape" data-aos="fade-down-right" data-aos-duration="500" data-aos-delay="100"></div>
+		<div class="shape" data-aos="zoom-out" data-aos-duration="2000" data-aos-delay="500"></div>
+		<div class="shape" data-aos="fade-up-right" data-aos-duration="500" data-aos-delay="200"></div>
+		<div class="shape" data-aos="fade-down-left" data-aos-duration="500" data-aos-delay="100"></div>
+		<div class="shape" data-aos="fade-up" data-aos-duration="500" data-aos-delay="0"></div>
+		<div class="shape" data-aos="fade-down" data-aos-duration="500" data-aos-delay="0"></div>
+		<div class="shape" data-aos="fade-up-right" data-aos-duration="500" data-aos-delay="100"></div>
+		<div class="shape" data-aos="fade-down-left" data-aos-duration="500" data-aos-delay="0"></div>
+	</div>
+	<div class="container">
+		<div class="row align-items-center">
+			<div class="col-md-12 order-2 order-md-1 text-center text-md-center">
+                <input type="text" placeholder="Ingrese su Código..." id="Code" class="form-control">
+                <br>
+                <br>
+                <button type="button" onclick="analitics_post();" class="btn btn-primary">Ingresar</button>
+			</div>
+
+		</div>
+	</div>
+</section>
+
+<!--
+<section class="section pt-0 position-relative pull-top">
+	<div class="container">
+		<div class="rounded shadow p-5 bg-white">
+			<div class="row">
+				<div class="col-lg-4 col-md-6 mt-5 mt-md-0 text-center">
+					<i class="ti-mobile text-primary h1"></i>
+					<h3 class="mt-4 text-capitalize h5 ">Fácil de usar</h3>
+					<p class="regular text-muted">Solo inicie la aplicación, introduzca su codigo y listo... del resto se ocupa la app.</p>
+				</div>
+				<div class="col-lg-4 col-md-6 mt-5 mt-md-0 text-center">
+					<i class="ti-android text-primary h1"></i><i class="ti-apple text-primary h1"></i>
+					<h3 class="mt-4 text-capitalize h5 ">Altamente compatible</h3>
+					<p class="regular text-muted">texto</p>
+				</div>
+				<div class="col-lg-4 col-md-12 mt-5 mt-lg-0 text-center">
+					<i class="ti-layout-list-thumb-alt text-primary h1"></i>
+					<h3 class="mt-4 text-capitalize h5 ">Lleva un registro de tus invitados</h3>
+					<p class="regular text-muted">Podrás llevar un registros de tus invitados, como asi hacer el check-in.</p>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+-->
+<div class="container">
+
+    <div class="jumbotron" id="info">
+    </div>
+    <br>
+    <div id="principal"></div>
+    <br>
+    <ul class="list-group" style="float: none; text-align: center; text-decoration-color: rgb(233, 28, 28); text-decoration-line: none;" id="Lista">
+    </ul>
+
+    <br>
+    <ul class="list-group" style="float: none; text-align: center; text-decoration-color: rgb(233, 28, 28); text-decoration-line: none;" id="Lista-positivos">
+    </ul>
+
+    <br>
+    <br>
+</div>
+
+    <script>
+    var input = document.getElementById("Code");
+    input.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+       event.preventDefault();
+       analitics_post();
+      }
+    });
+    </script>
+    <script src="js/script_api.js"></script>
+  <!-- JAVASCRIPTS -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <script src="plugins/bootstrap/bootstrap.min.js"></script>
+  <script src="plugins/aos/aos.js"></script>
+
+  <script src="js/script.js"></script>
+</div>
+
+</body>
+</html>
