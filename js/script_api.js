@@ -44,13 +44,13 @@ function analitics_post(){
 	if (event != null){
         var Info = httpGetList("https://beta.taringa.net/api/story/"+id+"/voters/down");
         console.log(Info.items);
+        var lista = ''
+
+        lista += '<br><br><li class="list-group-item list-group-item-danger">'+'Negativos'+'</li>';
 
         if(Info.items.length > 0){
-            var lista = ''
             console.log(Info.items.length)
             //if(List.Invitados.length>0){
-
-            lista += '<li class="list-group-item list-group-item-info">'+'Negativos'+'</li>';
             for (x of Info.items) {
               console.log(x.username);
               if (x != null){
@@ -58,22 +58,28 @@ function analitics_post(){
               }
             }
         }
+        else{
+              lista += '<li class="list-group-item">No hay negativos</li>';
+        }
         document.getElementById("Lista").innerHTML = lista;
         var Info = httpGetList("https://beta.taringa.net/api/story/"+id+"/voters/up");
         console.log(Info.items);
+        var lista = ''
+
+        lista += '<li class="list-group-item list-group-item-info">'+'Positivos'+'</li>';
 
         if(Info.items.length > 0){
-            var lista = ''
             console.log(Info.items.length)
             //if(List.Invitados.length>0){
-
-            lista += '<li class="list-group-item list-group-item-info">'+'Positivos'+'</li>';
             for (x of Info.items) {
               console.log(x.username);
               if (x != null){
-              lista += '<li class="list-group-item">'+x.username+'</li>';
+              lista += '<li class="list-group-item">'+'<a href="https://www.taringa.net/'+x.username+'"> '+x.username+'</a>'+'</li>';
               }
             }
+        }
+        else{
+              lista += '<li class="list-group-item">No hay positivos</li>';
         }
         document.getElementById("Lista-positivos").innerHTML = lista;
    }
@@ -82,4 +88,5 @@ function analitics_post(){
     //alert(inputVal);
 
 }
+
 

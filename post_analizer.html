@@ -46,10 +46,10 @@
 	<div class="container">
 		<div class="row align-items-center">
 			<div class="col-md-12 order-2 order-md-1 text-center text-md-center">
-                <input type="text" placeholder="Ingrese su Código..." id="Code" class="form-control">
+                <input type="text" placeholder="Ingrese URL o código del post..." id="Code" class="form-control">
                 <br>
                 <br>
-                <button type="button" onclick="analitics_post();" class="btn btn-primary">Ingresar</button>
+                <button type="button" onclick="analitics_post();" class="btn btn-primary">Procesar</button>
 			</div>
 
 		</div>
@@ -85,9 +85,34 @@
 <div class="container">
 
     <div class="jumbotron" id="info">
+
+        <h1 class="display-4">Analizador de post!</h1>
+        <br>
+        <p class="lead">Se utiliza la Api de Taringa, los datos son extraidos de ahi, el desarrollo dentro de esta web simplemente es para consumir dicha api.</p>
+        <br>
+
+
+		<div class="row align-items-center">
+            <p>Nuevo proyecto</p>
+			<div class="col-md-12 order-2 order-md-1 text-center text-md-center">
+
+                <div class="progress">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 1%"></div>
+                </div>
+                <br><br>
+                <a class="btn btn-primary" href="#proyecto"> Conoce el nuevo proyecto </a>
+			</div>
+
+		</div>
+
+        <!--
+        <p><a class="btn btn-lg btn-success" href="https://cafecito.app/pipodelgiudice" role="button"> Aporta al nuevo proyecto </a></p>
+        -->
     </div>
     <br>
-    <div id="principal"></div>
+    <div id="principal">
+
+    </div>
     <br>
     <ul class="list-group" style="float: none; text-align: center; text-decoration-color: rgb(233, 28, 28); text-decoration-line: none;" id="Lista">
     </ul>
@@ -99,6 +124,34 @@
     <br>
     <br>
 </div>
+
+
+
+
+<section class="section">
+
+	<div class="container">
+		<div class="row align-items-center">
+            <div id="proyecto" class="col-md-12 order-2 order-md-1 text-center text-md-center">
+                <h2>Sistema de control a distancia de luces RGB mediante APP</h2>
+                <p>Se busca realizar un control a distancia para idealmente integrar a twitch para que los oyentes de Taringa at Night
+                    <br>puedan controlar las luces de fondo por medio de una App Android</p>
+
+
+                <ul class="list-group" style="float: none; text-align: center; text-decoration-color: rgb(233, 28, 28); text-decoration-line: none;" id="Lista-componentes">
+                    <li class="list-group-item list-group-item-info"> Componentes</li>
+                    <li class="list-group-item list-group-item">ESP32</li>
+                    <li class="list-group-item list-group-item">Tira Led RGB</li>
+                    <li class="list-group-item list-group-item">Fuente 12v</li>
+                    <li class="list-group-item list-group-item">soldador</li>
+
+                </ul>
+                <br><br>
+                <a class="btn btn-primary" href="https://cafecito.app/pipodelgiudice"> Donar al proyecto </a>
+            </div>
+        </div>
+    </div>
+</section>
 
     <script>
     var input = document.getElementById("Code");
