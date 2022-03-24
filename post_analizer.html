@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="plugins/bootstrap/bootstrap.min.css">
   <link rel="stylesheet" href="plugins/themify-icons/themify-icons.css">
   <link rel="stylesheet" href="plugins/aos/aos.css">
+  <link href="css/popup.css" rel="stylesheet" type="text/css" />
 
 
   <!-- CUSTOM CSS -->
@@ -125,6 +126,51 @@
     <br>
 </div>
 
+
+<p><a href="#popup">Abrir Popup</a></p>
+<!--<a id="cerrar" href="#popup">&times;</a> -->
+<div id="popup" class="overlay">
+    <div id="popupBody">
+        <h2>Ayuda a la pagina</h2>
+        <a id="cerrar" href="#popup">&times;</a>
+        <div class="popupContent">
+            <div class="col-md-12 order-2 order-md-1 text-center text-md-center">
+
+                <h4>Puedes ayudar a mantener la pagina <br>aportando tan solo $100: </h4>
+
+            <script src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js"
+                    data-preference-id="45193535-765d31e0-387c-4a9b-994c-88aa6f508549" data-source="button">
+            </script>
+
+            <h4>Puedes ayudar a mantener la pagina <br>aportando mensualmente lo que puedas: </h4>
+            <a mp-mode="dftl" href="https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c9380847fbbb220017fbc6230010021" name="MP-payButton" class='blue-ar-l-rn-none'>Mercado Pago</a>
+            <a href='https://cafecito.app/pipodelgiudice' rel='noopener' target='_blank'><img srcset='https://cdn.cafecito.app/imgs/buttons/button_6.png 1x, https://cdn.cafecito.app/imgs/buttons/button_6_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_6_3.75x.png 3.75x' src='https://cdn.cafecito.app/imgs/buttons/button_6.png' alt='Invitame un café en cafecito.app' /></a>
+
+            </div>
+
+                <script type="text/javascript">
+               (function() {
+                  function $MPC_load() {
+                     window.$MPC_loaded !== true && (function() {
+                     var s = document.createElement("script");
+                     s.type = "text/javascript";
+                     s.async = true;
+                     s.src = document.location.protocol + "//secure.mlstatic.com/mptools/render.js";
+                     var x = document.getElementsByTagName('script')[0];
+                     x.parentNode.insertBefore(s, x);
+                     window.$MPC_loaded = true;
+                  })();
+               }
+               window.$MPC_loaded !== true ? (window.attachEvent ? window.attachEvent('onload', $MPC_load) : window.addEventListener('load', $MPC_load, false)) : null;
+               })();
+            </script>
+
+
+
+
+             </div>
+    </div>
+</div>
 
 
 

@@ -1,0 +1,43 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 20, 100, 0.7);
+  transition: opacity 500ms;
+  visibility: visible;
+  opacity: 1;
+}
+
+.overlay:target{
+  visibility: visible;
+  opacity: 1;
+}
+
+#popup:target{
+  visibility: hidden; /* Se regresa a hidden para ocultar */
+  opacity: 0; /* Se regresa a o para hacerlo "invisible" */
+}
+
+#popupBody{
+  width: 50%;
+  padding: 2%;
+  border-radius: 50px;
+  box-shadow: 0 0 50px #CCC;
+  background: #FFF;
+  position: relative;
+  margin: 20% auto;
+  transition: all 2s ease-in-out;
+}
+
+#cerrar{
+position: absolute;
+top: 20px;
+right: 30px;
+font-size: 30px;
+fotn-weight: bold;
+text-decoration: none;
+color: #F00;
+transition: all 200ms;
+}
