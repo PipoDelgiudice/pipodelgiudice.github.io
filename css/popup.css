@@ -21,10 +21,10 @@
 }
 
 #popupBody{
-  width: 50%;
+  width: 75%;
   padding: 2%;
   border-radius: 50px;
-  box-shadow: 0 0 50px #CCC;
+  box-shadow: 0 0 20px #CCC;
   background: #FFF;
   position: relative;
   margin: 20% auto;
