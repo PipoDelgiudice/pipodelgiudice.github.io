@@ -54,7 +54,7 @@ function analitics_post(){
             for (x of Info.items) {
               console.log(x.username);
               if (x != null){
-              lista += '<li class="list-group-item">'+x.username+'</li>';
+              lista += '<li class="list-group-item">'+'<a href="https://www.taringa.net/'+x.username+'"> '+x.username+'</a>'+'</li>';
               }
             }
         }
