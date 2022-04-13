@@ -36,6 +36,9 @@ function analitics_post(){
     var code = document.getElementById("Code").value;
     if (code.split('_').length > 1){
         var id = code.split('_')[(code.split('_').length) - 1]
+        if (id.split('/?').length > 1){
+            id = id.split('/?')[0]
+        }
     }
     else{
         var id = code
