@@ -93,3 +93,46 @@ function analitics_post(){
 }
 
 
+
+function text_process(){
+   texto = document.getElementById("exampleFormControlTextarea1").value
+   lista_variables = texto.split('{')
+   const variables = []
+   if (lista_variables.length > 1){
+
+        var formulario = ''
+
+        for (each of lista_variables){
+            if (each.indexOf('}') > 0){
+                variables.push(each.split('}')[0])
+                variable = each.split('}')[0]
+                formulario += '<div class="form-group"><label for="'+variable+'"'+variable+'</label><input type="text" class="form-control" id="'+variable+'" placeholder="'+variable+'"></div>'
+            }
+        }
+        document.getElementById("Formulario").innerHTML = formulario;
+   }
+   else{
+        alert("El texto contiene un error que no se puede procesar");
+
+   }
+}
+
+function text_result(){
+   texto = document.getElementById("exampleFormControlTextarea1").value
+   input = document.getElementById("Formulario")
+   var text_mod = texto.replace(/(\r\n|\n\r|\r|\n)/g, '<br>');
+   if (input.length > 0){
+       for(each of input){
+           text_mod = text_mod.replace('{'+each.id+'}',each.value)
+           console.log(each.id, each.value)
+       }
+
+       document.getElementById("result").innerHTML = text_mod;
+   }
+}
+ function tformat(str, dict) {
+    return str.replace(/\${(\w+)}/g, function(_,m) {
+    return dict[m];
+    });
+}
+

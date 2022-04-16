@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="images/icon.png">
+
+    <title>Analizador de Post</title>
+  <!-- PLUGINS CSS STYLE -->
+  <link rel="stylesheet" href="plugins/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="plugins/themify-icons/themify-icons.css">
+  <link rel="stylesheet" href="plugins/aos/aos.css">
+  <link href="css/popup.css" rel="stylesheet" type="text/css" />
+
+
+  <!-- CUSTOM CSS -->
+  <link href="css/style_project.css" rel="stylesheet">
+
+<!-- //custom css theme files -->
+
+    <!-- Custom styles for this template -->
+    <link href="narrow-jumbotron.css" rel="stylesheet">
+  </head>
+
+<body>
+
+<section class="section gradient-banner2">
+	<div class="shapes-container">
+		<div class="shape" data-aos="fade-down-left" data-aos-duration="1500" data-aos-delay="100"></div>
+		<div class="shape" data-aos="fade-down" data-aos-duration="1000" data-aos-delay="100"></div>
+		<div class="shape" data-aos="fade-up-right" data-aos-duration="1000" data-aos-delay="200"></div>
+		<div class="shape" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200"></div>
+		<div class="shape" data-aos="fade-down-left" data-aos-duration="1000" data-aos-delay="100"></div>
+		<div class="shape" data-aos="fade-down-left" data-aos-duration="1000" data-aos-delay="100"></div>
+		<div class="shape" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="300"></div>
+		<div class="shape" data-aos="fade-down-right" data-aos-duration="500" data-aos-delay="200"></div>
+		<div class="shape" data-aos="fade-down-right" data-aos-duration="500" data-aos-delay="100"></div>
+		<div class="shape" data-aos="zoom-out" data-aos-duration="2000" data-aos-delay="500"></div>
+		<div class="shape" data-aos="fade-up-right" data-aos-duration="500" data-aos-delay="200"></div>
+		<div class="shape" data-aos="fade-down-left" data-aos-duration="500" data-aos-delay="100"></div>
+		<div class="shape" data-aos="fade-up" data-aos-duration="500" data-aos-delay="0"></div>
+		<div class="shape" data-aos="fade-down" data-aos-duration="500" data-aos-delay="0"></div>
+		<div class="shape" data-aos="fade-up-right" data-aos-duration="500" data-aos-delay="100"></div>
+		<div class="shape" data-aos="fade-down-left" data-aos-duration="500" data-aos-delay="0"></div>
+	</div>
+	<div class="container">
+		<div class="row align-items-center">
+			<div class="col-md-12 order-2 order-md-1 text-center text-md-center">
+                <div class="jumbotron" id="info">
+
+                <h1 class="display-4">Generador de Text Editable!</h1>
+                <br>
+                <p class="lead">Herramienta desarrollada por <a href="https://www.taringa.net/pipo1995_2">Pipo1995_2</a> para el uso en Taringa at Night.</p>
+                <br>
+                <p class="lead">Debes ingresar un texto que contenga variables de la siguiente {nombre}. </p>
+                <p class="lead">Se habilitará un formulario para ingresar el valor a reemplazar en el texto original</p>
+                <br>
+
+                </div>
+			</div>
+
+		</div>
+	</div>
+</section>
+
+
+<section>
+	<div class="container">
+		<div class="col-lg-12 align-items-center">
+            <form>
+              <div class="form-group">
+                <label for="exampleFormControlTextarea1">Ingrese texto a modificar: </label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
+              </div>
+            <button type="button" onclick="text_process();" class="btn btn-primary">Modificar variables</button>
+            </form>
+
+            <br>
+            <br>
+            <form id="Formulario">
+            </form>
+
+            <button type="button" onclick="text_result();" class="btn btn-primary">Dame mi texto</button>
+            <br>
+
+            <h1 id="result"></h1>
+            <br>
+
+        </div>
+    </div>
+</section>
+
+
+<section class="call-to-action-app section bg-blue">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<h2>Descargo de responsabilidad</h2>
+				<p>Está herramienta solo provee información, el uso que se le de es responsabilidad de cada uno.</p>
+
+                <p>Está herramienta utiliza la api de Taringa, la información proviene de la misma y no de otra fuente.</p>
+			</div>
+		</div>
+	</div>
+</section>
+<script>
+</script>
+  <script src="js/script_api.js"></script>
+  <!-- JAVASCRIPTS -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <script src="plugins/bootstrap/bootstrap.min.js"></script>
+  <script src="plugins/aos/aos.js"></script>
+
+  <script src="js/script.js"></script>
+</div>
+
+</body>
+</html>
