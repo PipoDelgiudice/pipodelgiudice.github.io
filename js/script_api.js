@@ -104,9 +104,11 @@ function text_process(){
 
         for (each of lista_variables){
             if (each.indexOf('}') > 0){
+                if( !variables.includes(each.split('}')[0])){
+                    variable = each.split('}')[0]
+                    formulario += '<div class="form-group"><label for="'+variable+'"'+variable+'</label><input type="text" class="form-control" id="'+variable+'" placeholder="'+variable+'"></div>'
+                }
                 variables.push(each.split('}')[0])
-                variable = each.split('}')[0]
-                formulario += '<div class="form-group"><label for="'+variable+'"'+variable+'</label><input type="text" class="form-control" id="'+variable+'" placeholder="'+variable+'"></div>'
             }
         }
         document.getElementById("Formulario").innerHTML = formulario;
@@ -123,8 +125,10 @@ function text_result(){
    var text_mod = texto.replace(/(\r\n|\n\r|\r|\n)/g, '<br>');
    if (input.length > 0){
        for(each of input){
-           text_mod = text_mod.replace('{'+each.id+'}',each.value)
-           console.log(each.id, each.value)
+           while(text_mod.indexOf('{'+each.id+'}') > 0){
+            text_mod = text_mod.replace('{'+each.id+'}',each.value)
+            console.log(each.id, each.value)
+           }
        }
 
        document.getElementById("result").innerHTML = text_mod;
