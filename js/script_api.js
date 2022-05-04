@@ -39,6 +39,9 @@ function analitics_post(){
         if (id.split('/?').length > 1){
             id = id.split('/?')[0]
         }
+        else if(id.split('?').length > 1){
+            id = id.split('?')[0]
+        }
     }
     else{
         var id = code
@@ -96,16 +99,17 @@ function analitics_post(){
         comentarios = Info.comments
         visitas = Info.visits
 
+    	document.getElementById("stats").innerHTML ='<div class="container"><div class="rounded shadow p-5 bg-white"><div class="row"><div class="col-lg-4 col-md-6 mt-5 mt-md-0 text-center" id="stats_pos"></div><div class="col-lg-4 col-md-6 mt-5 mt-md-0 text-center" id="stats_neg"></div><div class="col-lg-4 col-md-6 mt-5 mt-md-0 text-center" id="stats_fav"></div><div class="col-lg-4 col-md-6 mt-5 mt-md-0 text-center" id="stats_share"></div><div class="col-lg-4 col-md-12 mt-5 mt-lg-0 text-center" id="stats_com"></div><div class="col-lg-4 col-md-12 mt-5 mt-lg-0 text-center" id="stats_visit"></div>'
         var stats_pos = '<i class="ti-arrow-up text-primary h1"></i><h3 class="mt-4 text-capitalize h5 ">Positivos</h3><p class="regular text-muted">A '+positivos+' taringueros le gusto el post.</p>'
         document.getElementById("stats_pos").innerHTML = stats_pos;
 
-        var stats_neg ='<i class="ti-arrow-down text-primary h1"></i><h3 class="mt-4 text-capitalize h5 ">Negativos</h3><p class="regular text-muted">A '+negativos+' taringueros odiaron el post.</p>'
+        var stats_neg ='<i class="ti-arrow-down text-primary h1"></i><h3 class="mt-4 text-capitalize h5 ">Negativos</h3><p class="regular text-muted">'+negativos+' taringueros odiaron el post.</p>'
         document.getElementById("stats_neg").innerHTML = stats_neg;
 
         var stats_fav = '<i class="ti-star text-primary h1"></i><h3 class="mt-4 text-capitalize h5 ">Favoritos</h3><p class="regular text-muted">'+favoritos+' taringueros lo guardaron en favoritos.</p>'
         document.getElementById("stats_fav").innerHTML = stats_fav;
 
-        var stats_share = '<i class="ti-share text-primary h1"></i><h3 class="mt-4 text-capitalize h5 ">Altamente recomendado</h3><p class="regular text-muted"> '+shared+' taringueros compartieron el post.</p>'
+        var stats_share = '<i class="ti-share text-primary h1"></i><h3 class="mt-4 text-capitalize h5 ">Recomendados</h3><p class="regular text-muted"> '+shared+' taringueros compartieron el post.</p>'
         document.getElementById("stats_share").innerHTML = stats_share;
 
         var stats_com = '<i class="ti-comments text-primary h1"></i><h3 class="mt-4 text-capitalize h5 ">Comentarios</h3><p class="regular text-muted">'+comentarios+' taringueros comentaron el post.</p>'
