@@ -43,9 +43,8 @@ function analitics_post(){
     else{
         var id = code
     }
-    var event = httpGetList("https://beta.taringa.net/api/story/"+id+"/voters/down");
-	if (event != null){
-        var Info = httpGetList("https://beta.taringa.net/api/story/"+id+"/voters/down");
+    var Info = httpGetList("https://beta.taringa.net/api/story/"+id+"/voters/down?count=999");
+	if (Info != null){
         console.log(Info.items);
         var lista = ''
 
@@ -65,7 +64,7 @@ function analitics_post(){
               lista += '<li class="list-group-item">No hay negativos</li>';
         }
         document.getElementById("Lista").innerHTML = lista;
-        var Info = httpGetList("https://beta.taringa.net/api/story/"+id+"/voters/up");
+        var Info = httpGetList("https://beta.taringa.net/api/story/"+id+"/voters/up?count=999");
         console.log(Info.items);
         var lista = ''
 
@@ -85,6 +84,35 @@ function analitics_post(){
               lista += '<li class="list-group-item">No hay positivos</li>';
         }
         document.getElementById("Lista-positivos").innerHTML = lista;
+
+
+        var Info = httpGetList("https://beta.taringa.net/api/story/"+id);
+        console.log(Info);
+
+        positivos = Info.upvotes
+        negativos = Info.downvotes
+        favoritos = Info.bookmarks
+        shared = Info.shares
+        comentarios = Info.comments
+        visitas = Info.visits
+
+        var stats_pos = '<i class="ti-arrow-up text-primary h1"></i><h3 class="mt-4 text-capitalize h5 ">Positivos</h3><p class="regular text-muted">A '+positivos+' taringueros le gusto el post.</p>'
+        document.getElementById("stats_pos").innerHTML = stats_pos;
+
+        var stats_neg ='<i class="ti-arrow-down text-primary h1"></i><h3 class="mt-4 text-capitalize h5 ">Negativos</h3><p class="regular text-muted">A '+negativos+' taringueros odiaron el post.</p>'
+        document.getElementById("stats_neg").innerHTML = stats_neg;
+
+        var stats_fav = '<i class="ti-star text-primary h1"></i><h3 class="mt-4 text-capitalize h5 ">Favoritos</h3><p class="regular text-muted">'+favoritos+' taringueros lo guardaron en favoritos.</p>'
+        document.getElementById("stats_fav").innerHTML = stats_fav;
+
+        var stats_share = '<i class="ti-share text-primary h1"></i><h3 class="mt-4 text-capitalize h5 ">Altamente recomendado</h3><p class="regular text-muted"> '+shared+' taringueros compartieron el post.</p>'
+        document.getElementById("stats_share").innerHTML = stats_share;
+
+        var stats_com = '<i class="ti-comments text-primary h1"></i><h3 class="mt-4 text-capitalize h5 ">Comentarios</h3><p class="regular text-muted">'+comentarios+' taringueros comentaron el post.</p>'
+        document.getElementById("stats_com").innerHTML = stats_com;
+
+        var stats_visit = '<i class="ti-bar-chart text-primary h1"></i><h3 class="mt-4 text-capitalize h5 ">Visitas</h3><p class="regular text-muted">'+visitas+' taringueros vieron el post.</p>'
+        document.getElementById("stats_visit").innerHTML = stats_visit;
    }
 
     //inputVal = 'Su codigo es '+id;
