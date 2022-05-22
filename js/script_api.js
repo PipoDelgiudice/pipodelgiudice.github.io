@@ -166,7 +166,7 @@ function text_result(){
        document.getElementById("result").innerHTML = text_mod;
    }
 }
- function tformat(str, dict) {
+function tformat(str, dict) {
     return str.replace(/\${(\w+)}/g, function(_,m) {
     return dict[m];
     });
