@@ -172,3 +172,26 @@ function tformat(str, dict) {
     });
 }
 
+function generar_oid(){
+   var texto = document.getElementById("exampleFormControlTextarea1").value;
+   var new_text = texto.replace(/(\t)/g,',').split('\n')
+   console.log(new_text);
+   if (new_text.length > 0){
+       text_mod = ''
+       text_raw = ''
+       for(each of new_text){
+            var data = each.split(',')
+            if (data.length >= 5){
+                text_mod += '<br><br>'+data[0] +"= SNMPModelObject(name='"+data[1]+"',oid='"+data[2]+"',type='"+data[3]+"',instanceOf='"+data[4]+"')"
+                text_raw += '\r\n\r\n'+data[0] +"= SNMPModelObject(name='"+data[1]+"',oid='"+data[2]+"',type='"+data[3]+"',instanceOf='"+data[4]+"')"
+            }
+       }
+       document.getElementById("result").innerHTML = text_mod;
+       navigator.clipboard.writeText(text_raw).then(function() {
+          console.log('Async: Copying to clipboard was successful!');
+        }, function(err) {
+          console.error('Async: Could not copy text: ', err);
+        });
+   }
+}
+
