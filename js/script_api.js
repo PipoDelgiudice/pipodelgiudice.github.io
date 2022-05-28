@@ -177,13 +177,24 @@ function generar_oid(){
    var new_text = texto.replace(/(\t)/g,',').split('\n')
    console.log(new_text);
    if (new_text.length > 0){
+
+       var protocol = document.getElementById('protocol');
+       console.log(protocol.value)
        text_mod = ''
        text_raw = ''
        for(each of new_text){
             var data = each.split(',')
-            if (data.length >= 5){
-                text_mod += '<br><br>'+data[0] +"= SNMPModelObject(name='"+data[1]+"',oid='"+data[2]+"',type='"+data[3]+"',instanceOf='"+data[4]+"')"
-                text_raw += '\r\n\r\n'+data[0] +"= SNMPModelObject(name='"+data[1]+"',oid='"+data[2]+"',type='"+data[3]+"',instanceOf='"+data[4]+"')"
+            if( (data[0] != '') && (data[1] != '') && (data[2] != '') && (data[3] != '') && (data[4] != '')){
+                if (data.length >= 5){
+                    if (protocol.value == 'SNMP'){
+                        text_mod += '<br><br>'+data[0] +"= SNMPModelObject(name='"+data[1]+"',oid='"+data[2]+"',type='"+data[3]+"',instanceOf='"+data[4]+"')"
+                        text_raw += '\r\n\r\n'+data[0] +"= SNMPModelObject(name='"+data[1]+"',oid='"+data[2]+"',type='"+data[3]+"',instanceOf='"+data[4]+"')"
+                    }
+                    else if(protocol.value == 'TR181' || protocol.value == 'TR98'  ){
+                        text_mod += '<br><br>'+data[0] +"= TRModelObject(name='"+data[1]+"',path='"+data[2]+"',type='"+data[3]+"',instanceOf='"+data[4]+"')"
+                        text_raw += '\r\n\r\n'+data[0] +"= TRModelObject(name='"+data[1]+"',path='"+data[2]+"',type='"+data[3]+"',instanceOf='"+data[4]+"')"
+                    }
+                }
             }
        }
        document.getElementById("result").innerHTML = text_mod;
