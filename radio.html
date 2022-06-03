@@ -121,7 +121,7 @@
 			<div class="col-lg-6 ml-auto justify-content-center" data-aos="flip-left">
 				<!-- Feature Mockup -->
 				<div class="image-content">
-					<img class="img-fluid" src="images/feature/Frame 4.png" alt="iphone">
+					<img class="img-fluid" src="images/Avatar_Sin_Fondo.png" alt="Lince" style="animation: pulse 2s linear infinite;">
 				</div>
 			</div>
 			<div class="col-lg-6 mr-auto align-self-center" data-aos="fade-up-left" data-aos-duration="2000">
@@ -144,11 +144,16 @@
 		<div class="row align-items-center">
 			<div class="col-lg-6 ml-auto justify-content-center" data-aos="fade-right">
 				<!-- Feature Mockup -->
+				<div id="twitch-embed"></div>
+				<!--
 				<iframe src="https://player.twitch.tv/?channel=taringa_at_night&amp;parent=www.pipo.ga" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>
+				-->
 			</div>
+			<!--
 			<div class="col-lg-6 mr-auto align-self-center" data-aos="fade-left">
 				<iframe id="chat_embed" src="https://www.twitch.tv/embed/taringa_at_night/chat?parent=www.pipo.ga" height="500" width="350"></iframe>
 			</div>
+			-->
 		</div>
 	</div>
 
@@ -232,5 +237,19 @@
   <script>
     AOS.init();
   </script>
+
+    <!-- Load the Twitch embed JavaScript file -->
+    <script src="https://embed.twitch.tv/embed/v1.js"></script>
+
+    <!-- Create a Twitch.Embed object that will render within the "twitch-embed" element -->
+    <script type="text/javascript">
+      new Twitch.Embed("twitch-embed", {
+        width: 854,
+        height: 480,
+        channel: "taringa_at_night",
+        // Only needed if this page is going to be embedded on other websites
+        parent: ["www.pipo.ga"]
+      });
+    </script>
 </body>
 </html>
