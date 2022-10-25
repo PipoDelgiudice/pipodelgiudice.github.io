@@ -1,6 +1,6 @@
 {
    "words":{
-      "3":[
+      "letters_3":[
          "NFT",
          "DAO",
          "POS",
@@ -22,7 +22,7 @@
          "WEI",
          "API"
       ],
-      "4":[
+      "letters_4":[
          "BULL",
          "PUMP",
          "LAND",
@@ -47,7 +47,7 @@
          "DATA",
          "RANK"
       ],
-      "5":[
+      "letters_5":[
          "FLOOR",
          "OWNER",
          "CYCLE",
@@ -86,7 +86,7 @@
          "PRICE",
          "STORE"
       ],
-      "6":[
+      "letters_6":[
          "REDEEM",
          "TICKET",
          "INFLOW",
@@ -127,7 +127,7 @@
          "TICKER",
          "MARKET"
       ],
-      "7":[
+      "letters_7":[
          "CREATOR",
          "MYSTERY",
          "ROYALTY",
@@ -166,7 +166,7 @@
          "EXACTLY",
          "MONITOR"
       ],
-      "8":[
+      "letters_8":[
          "FUNGIBLE",
          "POSITION",
          "TRANSFER",
