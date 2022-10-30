@@ -13,6 +13,7 @@ Desarrollado por: Pipo Del Giudice"/>
 
     <!-- PLUGINS CSS STYLE -->
   <link rel="stylesheet" href="plugins/bootstrap/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="plugins/themify-icons/themify-icons.css">
   <link rel="stylesheet" href="plugins/aos/aos.css">
 	<link href="css/wodl.css" rel="stylesheet" type="text/css" />
@@ -27,9 +28,49 @@ Desarrollado por: Pipo Del Giudice"/>
     <!--<link href="narrow-jumbotron.css" rel="stylesheet"> -->
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-65DQH6XH4G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-65DQH6XH4G');
+</script>
 
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a href="https://www.pipo.ga/" class="navbar-brand">Pipo</a>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav">
+                <a href="https://www.pipo.ga/inicio" class="nav-item nav-link active">Inicio</a>
+                <a href="https://www.pipo.ga/certificados.html" class="nav-item nav-link">Mis habilidades</a>
+
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Herramientas</a>
+                    <div class="dropdown-menu">
+                        <a href="./post_analizer.html" class="dropdown-item">Analizador de Post</a>
+                        <a href="./wodl.html" class="dropdown-item">Respuesta Binance Wodl!</a>
+                        <a href="./password.html" class="dropdown-item">Analizador de Contraseña</a>
+                        <a href="./history.html" class="dropdown-item">Creador de Historias</a>
+                    </div>
+                </div>
+
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Proyectos</a>
+                    <div class="dropdown-menu">
+                        <a href="./trazapp.html" class="dropdown-item">Trazapp</a>
+                        <a href="./wodl.html" class="dropdown-item">Respuesta Binance Wodl!</a>
+                        <a href="https://www.pipo.ga/post" class="dropdown-item">Mis Publicaciones</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
 
 
 <section class="section gradient-banner2">
