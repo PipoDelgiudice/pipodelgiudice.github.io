@@ -9,7 +9,6 @@
 }
 .textWords {
    word-wrap: break-word;
-   width: 500px;
 }
 .grid-cards {
   display: grid;
