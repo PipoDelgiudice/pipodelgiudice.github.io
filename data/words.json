@@ -45,7 +45,9 @@
          "DAPP",
          "NODE",
          "DATA",
-         "RANK"
+         "RANK",
+         "FANS",
+         "SONG"
       ],
       "letters_5":[
          "FLOOR",
@@ -84,7 +86,10 @@
          "BRIDE",
          "TRACK",
          "PRICE",
-         "STORE"
+         "STORE",
+         "MUSIC",
+         "MEDIA",
+         "VIDEO"
       ],
       "letters_6":[
          "REDEEM",
@@ -125,7 +130,12 @@
          "ORACLE",
          "ANSWER",
          "TICKER",
-         "MARKET"
+         "MARKET",
+         "TICKET",
+         "UNLOCK",
+         "AVATAR",
+         "STUDIO",
+         "ARTIST"
       ],
       "letters_7":[
          "CREATOR",
@@ -164,7 +174,9 @@
          "ROADMAP",
          "ADDRESS",
          "EXACTLY",
-         "MONITOR"
+         "MONITOR",
+         "CONTENT",
+         "RECORDS"
       ],
       "letters_8":[
          "FUNGIBLE",
@@ -189,7 +201,9 @@
          "RECHARGE",
          "PROPOSAL",
          "EVALUATE",
-         "RELIABLE"
+         "RELIABLE",
+         "PREMIERE",
+         "FESTIVAL"
       ]
    }
 }
