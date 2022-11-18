@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <head xmlns="http://www.w3.org/1999/html">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3561826385481829"
+     crossorigin="anonymous"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
+
+    <meta name="description" content="Analizá cualquier perfil de Taringa y mira los Negativos de Taringa
+Desarrollado por: Pipo Del Giudice | Pipo1995_2"/>
+    <meta name="keywords" content="Negativos, Postivos, Taringa, Post, hater, herramienta"/>
     <meta name="author" content="">
     <link rel="icon" href="images/icon.png">
 
@@ -33,7 +38,40 @@
   </head>
 
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a href="https://www.pipo.ga/" class="navbar-brand">Pipo</a>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav">
+                <a href="https://www.pipo.ga/inicio" class="nav-item nav-link active">Inicio</a>
+                <a href="https://www.pipo.ga/certificados.html" class="nav-item nav-link">Mis habilidades</a>
 
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Herramientas</a>
+                    <div class="dropdown-menu">
+                        <a href="./post_analizer.html" class="dropdown-item">Analizador de Post</a>
+                        <a href="./profile_analizer.html" class="dropdown-item">Analizador de Perfil</a>
+                        <a href="./wodl.html" class="dropdown-item">Respuesta Binance Wodl!</a>
+                        <a href="./password.html" class="dropdown-item">Analizador de Contraseña</a>
+                        <a href="./history.html" class="dropdown-item">Creador de Historias</a>
+                    </div>
+                </div>
+
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Proyectos</a>
+                    <div class="dropdown-menu">
+                        <a href="./trazapp.html" class="dropdown-item">Trazapp</a>
+                        <a href="./wodl.html" class="dropdown-item">Respuesta Binance Wodl!</a>
+                        <a href="https://www.pipo.ga/post" class="dropdown-item">Mis Publicaciones</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
 <section class="section gradient-banner2">
 	<div class="shapes-container">
 		<div class="shape" data-aos="fade-down-left" data-aos-duration="1500" data-aos-delay="100"></div>
@@ -56,7 +94,7 @@
 	<div class="container">
 		<div class="row align-items-center">
 			<div class="col-md-12 order-2 order-md-1 text-center text-md-center">
-                <input type="text" placeholder="Ingrese URL o código del post..." id="Code" class="form-control">
+                <input type="text" placeholder="Nombre de usuario..." id="Code" class="form-control">
                 <br>
                 <br>
                 <button type="button" onclick="analitics_profile();" class="btn btn-primary">Procesar</button>
@@ -75,7 +113,7 @@
 
         <h1 class="display-4">Analizador de Profile!</h1>
         <br>
-        <p class="lead">Herramienta desarrollada por <a href="https://www.taringa.net/pipo1995_2">Pipo1995_2</a> para analizar todos los votos de un post.</p>
+        <p class="lead">Herramienta desarrollada por <a href="https://www.taringa.net/pipo1995_2">Pipo1995_2</a> para analizar los ultimos post y ver quienes son tus haters.</p>
         <br>
         <p class="lead">Se utiliza la Api de Taringa, los datos son extraidos de ahi, el desarrollo dentro de esta web simplemente es para consumir dicha api.</p>
         <p id="debug"></p>
@@ -105,8 +143,10 @@
 
     </div>
     <br>
-    <table id="Lista">
-    </table>
+
+    <ul class="list-group" style="float: none; text-align: center; text-decoration-color: rgb(233, 28, 28); text-decoration-line: none;" id="Lista">
+    <!--<table id="Lista">
+    </table>-->
 
 
     <br>

@@ -78,7 +78,8 @@ function analitics_profile(){
             console.log(negativos_filtered)
 
             negativos = negativos_filtered
-            var lista = '<tr><th>User</th><th>Negativos</th></tr>';
+            var lista = '<br><br><li class="list-group-item list-group-item-danger">'+'Negativos'+'</li>';
+
 
             if(negativos.length > 0){
 
@@ -86,22 +87,17 @@ function analitics_profile(){
                   console.log(x.username);
                   if (x != null){
                   //lista += '<li class="list-group-item">'+'<a href="https://www.taringa.net/'+x.user+'"> '+x.user+'</a>'+'</li>';
-                  lista += ' <tr><td class="">'+'<a href="https://www.taringa.net/'+x.user+'"> '+x.user+'</a>'+'</td><td>'+x.value+'</td> </tr>';
+                  //lista += ' <tr><td class="">'+'<a href="https://www.taringa.net/'+x.user+'"> '+x.user+'</a>'+'</td><td>'+x.value+'</td> </tr>';
+                  lista += '<li class="list-group-item">'+'<a href="https://www.taringa.net/'+x.user+'"> '+x.user+'</a>'+' Con '+x.value+' negativos.</li>';
+
                   }
                 }
             }
             else{
-                  lista += ' <tr><td class="">Sin negativos</td><td>0</td> </tr>';
+                  //lista += ' <tr><td class="">Sin negativos</td><td>0</td> </tr>';
+                  lista += '<li class="list-group-item">No hay negativos</li>';
             }
             document.getElementById("Lista").innerHTML = lista;
-
-
-
-
-
-
-
-
 
         }
     }
