@@ -20,7 +20,8 @@
          "ETH",
          "EVM",
          "WEI",
-         "API"
+         "API",
+         "IGO"
       ],
       "letters_4":[
          "BULL",
@@ -47,7 +48,9 @@
          "DATA",
          "RANK",
          "FANS",
-         "SONG"
+         "SONG",
+         "KEYS",
+         
       ],
       "letters_5":[
          "FLOOR",
@@ -89,7 +92,9 @@
          "STORE",
          "MUSIC",
          "MEDIA",
-         "VIDEO"
+         "VIDEO",
+         "FUNDS",
+         "TOKEN"
       ],
       "letters_6":[
          "REDEEM",
@@ -135,7 +140,9 @@
          "UNLOCK",
          "AVATAR",
          "STUDIO",
-         "ARTIST"
+         "ARTIST",
+         "BLOCKS",
+         "PHRASE"
       ],
       "letters_7":[
          "CREATOR",
@@ -176,7 +183,10 @@
          "EXACTLY",
          "MONITOR",
          "CONTENT",
-         "RECORDS"
+         "RECORDS",
+         "CONNECT",
+         "CUSTODY",
+         "OFFLINE"
       ],
       "letters_8":[
          "FUNGIBLE",
@@ -203,7 +213,8 @@
          "EVALUATE",
          "RELIABLE",
          "PREMIERE",
-         "FESTIVAL"
+         "FESTIVAL",
+         "WITHDRAW"
       ]
    }
 }
