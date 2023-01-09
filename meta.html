@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mis NFTs de OpenSea</title>
+    <script src="https://cdn.jsdelivr.net/npm/@metamask/metamask-extension@latest/dist/metamask.min.js"></script>
+  </head>
+  <body>
+    <h1>Mis NFTs de OpenSea</h1>
+    <div id="nft-list">
+      <!-- Aquí se mostrará la lista de NFTs -->
+    </div>
+    <script>
+      // Conectarse a MetaMask
+      if (typeof window.ethereum !== 'undefined') {
+        window.web3 = new Web3(ethereum);
+        try {
+          // Solicitar permiso para acceder a la billetera
+          await ethereum.enable();
+          // Obtener la dirección de Ethereum del usuario
+          const address = await web3.eth.getCoinbase();
+          console.log("Direccion de billetera: " + address);
+          // Obtener la lista de NFTs del usuario a través de la API de OpenSea
+          fetch("https://api.opensea.io/api/v1/assets?owner=" + address)
+            .then(function(response) {
+              return response.json();
+            })
+            .then(function(assets) {
+              // Mostrar la lista de NFTs en la página web
+              var html = "";
+              assets.forEach(function(asset) {
+                html += "<p>" + asset.name + "</p>";
+              });
+              document.getElementById("nft-list").innerHTML = html;
+            });
+        } catch (error) {
+          // El usuario no ha dado permiso o ha cancelado la solicitud
+        }
+      }
+    </script>
+  </body>
+</html>
