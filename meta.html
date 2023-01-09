@@ -1,36 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Mis NFTs de OpenSea</title>
-    <script src="https://cdn.jsdelivr.net/npm/@metamask/metamask-extension@latest/dist/metamask.min.js"></script>
-  </head>
-  <body>
-    <h1>Mis NFTs de OpenSea</h1>
-    <div id="nft-list">
-      <!-- Aquí se mostrará la lista de NFTs -->
-    </div>
-    <script>
-      // Conectarse a MetaMask
-
-      import detectEthereumProvider from '@metamask/detect-provider';
-
-      const provider = await detectEthereumProvider();
-
-      if (provider) {
-        // From now on, this should always be true:
-        // provider === window.ethereum
-        startApp(provider); // initialize your app
-      } else {
-        console.log('Please install MetaMask!');
-      }
-
-      if (typeof window.ethereum !== 'undefined') {
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+</head>
+<body>
+  <div>
+    <button class="pay-button">Pay</button>
+    <div id="status"></div>
+  </div>
+  <script type="text/javascript">
+    window.addEventListener('load', async () => {
+      if (window.ethereum) {
         window.web3 = new Web3(ethereum);
         try {
-          // Solicitar permiso para acceder a la billetera
           await ethereum.enable();
-          // Obtener la dirección de Ethereum del usuario
-          const address = await web3.eth.getCoinbase();
+           const address = await web3.eth.getCoinbase();
           console.log("Direccion de billetera: " + address);
           // Obtener la lista de NFTs del usuario a través de la API de OpenSea
           fetch("https://api.opensea.io/api/v1/assets?owner=" + address)
@@ -45,10 +30,55 @@
               });
               document.getElementById("nft-list").innerHTML = html;
             });
-        } catch (error) {
-          // El usuario no ha dado permiso o ha cancelado la solicitud
+          //initPayButton()
+        } catch (err) {
+          $('#status').html('User denied account access', err)
         }
+      } else if (window.web3) {
+        window.web3 = new Web3(web3.currentProvider)
+         const address = await web3.eth.getCoinbase();
+          console.log("Direccion de billetera 2: " + address);
+          // Obtener la lista de NFTs del usuario a través de la API de OpenSea
+          fetch("https://api.opensea.io/api/v1/assets?owner=" + address)
+            .then(function(response) {
+              return response.json();
+            })
+            .then(function(assets) {
+              // Mostrar la lista de NFTs en la página web
+              var html = "";
+              assets.forEach(function(asset) {
+                html += "<p>" + asset.name + "</p>";
+              });
+              document.getElementById("nft-list").innerHTML = html;
+            });
+        //initPayButton()
+      } else {
+        $('#status').html('No Metamask (or other Web3 Provider) installed')
       }
-    </script>
-  </body>
+    })
+
+    const initPayButton = () => {
+      $('.pay-button').click(() => {
+        // paymentAddress is where funds will be send to
+        const paymentAddress = 'YOUR ACCOUNT ADDRESS HERE'
+        const amountEth = 1
+
+
+        /*
+        web3.eth.sendTransaction({
+          to: paymentAddress,
+          value: web3.toWei(amountEth, 'ether')
+        }, (err, transactionId) => {
+          if  (err) {
+            console.log('Payment failed', err)
+            $('#status').html('Payment failed')
+          } else {
+            console.log('Payment successful', transactionId)
+            $('#status').html('Payment successful')
+          }
+        })*/
+      })
+    }
+  </script>
+</body>
 </html>
