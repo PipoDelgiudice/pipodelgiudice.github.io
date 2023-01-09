@@ -16,9 +16,10 @@
         try {
           await ethereum.enable();
            const address = await web3.eth.accounts;
+           const fake_address = "0x03A819bb99979Cf232D16A60Ea604c4b5E228311"
           console.log("Direccion de billetera: " + address);
           // Obtener la lista de NFTs del usuario a través de la API de OpenSea
-          fetch("https://api.opensea.io/api/v1/assets?owner=" + address[0])
+          fetch("https://api.opensea.io/api/v1/assets?owner=" + fake_address)
             .then(function(response) {
               return response.json();
             })
@@ -30,16 +31,17 @@
               });
               document.getElementById("nft-list").innerHTML = html;
             });
-          initPayButton()
+          //initPayButton()
         } catch (err) {
           $('#status').html('User denied account access', err)
         }
       } else if (window.web3) {
         window.web3 = new Web3(web3.currentProvider)
            const address = await web3.eth.accounts;
+           const fake_address = "0x03A819bb99979Cf232D16A60Ea604c4b5E228311"
           console.log("Direccion de billetera: " + address);
           // Obtener la lista de NFTs del usuario a través de la API de OpenSea
-          fetch("https://api.opensea.io/api/v1/assets?owner=" + address[0])
+          fetch("https://api.opensea.io/api/v1/assets?owner=" + fake_address)
             .then(function(response) {
               return response.json();
             })
@@ -51,7 +53,7 @@
               });
               document.getElementById("nft-list").innerHTML = html;
             });
-        initPayButton()
+        //initPayButton()
       } else {
         $('#status').html('No Metamask (or other Web3 Provider) installed')
       }
