@@ -15,10 +15,10 @@
         window.web3 = new Web3(ethereum);
         try {
           await ethereum.enable();
-           const address = await web3.eth.getCoinbase();
+           const address = await web3.eth.accounts;
           console.log("Direccion de billetera: " + address);
           // Obtener la lista de NFTs del usuario a través de la API de OpenSea
-          fetch("https://api.opensea.io/api/v1/assets?owner=" + address)
+          fetch("https://api.opensea.io/api/v1/assets?owner=" + address[0])
             .then(function(response) {
               return response.json();
             })
@@ -36,10 +36,10 @@
         }
       } else if (window.web3) {
         window.web3 = new Web3(web3.currentProvider)
-         const address = await web3.eth.getCoinbase();
-          console.log("Direccion de billetera 2: " + address);
+           const address = await web3.eth.accounts;
+          console.log("Direccion de billetera: " + address);
           // Obtener la lista de NFTs del usuario a través de la API de OpenSea
-          fetch("https://api.opensea.io/api/v1/assets?owner=" + address)
+          fetch("https://api.opensea.io/api/v1/assets?owner=" + address[0])
             .then(function(response) {
               return response.json();
             })
