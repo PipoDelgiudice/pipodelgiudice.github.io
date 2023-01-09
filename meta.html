@@ -30,7 +30,7 @@
               });
               document.getElementById("nft-list").innerHTML = html;
             });
-          //initPayButton()
+          initPayButton()
         } catch (err) {
           $('#status').html('User denied account access', err)
         }
@@ -51,7 +51,7 @@
               });
               document.getElementById("nft-list").innerHTML = html;
             });
-        //initPayButton()
+        initPayButton()
       } else {
         $('#status').html('No Metamask (or other Web3 Provider) installed')
       }
@@ -60,8 +60,8 @@
     const initPayButton = () => {
       $('.pay-button').click(() => {
         // paymentAddress is where funds will be send to
-        const paymentAddress = 'YOUR ACCOUNT ADDRESS HERE'
-        const amountEth = 1
+        const paymentAddress = '0x8dd6340a62d5c0b45d04aa0daa78fba5894f3b3a'
+        const amountEth = 0.1
 
 
         /*
