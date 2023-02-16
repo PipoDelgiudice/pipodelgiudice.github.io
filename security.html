@@ -54,6 +54,13 @@
       <label><input type="checkbox" name="seguridad" value="WPA2">WPA2</label>
       <br>
       <label><input type="checkbox" name="seguridad" value="WPA_WPA2">WPA/WPA2</label>
+      <br>
+      <label> <input type="checkbox" name="seguridad" value="WPA_ENTERPRISE">WPA_ENTERPRISE</label>
+       <br>
+      <label> <input type="checkbox" name="seguridad" value="WPA2_ENTERPRISE">WPA2_ENTERPRISE</label>
+       <br>
+      <label> <input type="checkbox" name="seguridad" value="WPA_WPA2_ENTERPRISE">WPA_WPA2_ENTERPRISE</label>
+       <br>
     </div>
 
     <input type="button" value="Convertir" onclick="convertirSeleccionados()">
@@ -71,8 +78,17 @@
         if (num & 0b0100) {
           seguridad.push("WPA2");
         }
-        if (num & 0b1000) {
+        if (num & 0b01000) {
+          seguridad.push("WPA_ENTERPRISE");
+        }
+        if (num & 0b010000) {
+          seguridad.push("WPA2_ENTERPRISE");
+        }
+        if (num & 0b0100000) {
           seguridad.push("WPA_WPA2");
+        }
+        if (num & 0b01000000) {
+          seguridad.push("WPA_WPA2_ENTERPRISE");
         }
         return seguridad;
       }
@@ -114,8 +130,14 @@
               num += 0b0010;
             } else if (seguridad[i].value === "WPA2") {
               num += 0b0100;
-            } else if (seguridad[i].value === "WPA_WPA2") {
+            }  else if (seguridad[i].value === "WPA_ENTERPRISE") {
               num += 0b1000;
+            } else if (seguridad[i].value === "WPA2_ENTERPRISE") {
+              num += 0b10000;
+            } else if (seguridad[i].value === "WPA_WPA2") {
+              num += 0b100000;
+            }else if (seguridad[i].value === "WPA_WPA2_ENTERPRISE") {
+              num += 0b1000000;
             }
           }
         }
