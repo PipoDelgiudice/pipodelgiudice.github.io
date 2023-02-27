@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Pipo Del Giudice">
+    <link rel="icon" href="images/icon.png">
+    <title>Conversor de encriptado de Wi-Fi</title>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-65DQH6XH4G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-65DQH6XH4G');
+</script>
+  </head>
+  <body>
+    <h1>Conversor de modo de encriptado Wi-Fi</h1>
+    <form>
+      <label>
+        Número decimal:
+        <input type="text" id="decimal">
+      </label>
+      <br><br>
+      <label>
+        Número binario:
+        <input type="text" id="binario">
+      </label>
+      <br><br>
+      <input type="button" value="Convertir" onclick="convertir()">
+    </form>
+    <br>
+    <table>
+      <tr>
+        <th>Encryption en decimal:</th>
+        <td id="encryption-decimal"></td>
+      </tr>
+      <tr>
+        <th>Encryption en binario:</th>
+        <td id="encryption-binario"></td>
+      </tr>
+    </table>
+
+    <h1>Conversor de tipos de encriptado</h1>
+    <p>Seleccione uno o varios tipos de encriptado:</p>
+     <div>
+      <label><input type="checkbox" name="encryption" value="TKIP">TKIP</label>
+      <br>
+      <label><input type="checkbox" name="encryption" value="AES">AES</label>
+      <br>
+      <label><input type="checkbox" name="encryption" value="AES+TKIP">AES+TKIP</label>
+      <br>
+    </div>
+
+    <input type="button" value="Convertir" onclick="convertirSeleccionados()">
+    <p id="resultado"></p>
+
+    <script>
+      function tipos_encriptados_soportados(num) {
+        var encryption = [];
+        if (num & 0b0001) {
+          encryption.push("TKIP");
+        }
+        if (num & 0b0010) {
+          encryption.push("AES");
+        }
+        if (num & 0b0100) {
+          encryption.push("AES+TKIP");
+        }
+        return encryption;
+      }
+
+      function convertir() {
+        var decimal = document.getElementById("decimal").value;
+        var binario = document.getElementById("binario").value;
+
+        if (decimal !== "") {
+          var num = parseInt(decimal);
+          var encryption = tipos_encriptados_soportados(num);
+          var encryptionDecimal = encryption.join(" | ");
+          var encryptionBinario = "0b" + (num & 0b111).toString(2).padStart(3, "0");
+          document.getElementById("encryption-decimal").textContent = encryptionDecimal;
+          document.getElementById("encryption-binario").textContent = encryptionBinario;
+        } else if (binario !== "") {
+          var num = parseInt(binario, 2);
+          var encryption = tipos_encriptados_soportados(num);
+          var encryptionDecimal = encryption.join(" | ");
+          var encryptionBinario = "0b" + (num & 0b111).toString(2).padStart(3, "0");
+          document.getElementById("encryption-decimal").textContent = encryptionDecimal;
+          document.getElementById("encryption-binario").textContent = encryptionBinario;
+        } else {
+          alert("Por favor ingrese un número decimal o binario.");
+        }
+      }
+
+      function convertirSeleccionados() {
+        var encryption = document.getElementsByName("encryption");
+
+        var num = 0;
+        for (var i = 0; i < encryption.length; i++) {
+
+          if (encryption[i].checked) {
+                  console.log(encryption[i].value);
+            if (encryption[i].value === "TKIP") {
+              num += 0b0001;
+            } else if (encryption[i].value === "AES") {
+              num += 0b0010;
+            } else if (encryption[i].value === "AES+TKIP") {
+              num += 0b0100;
+            }  
+          }
+        }
+
+        console.log(num);
+        var resultado = document.getElementById("resultado");
+
+        if (num > 0) {
+          resultado.innerHTML = "<p> Número decimal: <b>" + num + " </b><br> Número binario: <b>" + num.toString(2) + "</b> <br> Tipos de Encryption soportados: <b>[" + tipos_encriptados_soportados(num).join(", ") + ']</b></p>';
+        } else if (binario !== "") {
+          resultado.innerHTML = "<p>Número decimal: " + parseInt(num, 2) + '</p>';
+          }
+          }
+    </script>
+  </body>
+</html>
