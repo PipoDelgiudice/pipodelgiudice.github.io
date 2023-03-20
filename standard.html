@@ -64,6 +64,7 @@
          <br> <label> <input type="checkbox" name="standard" value="anMixed">anMixed</label>
          <br> <label> <input type="checkbox" name="standard" value="nacOnly">nacOnly</label>
          <br> <label> <input type="checkbox" name="standard" value="anacOnly">anacOnly</label>
+         <br> <label> <input type="checkbox" name="standard" value="auto">auto</label>
        <br>
     </div>
 
@@ -103,8 +104,11 @@
         if (num & 0b01000000000) {
           standard.push("nacOnly");
         }
-        if (num & 0b010000000000) {
+        if (num & 0b10000000000) {
           standard.push("anacOnly");
+        }
+        if( num & 0b100000000000){
+          standard.push("auto");
         }
         return standard;
       }
@@ -162,6 +166,8 @@
               num += 0b10000000000;
             }else if (standard[i].value === "anacOnly") {
               num += 0b100000000000;
+            }else if (standard[i].value === "auto") {
+              num += 0b1000000000000;
             }
           }
         }
