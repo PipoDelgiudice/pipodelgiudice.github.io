@@ -21,7 +21,9 @@
          "EVM",
          "WEI",
          "API",
-         "IGO"
+         "IGO",
+         "TAX",
+         "PNL"
       ],
       "letters_4":[
          "BULL",
@@ -50,6 +52,9 @@
          "FANS",
          "SONG",
          "KEYS",
+         "HODL",
+         "DEFI",
+         "SAFU"
          
       ],
       "letters_5":[
@@ -94,7 +99,9 @@
          "MEDIA",
          "VIDEO",
          "FUNDS",
-         "TOKEN"
+         "TOKEN",
+         "RATIO",
+         "ASSET"
       ],
       "letters_6":[
          "REDEEM",
@@ -142,7 +149,10 @@
          "STUDIO",
          "ARTIST",
          "BLOCKS",
-         "PHRASE"
+         "PHRASE",
+         "REVIEW",
+         "SIMPLE",
+         "SECURE"
       ],
       "letters_7":[
          "CREATOR",
@@ -186,7 +196,9 @@
          "RECORDS",
          "CONNECT",
          "CUSTODY",
-         "OFFLINE"
+         "OFFLINE",
+         "DEPOSIT",
+         "BALANCE"
       ],
       "letters_8":[
          "FUNGIBLE",
@@ -214,7 +226,9 @@
          "RELIABLE",
          "PREMIERE",
          "FESTIVAL",
-         "WITHDRAW"
+         "WITHDRAW",
+         "ALLOCATE",
+         "STRATEGY"
       ]
    }
 }
