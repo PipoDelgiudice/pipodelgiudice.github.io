@@ -1,0 +1,1505 @@
+{
+  "version": "0.1.0",
+  "phrases": [
+    {
+      "id": 1,
+      "author": "Albert Einstein",
+      "text": "La imaginación es más importante que el conocimiento."
+    },
+    {
+      "id": 2,
+      "author": "Walt Disney",
+      "text": "Hazlo o no lo hagas, pero no lo intentes."
+    },
+    {
+      "id": 3,
+      "author": "Nelson Mandela",
+      "text": "Siempre parece imposible hasta que se hace."
+    },
+    {
+      "id": 4,
+      "author": "Pablo Picasso",
+      "text": "La inspiración existe, pero tiene que encontrarte trabajando."
+    },
+    {
+      "id": 5,
+      "author": "Steve Jobs",
+      "text": "Tu trabajo va a llenar gran parte de tu vida, y la única forma de estar realmente satisfecho es hacer lo que creas que es un gran trabajo."
+    },
+    {
+      "id": 6,
+      "author": "Helen Keller",
+      "text": "La vida es una aventura atrevida o no es nada."
+    },
+    {
+      "id": 7,
+      "author": "Confucio",
+      "text": "Elige un trabajo que ames y no tendrás que trabajar ni un solo día de tu vida."
+    },
+    {
+      "id": 8,
+      "author": "Oprah Winfrey",
+      "text": "El mayor descubrimiento de todos los tiempos es que una persona puede cambiar su futuro simplemente cambiando su actitud."
+    },
+    {
+      "id": 9,
+      "author": "Napoleón Bonaparte",
+      "text": "La victoria pertenece al más perseverante."
+    },
+    {
+      "id": 10,
+      "author": "Ralph Waldo Emerson",
+      "text": "Lo que nos asusta de las decepciones es que nos obligan a descubrir lo que realmente somos cuando no tenemos algo o a alguien."
+    },
+    {
+      "id": 11,
+      "author": "Albert Camus",
+      "text": "En medio del invierno, aprendí que había en mí un verano invencible."
+    },
+    {
+      "id": 12,
+      "author": "Dalai Lama",
+      "text": "Si crees que eres demasiado pequeño para marcar la diferencia, intenta dormir con un mosquito en la habitación."
+    },
+    {
+      "id": 13,
+      "author": "Maya Angelou",
+      "text": "No es lo que te sucede, sino cómo reaccionas a ello lo que importa."
+    },
+    {
+      "id": 14,
+      "author": "Winston Churchill",
+      "text": "El éxito consiste en ir de fracaso en fracaso sin perder el entusiasmo."
+    },
+    {
+      "id": 15,
+      "author": "Gabriel García Márquez",
+      "text": "La sabiduría nos llega cuando ya no nos sirve de nada."
+    },
+    {
+      "id": 16,
+      "author": "Coco Chanel",
+      "text": "La belleza comienza en el momento en que decides ser tú mismo."
+    },
+    {
+      "id": 17,
+      "author": "Jorge Luis Borges",
+      "text": "No hay en el mundo un lenguaje tan universal y tan rápido como una sonrisa."
+    },
+    {
+      "id": 18,
+      "author": "J.K. Rowling",
+      "text": "La felicidad se puede encontrar incluso en los momentos más oscuros, si uno recuerda encender la luz."
+    },
+    {
+      "id": 19,
+      "author": "Alberto Durero",
+      "text": "La simetría es la armonía de las formas y la belleza de las proporciones."
+    },
+    {
+      "id": 20,
+      "author": "Marie Curie",
+      "text": "Nunca debemos olvidar que cuando se descubren principios científicos, lo que realmente se descubre son las maravillas de la creación."
+    },
+    {
+      "id": 21,
+      "author": "César Vallejo",
+      "text": "Hay golpes en la vida, tan fuertes... ¡Yo no sé!"
+    },
+    {
+      "id": 22,
+      "author": "Frida Kahlo",
+      "text": "Pies, ¿para qué los quiero si tengo alas para volar?"
+    },
+    {
+      "id": 23,
+      "author": "Rabindranath Tagore",
+      "text": "El amor es el eco de la eternidad en los sentimientos."
+    },
+    {
+      "id": 24,
+      "author": "Fernando Pessoa",
+      "text": "Para viajar lejos, no hay mejor nave que un libro."
+    },
+    {
+      "id": 25,
+      "author": "Johann Wolfgang von Goethe",
+      "text": "Trata a una persona como es y seguirá siendo lo que es, trátala como puede y debe ser y se convertirá en lo que puede y debe ser."
+    },
+    {
+      "id": 26,
+      "author": "Gustave Flaubert",
+      "text": "Viajar es vivir dos veces."
+    },
+    {
+      "id": 27,
+      "author": "J.R.R. Tolkien",
+      "text": "No todos los que deambulan están perdidos."
+    },
+    {
+      "id": 28,
+      "author": "Helen Keller",
+      "text": "La vida es una aventura atrevida o no es nada."
+    },
+    {
+      "id": 29,
+      "author": "Mark Twain",
+      "text": "El mundo es un libro y aquellos que no viajan solo leen una página."
+    },
+    {
+      "id": 30,
+      "author": "Isabel Allende",
+      "text": "El viajar es como el lenguaje, una de las grandes aventuras humanas."
+    },
+    {
+      "id": 31,
+      "author": "Paulo Coelho",
+      "text": "Nunca se sube la misma montaña dos veces, porque en cada ascenso ya no eres la misma persona y la montaña tampoco es la misma."
+    },
+    {
+      "id": 32,
+      "author": "Hans Christian Andersen",
+      "text": "Viajar es vivir."
+    },
+    {
+      "id": 33,
+      "author": "Anaïs Nin",
+      "text": "No veas el mundo como es, sino como podría ser."
+    },
+    {
+      "id": 34,
+      "author": "John Steinbeck",
+      "text": "La gente no toma viajes, los viajes toman a la gente."
+    },
+    {
+      "id": 35,
+      "author": "Ralph Waldo Emerson",
+      "text": "No existe un camino hacia la felicidad. La felicidad es el camino."
+    },
+    {
+      "id": 36,
+      "author": "Walt Disney",
+      "text": "Si puedes soñarlo, puedes lograrlo."
+    },
+    {
+      "id": 37,
+      "author": "Nelson Mandela",
+      "text": "Siempre parece imposible hasta que se hace."
+    },
+    {
+      "id": 38,
+      "author": "Confucio",
+      "text": "El hombre de bien rectifica y cambia su conducta."
+    },
+    {
+      "id": 39,
+      "author": "Coco Chanel",
+      "text": "La belleza comienza en el momento en que decides ser tú mismo."
+    },
+    {
+      "id": 40,
+      "author": "Albert Einstein",
+      "text": "El verdadero signo de la inteligencia no es el conocimiento, sino la imaginación."
+    },
+    {
+      "id": 41,
+      "author": "Maya Angelou",
+      "text": "Siempre puedes reinventarte, no importa tu edad o circunstancias."
+    },
+    {
+      "id": 42,
+      "author": "Harriet Tubman",
+      "text": "Cada gran sueño comienza con un soñador. Recuerda siempre, tienes dentro de ti la fuerza, la paciencia y la pasión para alcanzar las estrellas y cambiar el mundo."
+    },
+    {
+      "id": 43,
+      "author": "Steve Jobs",
+      "text": "La única manera de hacer un gran trabajo es amar lo que haces."
+    },
+    {
+      "id": 44,
+      "author": "Helen Keller",
+      "text": "Nunca debes estar satisfecho con lo que logras, siempre debes aspirar a algo más."
+    },
+    {
+      "id": 45,
+      "author": "Les Brown",
+      "text": "Elige tomar el control de tu vida. No te conformes con vivir a medias."
+    },
+    {
+      "id": 46,
+      "author": "Ralph Waldo Emerson",
+      "text": "La belleza de una mujer debe ser vista desde sus ojos, porque esa es la puerta hacia su corazón, el lugar donde el amor reside."
+    },
+    {
+      "id": 47,
+      "author": "Audrey Hepburn",
+      "text": "La belleza de una mujer se refleja en su alma."
+    },
+    {
+      "id": 48,
+      "author": "Sócrates",
+      "text": "El verdadero conocimiento es conocer la belleza interior."
+    },
+    {
+      "id": 49,
+      "author": "Mahatma Gandhi",
+      "text": "La belleza está en los ojos del observador."
+    },
+    {
+      "id": 50,
+      "author": "Lao Tzu",
+      "text": "La belleza exterior atrae, pero la belleza interior cautiva."
+    },
+    {
+      "id": 51,
+      "author": "Eleanor Roosevelt",
+      "text": "La belleza en el rostro envejece, la belleza en el corazón perdura."
+    },
+    {
+      "id": 52,
+      "author": "Friedrich Schiller",
+      "text": "La belleza interior es la verdadera belleza."
+    },
+    {
+      "id": 53,
+      "author": "Pablo Neruda",
+      "text": "La belleza es ese misterio hermoso que no descifran ni la psicología ni la retórica."
+    },
+    {
+      "id": 54,
+      "author": "Victor Hugo",
+      "text": "La belleza es tener alma."
+    },
+    {
+      "id": 55,
+      "author": "Confucio",
+      "text": "La belleza de una persona no está en su rostro, sino en su alma."
+    },
+    {
+      "id": 56,
+      "author": "Coco Chanel",
+      "text": "La belleza comienza en el momento en que decides ser tú mismo."
+    },
+    {
+      "id": 57,
+      "author": "Emily Dickinson",
+      "text": "La belleza no puede ser vista, sino sentida y entendida por el corazón."
+    },
+    {
+      "id": 58,
+      "author": "Khalil Gibran",
+      "text": "La belleza no está en la cara; la belleza es una luz en el corazón."
+    },
+    {
+      "id": 59,
+      "author": "Rumi",
+      "text": "Tu tarea no es buscar el amor, sino buscar y encontrar todas las barreras dentro de ti que has construido en contra de él."
+    },
+    {
+      "id": 60,
+      "author": "José Martí",
+      "text": "La belleza está en el interior, en el alma."
+    },
+    {
+      "id": 61,
+      "author": "Walt Disney",
+      "text": "El futuro pertenece a aquellos que creen en la belleza de sus sueños."
+    },
+    {
+      "id": 62,
+      "author": "Pablo Picasso",
+      "text": "El futuro será lo que hagamos hoy."
+    },
+    {
+      "id": 63,
+      "author": "Eleanor Roosevelt",
+      "text": "El futuro pertenece a quienes creen en la belleza de sus sueños."
+    },
+    {
+      "id": 64,
+      "author": "Steve Jobs",
+      "text": "No podemos predecir el futuro, pero podemos crearlo."
+    },
+    {
+      "id": 65,
+      "author": "Albert Einstein",
+      "text": "La imaginación es más importante que el conocimiento. El conocimiento es limitado, mientras que la imaginación no tiene límites."
+    },
+    {
+      "id": 66,
+      "author": "Napoleón Hill",
+      "text": "No esperes. El momento nunca será perfecto. Empieza donde estás y trabaja con las herramientas que tienes a tu disposición. Mejora a medida que avanzas."
+    },
+    {
+      "id": 67,
+      "author": "Helen Keller",
+      "text": "Aunque el mundo esté lleno de sufrimiento, también está lleno de superación."
+    },
+    {
+      "id": 68,
+      "author": "John F. Kennedy",
+      "text": "El cambio es la ley de la vida. Y aquellos que solo miran al pasado o al presente, están seguros de perder el futuro."
+    },
+    {
+      "id": 69,
+      "author": "J.R.R. Tolkien",
+      "text": "Aun en la oscuridad se pueden encontrar estrellas."
+    },
+    {
+      "id": 70,
+      "author": "Eleanor Roosevelt",
+      "text": "El futuro pertenece a quienes creen en la belleza de sus sueños."
+    },
+    {
+      "id": 71,
+      "author": "Nelson Mandela",
+      "text": "Siempre parece imposible hasta que se hace."
+    },
+    {
+      "id": 72,
+      "author": "C.S. Lewis",
+      "text": "Puedes ir tan lejos como tu mente te permita. Recuerda: tus límites son solo producto de tu imaginación."
+    },
+    {
+      "id": 73,
+      "author": "Ralph Waldo Emerson",
+      "text": "No sigas donde el camino te lleve. Ve donde no hay camino y deja un rastro."
+    },
+    {
+      "id": 74,
+      "author": "Abraham Lincoln",
+      "text": "El mejor modo de predecir el futuro es crearlo."
+    },
+    {
+      "id": 75,
+      "author": "Pablo Picasso",
+      "text": "La inspiración existe, pero tiene que encontrarte trabajando."
+    },
+    {
+      "id": 76,
+      "author": "Eleanor Roosevelt",
+      "text": "El futuro pertenece a aquellos que creen en la belleza de sus sueños."
+    },
+    {
+      "id": 77,
+      "author": "Walt Disney",
+      "text": "Todos tus sueños pueden hacerse realidad si tienes el coraje de perseguirlos."
+    },
+    {
+      "id": 78,
+      "author": "Maya Angelou",
+      "text": "No puedes cambiar el pasado, pero puedes dar forma al futuro."
+    },
+    {
+      "id": 79,
+      "author": "Steve Jobs",
+      "text": "La innovación distingue a los líderes de los seguidores."
+    },
+    {
+      "id": 80,
+      "author": "Dalai Lama",
+      "text": "El futuro es algo que todos podemos construir juntos."
+    },
+    {
+      "id": 81,
+      "author": "Sócrates",
+      "text": "Una vida sin examen no vale la pena ser vivida."
+    },
+    {
+      "id": 82,
+      "author": "Buda",
+      "text": "No hay camino hacia la paz, la paz es el camino."
+    },
+    {
+      "id": 83,
+      "author": "Mahatma Gandhi",
+      "text": "Sé el cambio que quieres ver en el mundo."
+    },
+    {
+      "id": 84,
+      "author": "Confucio",
+      "text": "No importa lo lento que vayas, siempre y cuando no te detengas."
+    },
+    {
+      "id": 85,
+      "author": "Albert Einstein",
+      "text": "Locura es hacer lo mismo una y otra vez esperando obtener resultados diferentes."
+    },
+    {
+      "id": 86,
+      "author": "Ralph Waldo Emerson",
+      "text": "Lo que somos habla más fuerte que lo que decimos."
+    },
+    {
+      "id": 87,
+      "author": "Leonardo da Vinci",
+      "text": "Aprendamos a ver. Pintemos nuestra mente con las tonalidades más delicadas y más resplandecientes."
+    },
+    {
+      "id": 88,
+      "author": "Nelson Mandela",
+      "text": "La educación es el arma más poderosa que puedes usar para cambiar el mundo."
+    },
+    {
+      "id": 89,
+      "author": "Aristóteles",
+      "text": "Somos lo que hacemos repetidamente. La excelencia, entonces, no es un acto, sino un hábito."
+    },
+    {
+      "id": 90,
+      "author": "Martin Luther King Jr.",
+      "text": "La oscuridad no puede expulsar a la oscuridad; solo la luz puede hacer eso. El odio no puede expulsar al odio; solo el amor puede hacer eso."
+    },
+    {
+      "id": 91,
+      "author": "Pablo Picasso",
+      "text": "La acción es la clave fundamental de todo éxito."
+    },
+    {
+      "id": 92,
+      "author": "Albert Camus",
+      "text": "No hay más que un problema filosófico verdaderamente serio: el suicidio. Juzgar si la vida merece o no ser vivida es responder a la pregunta fundamental de la filosofía."
+    },
+    {
+      "id": 93,
+      "author": "Coco Chanel",
+      "text": "La moda pasa, el estilo permanece."
+    },
+    {
+      "id": 94,
+      "author": "Séneca",
+      "text": "No es porque las cosas son difíciles que no nos atrevemos; es porque no nos atrevemos que son difíciles."
+    },
+    {
+      "id": 95,
+      "author": "Eleanor Roosevelt",
+      "text": "Haz lo que sientes en tu corazón que es correcto, ya que de todas formas serás criticado."
+    },
+    {
+      "id": 96,
+      "author": "Buda",
+      "text": "El dolor es inevitable, pero el sufrimiento es opcional."
+    },
+    {
+      "id": 97,
+      "author": "Gabriel García Márquez",
+      "text": "Lo único que me duele de morir, es que no sea de amor."
+    },
+    {
+      "id": 98,
+      "author": "Lao Tzu",
+      "text": "Si te das cuenta de que tienes suficiente, eres verdaderamente rico."
+    },
+    {
+      "id": 99,
+      "author": "Pablo Neruda",
+      "text": "Podrán cortar todas las flores, pero no podrán detener la primavera."
+    },
+    {
+      "id": 100,
+      "author": "Friedrich Nietzsche",
+      "text": "Aquel que tiene un porqué para vivir se puede enfrentar a cualquier cómo."
+    },
+    {
+      "id": 101,
+      "author": "William Shakespeare",
+      "text": "El amor no prospera en corazones que se amedrentan de las sombras."
+    },
+    {
+      "id": 102,
+      "author": "Paulo Coelho",
+      "text": "Algunos amores están destinados a ser eternos pero no a ser vividos."
+    },
+    {
+      "id": 103,
+      "author": "Federico García Lorca",
+      "text": "Prohibir un amor aumenta sus fuerzas y lo hace más deseado."
+    },
+    {
+      "id": 104,
+      "author": "Mario Benedetti",
+      "text": "Hay amores que se convierten en prohibidos porque el destino les tiene miedo."
+    },
+    {
+      "id": 105,
+      "author": "Gustavo Adolfo Bécquer",
+      "text": "Amor eterno mientras dura."
+    },
+    {
+      "id": 106,
+      "author": "Octavio Paz",
+      "text": "El amor prohibido es como un sueño imposible, pero eso no lo hace menos real."
+    },
+    {
+      "id": 107,
+      "author": "Pablo Neruda",
+      "text": "Es tan corto el amor y tan largo el olvido."
+    },
+    {
+      "id": 108,
+      "author": "Johann Wolfgang von Goethe",
+      "text": "El amor no se elige, nos elige."
+    },
+    {
+      "id": 109,
+      "author": "Oscar Wilde",
+      "text": "El amor que no se atreve a declararse, pronto se convierte en amistad."
+    },
+    {
+      "id": 110,
+      "author": "Gabriel García Márquez",
+      "text": "La única revolución posible es dentro de uno mismo."
+    },
+    {
+      "id": 111,
+      "author": "Friedrich Nietzsche",
+      "text": "Es el amor, y no la razón, que es más fuerte que la muerte."
+    },
+    {
+      "id": 112,
+      "author": "Emily Dickinson",
+      "text": "No podemos vivir sin el amor, tampoco sin la esperanza."
+    },
+    {
+      "id": 113,
+      "author": "Victor Hugo",
+      "text": "No hay nada como un sueño para crear el futuro."
+    },
+    {
+      "id": 114,
+      "author": "Albert Camus",
+      "text": "En el amor, no hay pecado más grande que el de la fuga."
+    },
+    {
+      "id": 115,
+      "author": "George Sand",
+      "text": "El amor verdadero no espera a ser permitido."
+    },
+    {
+      "id": 116,
+      "author": "Jane Austen",
+      "text": "El amor que no puede hablar, susurra la más fuerte."
+    },
+    {
+      "id": 117,
+      "author": "Arthur Rimbaud",
+      "text": "Amar es siempre un sacrificio, el más alto que se puede pagar por el amor prohibido."
+    },
+    {
+      "id": 118,
+      "author": "Sor Juana Inés de la Cruz",
+      "text": "Amar y saber callar, es lo más heroico que puede hacer un corazón enamorado."
+    },
+    {
+      "id": 119,
+      "author": "Anaïs Nin",
+      "text": "No quiero el amor prohibido, quiero el amor que me prohibieron."
+    },
+    {
+      "id": 120,
+      "author": "Miguel de Cervantes Saavedra",
+      "text": "La ausencia es al amor lo que el viento al fuego; apaga los pequeños, pero aviva los grandes."
+    },
+    {
+      "id": 121,
+      "author": "Pablo Neruda",
+      "text": "Te amo sin saber cómo, ni cuándo, ni de dónde."
+    },
+    {
+      "id": 122,
+      "author": "Frida Kahlo",
+      "text": "Donde no puedas amar, no te demores."
+    },
+    {
+      "id": 123,
+      "author": "Emily Dickinson",
+      "text": "El corazón quiere lo que quiere. No hay lógica para estos asuntos. Puedes tener razones muy lógicas para alguien y aún así no amarlo."
+    },
+    {
+      "id": 124,
+      "author": "John Lennon",
+      "text": "Todo lo que necesitas es amor."
+    },
+    {
+      "id": 125,
+      "author": "William Shakespeare",
+      "text": "El amor no mira con los ojos, sino con la mente."
+    },
+    {
+      "id": 126,
+      "author": "Julia Roberts",
+      "text": "Te amo. Te amo sin saber cómo, ni cuándo, ni de dónde."
+    },
+    {
+      "id": 127,
+      "author": "Rumi",
+      "text": "Amar es encontrar en la felicidad de otro la propia felicidad."
+    },
+    {
+      "id": 128,
+      "author": "Mario Benedetti",
+      "text": "Si el corazón se escapa del pecho, no hay palabras que lo detengan."
+    },
+    {
+      "id": 129,
+      "author": "Victor Hugo",
+      "text": "El amor es una maravilla que no tiene límites ni fronteras."
+    },
+    {
+      "id": 130,
+      "author": "Hermann Hesse",
+      "text": "El amor es un puente que une dos almas en una."
+    },
+    {
+      "id": 131,
+      "author": "Lao Tzu",
+      "text": "El amor es de todos los tiempos y lugares, y no conoce barreras ni límites."
+    },
+    {
+      "id": 132,
+      "author": "Federico García Lorca",
+      "text": "El amor es un misterio que no tiene explicación, solo se siente y se vive."
+    },
+    {
+      "id": 133,
+      "author": "Jorge Luis Borges",
+      "text": "Amar es dejar que el otro sea libre, incluso si eso significa estar sin él."
+    },
+    {
+      "id": 134,
+      "author": "Helen Keller",
+      "text": "El mejor y más hermoso amor es el que despierta el alma y nos hace aspirar a más, nos enciende el corazón y nos trae paz a la mente."
+    },
+    {
+      "id": 135,
+      "author": "Giovanni Boccaccio",
+      "text": "El amor no respeta leyes ni obedece mandatos."
+    },
+    {
+      "id": 136,
+      "author": "Gabriel García Márquez",
+      "text": "El amor es tan importante como la comida. Pero no alimenta."
+    },
+    {
+      "id": 137,
+      "author": "Miguel de Cervantes Saavedra",
+      "text": "El amor no tiene límites, es un océano infinito de emociones y sentimientos."
+    },
+    {
+      "id": 138,
+      "author": "Virginia Woolf",
+      "text": "El amor verdadero no tiene límites, ni barreras, ni condiciones. Es simplemente puro y sincero."
+    },
+    {
+      "id": 139,
+      "author": "Johann Wolfgang von Goethe",
+      "text": "El amor es una fuerza indomable que todo lo puede."
+    },
+    {
+      "id": 140,
+      "author": "Kahlil Gibran",
+      "text": "El amor no tiene otra desdicha que la de acabarse."
+    },
+    {
+      "id": 141,
+      "author": "Rabindranath Tagore",
+      "text": "Despierta, amanece tu belleza."
+    },
+    {
+      "id": 142,
+      "author": "Albert Camus",
+      "text": "En medio del invierno, aprendí que había en mí un verano invencible."
+    },
+    {
+      "id": 143,
+      "author": "Eleanor Roosevelt",
+      "text": "Cada nuevo amanecer nos ofrece la oportunidad de empezar de nuevo."
+    },
+    {
+      "id": 144,
+      "author": "Victor Hugo",
+      "text": "El amanecer es la esperanza renovada que nos brinda un nuevo comienzo."
+    },
+    {
+      "id": 145,
+      "author": "Emily Dickinson",
+      "text": "Despierta y encuentra la belleza en cada amanecer."
+    },
+    {
+      "id": 146,
+      "author": "J.R.R. Tolkien",
+      "text": "Un amanecer rojo, un nuevo día se levanta."
+    },
+    {
+      "id": 147,
+      "author": "Rumi",
+      "text": "La mañana tiene oro en la boca."
+    },
+    {
+      "id": 148,
+      "author": "George Eliot",
+      "text": "El amanecer es una maravillosa compensación por tener que levantarse temprano."
+    },
+    {
+      "id": 149,
+      "author": "Pablo Neruda",
+      "text": "No me basta con el amanecer, quiero el mediodía contigo."
+    },
+    {
+      "id": 150,
+      "author": "Séneca",
+      "text": "Nunca te arrepientas de un día en tu vida: los buenos días te dan felicidad, los malos días te dan experiencia y los peores días te dan lecciones."
+    },
+    {
+      "id": 151,
+      "author": "Ralph Waldo Emerson",
+      "text": "Cada amanecer es una invitación para alegrarse de estar vivo y disfrutar de la belleza del mundo."
+    },
+    {
+      "id": 152,
+      "author": "Khalil Gibran",
+      "text": "El amanecer es un mensajero de la resurrección y una canción de esperanza."
+    },
+    {
+      "id": 153,
+      "author": "Walt Whitman",
+      "text": "Cada amanecer es una invitación a la vida, una nueva oportunidad para ser y hacer."
+    },
+    {
+      "id": 154,
+      "author": "Hermann Hesse",
+      "text": "Cada amanecer es un pequeño milagro que nos recuerda la belleza y la fragilidad de la vida."
+    },
+    {
+      "id": 155,
+      "author": "Henry David Thoreau",
+      "text": "El amanecer es un espectáculo eterno para los ojos y una bendición para el alma."
+    },
+    {
+      "id": 156,
+      "author": "Jalaluddin Rumi",
+      "text": "El sol nunca deja de brillar, incluso cuando las nubes cubren el cielo."
+    },
+    {
+      "id": 157,
+      "author": "John Milton",
+      "text": "El amanecer trae consigo una promesa de nuevos comienzos y oportunidades infinitas."
+    },
+    {
+      "id": 158,
+      "author": "Virginia Woolf",
+      "text": "El amanecer es una palabra silenciosa que despierta el alma."
+    },
+    {
+      "id": 159,
+      "author": "Ralph Waldo Emerson",
+      "text": "Cada amanecer es una invitación a la belleza y la renovación."
+    },
+    {
+      "id": 160,
+      "author": "Octavio Paz",
+      "text": "El amanecer es un milagro cotidiano que nos recuerda que cada día es una nueva oportunidad."
+    },
+    {
+      "id": 161,
+      "author": "Hans Christian Andersen",
+      "text": "Viajar es maravilloso, pero hacerlo con alguien especial lo convierte en una experiencia inolvidable."
+    },
+    {
+      "id": 162,
+      "author": "Ralph Waldo Emerson",
+      "text": "No descubres una persona hasta que no viajas con ella."
+    },
+    {
+      "id": 163,
+      "author": "Albert Einstein",
+      "text": "La felicidad no es una estación de llegada, sino un modo de viajar."
+    },
+    {
+      "id": 164,
+      "author": "Tim Cahill",
+      "text": "Un buen compañero de viaje es mejor que un mapa."
+    },
+    {
+      "id": 165,
+      "author": "Emily Dickinson",
+      "text": "No hay lugar como el hogar, excepto los lugares que visitas con las personas que amas."
+    },
+    {
+      "id": 166,
+      "author": "John Steinbeck",
+      "text": "Las personas no toman viajes, son los viajes los que toman a las personas."
+    },
+    {
+      "id": 167,
+      "author": "J.R.R. Tolkien",
+      "text": "La aventura está ahí afuera."
+    },
+    {
+      "id": 168,
+      "author": "Helen Keller",
+      "text": "La vida es mejor cuando la compartes con alguien especial en un viaje."
+    },
+    {
+      "id": 169,
+      "author": "Mark Twain",
+      "text": "El viaje en sí mismo es parte del destino."
+    },
+    {
+      "id": 170,
+      "author": "Seneca",
+      "text": "Un amigo en la necesidad es un amigo de verdad. Y un amigo en un viaje es el compañero perfecto."
+    },
+    {
+      "id": 171,
+      "author": "Marcel Proust",
+      "text": "El verdadero viaje de descubrimiento no consiste en buscar nuevos paisajes, sino en tener nuevos ojos."
+    },
+    {
+      "id": 172,
+      "author": "C.S. Lewis",
+      "text": "La amistad nace en el momento en que una persona dice a otra: '¡Qué! ¿Tú también? Pensé que era el único.'"
+    },
+    {
+      "id": 173,
+      "author": "Gustave Flaubert",
+      "text": "Viajar hace uno modesto. Ves lo pequeño que es el lugar que ocupas en el mundo."
+    },
+    {
+      "id": 174,
+      "author": "Helen Keller",
+      "text": "La aventura está allá afuera, pero es aún mejor cuando la compartes con alguien especial."
+    },
+    {
+      "id": 175,
+      "author": "Henry David Thoreau",
+      "text": "Un buen viaje es como un buen amigo. Te hace sentir más vivo."
+    },
+    {
+      "id": 176,
+      "author": "Maya Angelou",
+      "text": "Quizás es suficiente ser solo humano. Quizás una de las razones por las que todos estamos aquí es para decirles a los demás: '¿Sabes? Yo también siento así.'"
+    },
+    {
+      "id": 177,
+      "author": "Samuel Johnson",
+      "text": "Un viaje en buena compañía hace que el camino sea más corto."
+    },
+    {
+      "id": 178,
+      "author": "Margaret Atwood",
+      "text": "El viaje importa, pero lo más importante es con quién lo haces."
+    },
+    {
+      "id": 179,
+      "author": "Herman Melville",
+      "text": "No puedes guiar a un compañero de viaje si no estás en el camino tú mismo."
+    },
+    {
+      "id": 180,
+      "author": "Mignon McLaughlin",
+      "text": "La verdadera felicidad está en disfrutar del viaje, no solo en llegar a la meta."
+    },
+    {
+      "id": 181,
+      "author": "Aristóteles",
+      "text": "La amistad es un alma que habita en dos cuerpos."
+    },
+    {
+      "id": 182,
+      "author": "Elbert Hubbard",
+      "text": "Un amigo es alguien que sabe todo sobre ti y aún así te ama."
+    },
+    {
+      "id": 183,
+      "author": "Lucio Anneo Séneca",
+      "text": "La verdadera amistad no se trata de ser inseparables, sino de estar separados y que nada cambie."
+    },
+    {
+      "id": 184,
+      "author": "Ralph Waldo Emerson",
+      "text": "Un amigo es una persona con la que puedo ser sincero. Ante él puedo pensar en voz alta."
+    },
+    {
+      "id": 185,
+      "author": "Eleanor Roosevelt",
+      "text": "Muchas personas entrarán y saldrán de tu vida, pero solo los verdaderos amigos dejarán huellas en tu corazón."
+    },
+    {
+      "id": 186,
+      "author": "Platón",
+      "text": "Un amigo es aquel que conoce todo de ti y aun así te quiere."
+    },
+    {
+      "id": 187,
+      "author": "William Shakespeare",
+      "text": "La amistad duplica las alegrías y divide las angustias por la mitad."
+    },
+    {
+      "id": 188,
+      "author": "Helen Keller",
+      "text": "El amigo más grande es aquel cuya presencia te inspira a ser mejor."
+    },
+    {
+      "id": 189,
+      "author": "Martin Luther King Jr.",
+      "text": "En el final, no recordaremos las palabras de nuestros enemigos, sino el silencio de nuestros amigos."
+    },
+    {
+      "id": 190,
+      "author": "Ralph Waldo Emerson",
+      "text": "La única forma de tener un amigo es ser uno."
+    },
+    {
+      "id": 191,
+      "author": "Albert Schweitzer",
+      "text": "A veces, nuestro corazón necesita más tiempo para aceptar lo que nuestra mente ya sabe: que los verdaderos amigos nunca nos abandonarán."
+    },
+    {
+      "id": 192,
+      "author": "C.S. Lewis",
+      "text": "La amistad nace en el momento en que una persona dice a otra: '¿Qué? ¿Tú también? Pensé que era el único.'"
+    },
+    {
+      "id": 193,
+      "author": "Aristóteles",
+      "text": "La amistad es una sola alma que habita en dos cuerpos."
+    },
+    {
+      "id": 194,
+      "author": "Jorge Luis Borges",
+      "text": "La amistad es un alma que habita en dos cuerpos; un corazón que habita en dos almas."
+    },
+    {
+      "id": 195,
+      "author": "Proverbio africano",
+      "text": "Si quieres ir rápido, ve solo. Si quieres llegar lejos, ve acompañado."
+    },
+    {
+      "id": 196,
+      "author": "Cicerón",
+      "text": "Un amigo es como otro yo mismo."
+    },
+    {
+      "id": 197,
+      "author": "Lope de Vega",
+      "text": "El amigo ha de ser como el dinero, que antes de necesitarlo se sabe el valor que tiene."
+    },
+    {
+      "id": 198,
+      "author": "Friedrich Nietzsche",
+      "text": "Amigo es aquel que a pesar de conocer todos tus defectos, decide quedarse a tu lado."
+    },
+    {
+      "id": 199,
+      "author": "Carlos Ruiz Zafón",
+      "text": "No hay mejor ejercicio para el corazón que agacharse y levantar a alguien."
+    },
+    {
+      "id": 200,
+      "author": "Jimi Hendrix",
+      "text": "La amistad es como un fuego. Puedes encenderlo de nuevo incluso después de haber quedado reducido a cenizas."
+    },
+    {
+      "id": 201,
+      "author": "Buda",
+      "text": "No hay mañana sin un buen despertar."
+    },
+    {
+      "id": 202,
+      "author": "Dalai Lama",
+      "text": "Cada nuevo amanecer es una oportunidad para disfrutar de la vida y ser feliz."
+    },
+    {
+      "id": 203,
+      "author": "Albert Einstein",
+      "text": "La mente que se abre a una nueva idea nunca vuelve a su tamaño original."
+    },
+    {
+      "id": 204,
+      "author": "Ralph Waldo Emerson",
+      "text": "Escribe en tu corazón que cada día es el mejor día del año."
+    },
+    {
+      "id": 205,
+      "author": "Walt Whitman",
+      "text": "Haz de cada día tu obra maestra."
+    },
+    {
+      "id": 206,
+      "author": "William Shakespeare",
+      "text": "La mejor forma de predecir el futuro es crearlo."
+    },
+    {
+      "id": 207,
+      "author": "Maya Angelou",
+      "text": "Levántate con la determinación de aprovechar al máximo el día que tienes por delante."
+    },
+    {
+      "id": 208,
+      "author": "Confucio",
+      "text": "Elige un trabajo que te guste y no tendrás que trabajar ni un día de tu vida."
+    },
+    {
+      "id": 209,
+      "author": "Helen Keller",
+      "text": "La felicidad no está en tener lo que quieres, sino en querer lo que tienes."
+    },
+    {
+      "id": 210,
+      "author": "Nelson Mandela",
+      "text": "Siempre parece imposible hasta que se hace."
+    },
+    {
+      "id": 211,
+      "author": "Johann Wolfgang von Goethe",
+      "text": "Nada es más valioso que este día."
+    },
+    {
+      "id": 212,
+      "author": "Coco Chanel",
+      "text": "La belleza comienza en el momento en que decides ser tú misma."
+    },
+    {
+      "id": 213,
+      "author": "Pablo Picasso",
+      "text": "La inspiración existe, pero tiene que encontrarte trabajando."
+    },
+    {
+      "id": 214,
+      "author": "Proverbio chino",
+      "text": "El mejor momento para plantar un árbol fue hace 20 años. El segundo mejor momento es ahora."
+    },
+    {
+      "id": 215,
+      "author": "Henry Ford",
+      "text": "El fracaso es simplemente la oportunidad de comenzar de nuevo, esta vez de forma más inteligente."
+    },
+    {
+      "id": 216,
+      "author": "Mark Twain",
+      "text": "El secreto de tener un buen día es tener buenos pensamientos desde el momento en que te despiertas."
+    },
+    {
+      "id": 217,
+      "author": "Winston Churchill",
+      "text": "El optimismo es la fe que conduce al logro. Nada se puede hacer sin esperanza y confianza."
+    },
+    {
+      "id": 218,
+      "author": "Eleanor Roosevelt",
+      "text": "La luz no puede ser vista sin la oscuridad."
+    },
+    {
+      "id": 219,
+      "author": "Rumi",
+      "text": "El amanecer es un recordatorio de que siempre tienes una nueva oportunidad para comenzar de nuevo."
+    },
+    {
+      "id": 220,
+      "author": "Pablo Neruda",
+      "text": "Podrás tocar el cielo si tus sueños van de la mano con tu determinación."
+    },
+    {
+      "id": 221,
+      "author": "Dalai Lama",
+      "text": "Elige ser feliz hoy, no te preocupes por lo que no puedes cambiar."
+    },
+    {
+      "id": 222,
+      "author": "Albert Einstein",
+      "text": "La vida es como una bicicleta, para mantener el equilibrio debes seguir adelante."
+    },
+    {
+      "id": 223,
+      "author": "Walt Disney",
+      "text": "Si puedes soñarlo, puedes lograrlo."
+    },
+    {
+      "id": 224,
+      "author": "Maya Angelou",
+      "text": "Siempre puedes hacer algo para cambiar tu situación. Lo primero es cambiar tu actitud."
+    },
+    {
+      "id": 225,
+      "author": "Nelson Mandela",
+      "text": "Siempre parece imposible hasta que se hace."
+    },
+    {
+      "id": 226,
+      "author": "Proverbio chino",
+      "text": "El mejor momento para plantar un árbol fue hace 20 años. El segundo mejor momento es ahora."
+    },
+    {
+      "id": 227,
+      "author": "Helen Keller",
+      "text": "Aunque el mundo esté lleno de sufrimiento, también está lleno de superación."
+    },
+    {
+      "id": 228,
+      "author": "Martin Luther King Jr.",
+      "text": "La oscuridad no puede expulsar a la oscuridad; solo la luz puede hacer eso. El odio no puede expulsar al odio; solo el amor puede hacer eso."
+    },
+    {
+      "id": 229,
+      "author": "Oscar Wilde",
+      "text": "La vida es demasiado importante para tomársela en serio."
+    },
+    {
+      "id": 230,
+      "author": "Pablo Picasso",
+      "text": "Cada acto de creación es primero un acto de destrucción."
+    },
+    {
+      "id": 231,
+      "author": "Ralph Waldo Emerson",
+      "text": "El triunfo está en el esfuerzo, no en el resultado."
+    },
+    {
+      "id": 232,
+      "author": "Frida Kahlo",
+      "text": "Pies, para qué los quiero si tengo alas para volar."
+    },
+    {
+      "id": 233,
+      "author": "Viktor Frankl",
+      "text": "Cuando ya no podemos cambiar una situación, nos encontramos con el desafío de cambiarnos a nosotros mismos."
+    },
+    {
+      "id": 234,
+      "author": "J.K. Rowling",
+      "text": "Rock bottom se convierte en la base sólida sobre la cual reconstruir tu vida."
+    },
+    {
+      "id": 235,
+      "author": "John Lennon",
+      "text": "Todo estará bien al final. Si no está bien, no es el final."
+    },
+    {
+      "id": 236,
+      "author": "Anne Frank",
+      "text": "Piensa en toda la belleza que aún hay a tu alrededor y sé feliz."
+    },
+    {
+      "id": 237,
+      "author": "Steve Jobs",
+      "text": "Tu tiempo es limitado, no lo malgastes viviendo la vida de alguien más."
+    },
+    {
+      "id": 238,
+      "author": "William Shakespeare",
+      "text": "Nuestra duda es traicionera y nos hace perder lo que a menudo podríamos ganar, por temor a intentarlo."
+    },
+    {
+      "id": 239,
+      "author": "Winston Churchill",
+      "text": "El éxito no es definitivo, el fracaso no es fatal: lo que cuenta es el coraje para continuar."
+    },
+    {
+      "id": 240,
+      "author": "Rumi",
+      "text": "La herida es el lugar por donde entra la luz."
+    },
+    {
+      "id": 241,
+      "author": "Elbert Hubbard",
+      "text": "Un amigo es alguien que lo sabe todo sobre ti y aún así te ama."
+    },
+    {
+      "id": 242,
+      "author": "Aristóteles",
+      "text": "La amistad es un alma que habita en dos cuerpos."
+    },
+    {
+      "id": 243,
+      "author": "Dalai Lama",
+      "text": "Un amigo es aquel que nos hace sentir que el mundo es un lugar seguro."
+    },
+    {
+      "id": 244,
+      "author": "William Shakespeare",
+      "text": "La amistad duplica las alegrías y divide las angustias por la mitad."
+    },
+    {
+      "id": 245,
+      "author": "Helen Keller",
+      "text": "La verdadera amistad es como una luz que brilla en la oscuridad y nos guía cuando perdemos el camino."
+    },
+    {
+      "id": 246,
+      "author": "Ralph Waldo Emerson",
+      "text": "El único modo de tener un amigo es serlo."
+    },
+    {
+      "id": 247,
+      "author": "Confucio",
+      "text": "Elige a tus amigos con cuidado, pues te convertirás en aquello que ellos son."
+    },
+    {
+      "id": 248,
+      "author": "Proverbio africano",
+      "text": "Si quieres ir rápido, ve solo. Si quieres llegar lejos, ve acompañado."
+    },
+    {
+      "id": 249,
+      "author": "Jorge Luis Borges",
+      "text": "La amistad es un alma que habita en dos cuerpos; un corazón que habita en dos almas."
+    },
+    {
+      "id": 250,
+      "author": "Oscar Wilde",
+      "text": "Un amigo es alguien que te conoce tal como eres, comprende dónde has estado, te acompaña en tus logros y tus fracasos, celebra tus alegrías y comparte tus penas."
+    },
+    {
+      "id": 251,
+      "author": "Albert Camus",
+      "text": "No camines delante de mí; podría no seguirte. No camines detrás de mí; podría no guiarte. Simplemente camina a mi lado y sé mi amigo."
+    },
+    {
+      "id": 252,
+      "author": "Eleanor Roosevelt",
+      "text": "Muchas personas entrarán y saldrán de tu vida, pero solo los verdaderos amigos dejarán huellas en tu corazón."
+    },
+    {
+      "id": 253,
+      "author": "Mark Twain",
+      "text": "La amistad es el único regalo que podemos elegir para nosotros mismos."
+    },
+    {
+      "id": 254,
+      "author": "Anne Frank",
+      "text": "Recuerda que los buenos amigos nunca te dicen lo que quieres escuchar, sino lo que necesitas escuchar."
+    },
+    {
+      "id": 255,
+      "author": "Gabriel García Márquez",
+      "text": "La sabiduría de un amigo se prueba en los momentos difíciles."
+    },
+    {
+      "id": 256,
+      "author": "J.K. Rowling",
+      "text": "Los amigos verdaderos se preocupan por ti incluso cuando el resto del mundo te abandona."
+    },
+    {
+      "id": 257,
+      "author": "C.S. Lewis",
+      "text": "La amistad nace en el momento en que una persona dice a otra: '¿Qué? ¿Tú también? Pensé que era el único.'"
+    },
+    {
+      "id": 258,
+      "author": "Proverbio español",
+      "text": "Un amigo fiel es un refugio seguro."
+    },
+    {
+      "id": 259,
+      "author": "Henry David Thoreau",
+      "text": "Un amigo es aquel que te hace sentir que vales algo, incluso cuando te sientes como nada."
+    },
+    {
+      "id": 260,
+      "author": "Walter Winchell",
+      "text": "Un verdadero amigo es aquel que llega cuando todos los demás se van y se queda cuando todos los demás se han ido."
+    },
+     {
+      "id": 261,
+      "author": null,
+      "text": "El cambio comienza cuando sales de tu zona de confort."
+    },
+    {
+      "id": 262,
+      "author": null,
+      "text": "Si quieres resultados diferentes, no hagas siempre lo mismo."
+    },
+    {
+      "id": 263,
+      "author": null,
+      "text": "La libertad no es hacer lo que quieres, sino ser dueño de tus elecciones."
+    },
+    {
+      "id": 264,
+      "author": null,
+      "text": "El mayor enemigo del conocimiento no es la ignorancia, sino la ilusión de conocimiento."
+    },
+    {
+      "id": 265,
+      "author": null,
+      "text": "Si no te gusta algo, cámbialo. Si no puedes cambiarlo, cambia tu actitud."
+    },
+    {
+      "id": 266,
+      "author": null,
+      "text": "La verdad no teme a la pregunta, solo a la ausencia de ella."
+    },
+    {
+      "id": 267,
+      "author": null,
+      "text": "La mediocridad es contagiosa, aléjate de ella."
+    },
+    {
+      "id": 268,
+      "author": null,
+      "text": "Si no te desafía, no te cambia."
+    },
+    {
+      "id": 269,
+      "author": null,
+      "text": "La vida comienza al final de tu zona de confort."
+    },
+    {
+      "id": 270,
+      "author": null,
+      "text": "No busques el sentido de la vida, dale sentido a tu vida."
+    },
+    {
+      "id": 271,
+      "author": null,
+      "text": "No hay atajos para ningún lugar que valga la pena llegar."
+    },
+    {
+      "id": 272,
+      "author": null,
+      "text": "El mayor acto de rebeldía es pensar por ti mismo."
+    },
+    {
+      "id": 273,
+      "author": null,
+      "text": "No dejes que el miedo decida por ti."
+    },
+    {
+      "id": 274,
+      "author": null,
+      "text": "No sigas las reglas, crea las tuyas propias."
+    },
+    {
+      "id": 275,
+      "author": null,
+      "text": "El tiempo es limitado, no lo malgastes viviendo una vida que no te hace feliz."
+    },
+    {
+      "id": 276,
+      "author": null,
+      "text": "La comodidad es el enemigo del progreso."
+    },
+    {
+      "id": 277,
+      "author": null,
+      "text": "No tengas miedo de fracasar, ten miedo de no intentarlo."
+    },
+    {
+      "id": 278,
+      "author": null,
+      "text": "Si no arriesgas nada, arriesgas aún más."
+    },
+    {
+      "id": 279,
+      "author": null,
+      "text": "No importa cuántas veces te caigas, lo importante es cuántas veces te levantes."
+    },
+    {
+      "id": 280,
+      "author": null,
+      "text": "Nada cambia si no cambias tú primero."
+    },
+    {
+      "id": 281,
+      "author": null,
+      "text": "Si no luchas por lo que quieres, no llores por lo que pierdes."
+    },
+    {
+      "id": 282,
+      "author": null,
+      "text": "No esperes que la vida sea justa, no lo es. Pero aún así, vale la pena."
+    },
+    {
+      "id": 283,
+      "author": null,
+      "text": "No te conformes con vivir una vida mediocre cuando puedes vivir una vida extraordinaria."
+    },
+    {
+      "id": 284,
+      "author": null,
+      "text": "El éxito no es para los que sueñan, sino para los que hacen realidad sus sueños."
+    },
+    {
+      "id": 285,
+      "author": null,
+      "text": "La mente es como un paracaídas, solo funciona si se abre."
+    },
+    {
+      "id": 286,
+      "author": null,
+      "text": "No permitas que el pasado defina tu futuro."
+    },
+    {
+      "id": 287,
+      "author": null,
+      "text": "La vida no espera a que estés listo, solo avanza. Así que no te detengas."
+    },
+    {
+      "id": 288,
+      "author": null,
+      "text": "No busques la aprobación de los demás, busca tu propia aprobación."
+    },
+    {
+      "id": 289,
+      "author": null,
+      "text": "No hay límites excepto los que tú mismo te pones."
+    },
+    {
+      "id": 290,
+      "author": null,
+      "text": "El éxito es el resultado de tus acciones, no de tus intenciones."
+    },
+    {
+      "id": 291,
+      "author": null,
+      "text": "No te preocupes por los errores del pasado, concéntrate en las lecciones que te han dejado."
+    },
+    {
+      "id": 292,
+      "author": null,
+      "text": "No esperes a que las cosas sean perfectas, da el primer paso y haz que sucedan."
+    },
+    {
+      "id": 293,
+      "author": null,
+      "text": "No hay camino fácil hacia el éxito, pero cada paso cuenta."
+    },
+    {
+      "id": 294,
+      "author": null,
+      "text": "No te compares con los demás, compite contigo mismo para ser mejor cada día."
+    },
+    {
+      "id": 295,
+      "author": null,
+      "text": "No dejes que el miedo al fracaso te impida intentarlo."
+    },
+    {
+      "id": 296,
+      "author": null,
+      "text": "No te conformes con ser bueno, busca ser excepcional."
+    },
+    {
+      "id": 297,
+      "author": null,
+      "text": "No pierdas tiempo y energía en cosas que no puedes controlar. Enfócate en lo que sí puedes cambiar."
+    },
+    {
+      "id": 298,
+      "author": null,
+      "text": "No esperes a tenerlo todo para empezar, empieza con lo que tienes y ve construyendo desde ahí."
+    },
+    {
+      "id": 299,
+      "author": null,
+      "text": "No dejes que el pesimismo te detenga, mantén viva la chispa del optimismo."
+    },
+    {
+      "id": 300,
+      "author": null,
+      "text": "No hay mejor momento para empezar que ahora mismo."
+    }
+  ]
+}
