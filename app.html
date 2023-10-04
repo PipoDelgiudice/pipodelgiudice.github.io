@@ -44,7 +44,7 @@
           name.textContent = `Name: ${data.name}`;
           about.textContent = `About: ${data.about}`;
           flag.src = `https://flagsapi.com/${data.location.country}/flat/64.png`;
-          gamification.textContent = `Gamification Balance: ${data.gamification.balance}`;
+          gamification.textContent = `Gamification Balance: ${data.gamification.balance} \r\n Gamification boostFactor: ${data.gamification.boostFactor}`;
           userInfo.style.display = "block";
         })
         .catch(error => {
