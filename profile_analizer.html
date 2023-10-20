@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<head xmlns="http://www.w3.org/1999/html">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3561826385481829"
+     crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="description" content="Analizá cualquier perfil de Taringa y mira los Negativos de Taringa
+Desarrollado por: Pipo Del Giudice | Pipo1995_2"/>
+    <meta name="keywords" content="Negativos, Postivos, Taringa, Post, hater, herramienta"/>
+    <meta name="author" content="">
+    <link rel="icon" href="images/icon.png">
+
+    <title>Analizador de perfil</title>
+  <!-- PLUGINS CSS STYLE -->
+  <link rel="stylesheet" href="plugins/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="plugins/themify-icons/themify-icons.css">
+  <link rel="stylesheet" href="plugins/aos/aos.css">
+  <link href="css/popup.css" rel="stylesheet" type="text/css" />
+
+
+  <!-- CUSTOM CSS -->
+  <link href="css/style_project.css" rel="stylesheet">
+
+<!-- //custom css theme files -->
+
+    <!-- Custom styles for this template -->
+    <link href="narrow-jumbotron.css" rel="stylesheet">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-65DQH6XH4G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-65DQH6XH4G');
+</script>
+  </head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a href="/" class="navbar-brand">Pipo</a>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav">
+                <a href="/inicio" class="nav-item nav-link active">Inicio</a>
+                <a href="/certificados.html" class="nav-item nav-link">Mis habilidades</a>
+
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Herramientas</a>
+                    <div class="dropdown-menu">
+                        <a href="./post_analizer.html" class="dropdown-item">Analizador de Post</a>
+                        <a href="./profile_analizer.html" class="dropdown-item">Analizador de Perfil</a>
+                        <a href="./wodl.html" class="dropdown-item">Respuesta Binance Wodl!</a>
+                        <a href="./password.html" class="dropdown-item">Analizador de Contraseña</a>
+                        <a href="./history.html" class="dropdown-item">Creador de Historias</a>
+                    </div>
+                </div>
+
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Proyectos</a>
+                    <div class="dropdown-menu">
+                        <a href="./trazapp.html" class="dropdown-item">Trazapp</a>
+                        <a href="./wodl.html" class="dropdown-item">Respuesta Binance Wodl!</a>
+                        <a href="/post" class="dropdown-item">Mis Publicaciones</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<section class="section gradient-banner2">
+	<div class="shapes-container">
+		<div class="shape" data-aos="fade-down-left" data-aos-duration="1500" data-aos-delay="100"></div>
+		<div class="shape" data-aos="fade-down" data-aos-duration="1000" data-aos-delay="100"></div>
+		<div class="shape" data-aos="fade-up-right" data-aos-duration="1000" data-aos-delay="200"></div>
+		<div class="shape" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200"></div>
+		<div class="shape" data-aos="fade-down-left" data-aos-duration="1000" data-aos-delay="100"></div>
+		<div class="shape" data-aos="fade-down-left" data-aos-duration="1000" data-aos-delay="100"></div>
+		<div class="shape" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="300"></div>
+		<div class="shape" data-aos="fade-down-right" data-aos-duration="500" data-aos-delay="200"></div>
+		<div class="shape" data-aos="fade-down-right" data-aos-duration="500" data-aos-delay="100"></div>
+		<div class="shape" data-aos="zoom-out" data-aos-duration="2000" data-aos-delay="500"></div>
+		<div class="shape" data-aos="fade-up-right" data-aos-duration="500" data-aos-delay="200"></div>
+		<div class="shape" data-aos="fade-down-left" data-aos-duration="500" data-aos-delay="100"></div>
+		<div class="shape" data-aos="fade-up" data-aos-duration="500" data-aos-delay="0"></div>
+		<div class="shape" data-aos="fade-down" data-aos-duration="500" data-aos-delay="0"></div>
+		<div class="shape" data-aos="fade-up-right" data-aos-duration="500" data-aos-delay="100"></div>
+		<div class="shape" data-aos="fade-down-left" data-aos-duration="500" data-aos-delay="0"></div>
+	</div>
+	<div class="container">
+		<div class="row align-items-center">
+			<div class="col-md-12 order-2 order-md-1 text-center text-md-center">
+                <input type="text" placeholder="Nombre de usuario..." id="Code" class="form-control">
+                <br>
+                <br>
+                <button type="button" onclick="analitics_profile();" class="btn btn-primary">Procesar</button>
+			</div>
+
+		</div>
+	</div>
+</section>
+<section class="section pt-0 position-relative pull-top" id ="stats">
+</section>
+
+
+<div class="container">
+
+    <div class="jumbotron" id="info">
+
+        <h1 class="display-4">Analizador de Profile!</h1>
+        <br>
+        <p class="lead">Herramienta desarrollada por <a href="https://www.taringa.net/pipo1995_2">Pipo1995_2</a> para analizar los ultimos post y ver quienes son tus haters.</p>
+        <br>
+        <p class="lead">Se utiliza la Api de Taringa, los datos son extraidos de ahi, el desarrollo dentro de esta web simplemente es para consumir dicha api.</p>
+        <p id="debug"></p>
+        <br>
+
+<!--
+		<div class="row align-items-center">
+            <p>Nuevo proyecto</p>
+			<div class="col-md-12 order-2 order-md-1 text-center text-md-center">
+
+                <div class="progress">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 1%"></div>
+                </div>
+                <br><br>
+                <a class="btn btn-primary" href="#proyecto"> Conoce el nuevo proyecto </a>
+			</div>
+
+		</div>
+
+-->
+        <!--
+        <p><a class="btn btn-lg btn-success" href="https://cafecito.app/pipodelgiudice" role="button"> Aporta al nuevo proyecto </a></p>
+        -->
+    </div>
+    <br>
+    <div id="principal">
+
+    </div>
+    <br>
+
+    <ul class="list-group" style="float: none; text-align: center; text-decoration-color: rgb(233, 28, 28); text-decoration-line: none;" id="Lista">
+    <!--<table id="Lista">
+    </table>-->
+
+
+    <br>
+    <ul class="list-group" style="float: none; text-align: center; text-decoration-color: rgb(233, 28, 28); text-decoration-line: none;" id="Lista-positivos">
+    </ul>
+
+    <br>
+    <br>
+</div>
+
+
+<!--<p><a href="#popup"></a></p>-->
+<!--<a id="cerrar" href="#popup">&times;</a> -->
+<!--
+<div id="popup" class="overlay">
+    <div id="popupBody">
+        <h2>Ayuda a la pagina</h2>
+        <a id="cerrar" href="#popup">&times;</a>
+        <div class="popupContent">
+            <div class="col-md-20 order-2 order-md-12 text-center text-md-center">
+
+                <h7>Puedes ayudar a mantener la pagina <br>aportando tan solo $100: </h7>
+
+            <script src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js"
+                    data-preference-id="45193535-765d31e0-387c-4a9b-994c-88aa6f508549" data-source="button">
+            </script>
+
+            <h7>Puedes ayudar a mantener la pagina <br>aportando mensualmente lo que puedas: </h7>
+            <a mp-mode="dftl" href="https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=2c9380847fbbb220017fbc6230010021" name="MP-payButton" class='blue-ar-l-rn-none'>Mercado Pago</a>
+            <a href='https://cafecito.app/pipodelgiudice' rel='noopener' target='_blank'><img srcset='https://cdn.cafecito.app/imgs/buttons/button_6.png 1x, https://cdn.cafecito.app/imgs/buttons/button_6_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_6_3.75x.png 3.75x' src='https://cdn.cafecito.app/imgs/buttons/button_6.png' alt='Invitame un café en cafecito.app' /></a>
+
+            </div>
+
+                <script type="text/javascript">
+               (function() {
+                  function $MPC_load() {
+                     window.$MPC_loaded !== true && (function() {
+                     var s = document.createElement("script");
+                     s.type = "text/javascript";
+                     s.async = true;
+                     s.src = document.location.protocol + "//secure.mlstatic.com/mptools/render.js";
+                     var x = document.getElementsByTagName('script')[0];
+                     x.parentNode.insertBefore(s, x);
+                     window.$MPC_loaded = true;
+                  })();
+               }
+               window.$MPC_loaded !== true ? (window.attachEvent ? window.attachEvent('onload', $MPC_load) : window.addEventListener('load', $MPC_load, false)) : null;
+               })();
+            </script>
+
+
+
+
+             </div>
+    </div>
+</div>
+
+-->
+
+
+<section class="section">
+
+	<div class="container">
+		<div class="row align-items-center">
+            <div id="proyecto" class="col-md-12 order-2 order-md-1 text-center text-md-center">
+                <h2>Sistema de control a distancia de luces RGB mediante APP</h2>
+                <p>Se busca realizar un control a distancia para idealmente integrar a twitch para que los oyentes de Taringa at Night
+                    <br>puedan controlar las luces de fondo por medio de una App Android</p>
+
+
+                <ul class="list-group" style="float: none; text-align: center; text-decoration-color: rgb(233, 28, 28); text-decoration-line: none;" id="Lista-componentes">
+                    <li class="list-group-item list-group-item-info"> Componentes</li>
+                    <li class="list-group-item list-group-item">ESP32</li>
+                    <li class="list-group-item list-group-item">Tira Led RGB (Direccionables o no)</li>
+                    <li class="list-group-item list-group-item">Fuente 12v</li>
+                    <li class="list-group-item list-group-item">Buena predisposición</li>
+
+                </ul>
+                <br><br>
+                <a class="btn btn-primary" href="https://cafecito.app/pipodelgiudice"> Donar al proyecto </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="call-to-action-app section bg-blue">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<h2>Descargo de responsabilidad</h2>
+				<p>Está herramienta solo provee información, el uso que se le de es responsabilidad de cada uno.</p>
+
+                <p>Está herramienta utiliza la api de Taringa, la información proviene de la misma y no de otra fuente.</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+  <!-- To Top -->
+  <div class="scroll-top-to">
+    <i class="ti-angle-up"></i>
+  </div>
+    <script>
+    var input = document.getElementById("Code");
+    input.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+       event.preventDefault();
+       analitics_profile();
+      }
+    });
+    </script>
+    <script src="js/script_api_profile.js"></script>
+  <!-- JAVASCRIPTS -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <script src="plugins/bootstrap/bootstrap.min.js"></script>
+  <script src="plugins/aos/aos.js"></script>
+
+  <script src="js/script.js"></script>
+
+</body>
+</html>

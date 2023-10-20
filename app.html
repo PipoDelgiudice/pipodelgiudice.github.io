@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Perfil de Usuario</title>
+</head>
+<body>
+  <h1>Analizar Usuario</h1>
+  <input type="text" id="usernameInput" placeholder="Ingresa el nombre de usuario">
+  <button id="analyzeButton">Analizar</button>
+
+  <div id="userInfo">
+    <div class="card">
+      <img id="avatar" src="" alt="Avatar">
+      <h2 id="username"></h2>
+      <p id="name"></p>
+      <p id="about"></p>
+      <img id="flag" src="https://flagsapi.com/AR/flat/64.png" alt="Bandera">
+      <p id="gamification"></p>
+    </div>
+  </div>
+
+  <script>
+    const analyzeButton = document.getElementById("analyzeButton");
+    const usernameInput = document.getElementById("usernameInput");
+    const userInfo = document.getElementById("userInfo");
+
+    analyzeButton.addEventListener("click", () => {
+      const username = usernameInput.value;
+      const apiUrl = `https://api.app.taringa.net/profile/${username}`;
+      console.log(apiUrl);
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          const card = document.querySelector(".card");
+          const avatar = document.getElementById("avatar");
+          const usernameElement = document.getElementById("username");
+          const name = document.getElementById("name");
+          const about = document.getElementById("about");
+          const flag = document.getElementById("flag");
+          const gamification = document.getElementById("gamification");
+
+          avatar.src = data.avatar;
+          usernameElement.textContent = `Username: ${data.username}`;
+          name.textContent = `Name: ${data.name}`;
+          about.textContent = `About: ${data.about}`;
+          flag.src = `https://flagsapi.com/${data.location.country}/flat/64.png`;
+          gamification.textContent = `Gamification Balance: ${data.gamification.balance} \r\n Gamification boostFactor: ${data.gamification.boostFactor}`;
+          userInfo.style.display = "block";
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
+    });
+  </script>
+</body>
+</html>

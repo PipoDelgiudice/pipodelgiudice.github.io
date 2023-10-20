@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Pipo Del Giudice">
+    <link rel="icon" href="images/icon.png">
+    <title>Conversor de seguridad Wi-Fi</title>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-65DQH6XH4G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-65DQH6XH4G');
+</script>
+  </head>
+  <body>
+    <h1>Conversor de seguridad Wi-Fi</h1>
+    <form>
+      <label>
+        Número decimal:
+        <input type="text" id="decimal">
+      </label>
+      <br><br>
+      <label>
+        Número binario:
+        <input type="text" id="binario">
+      </label>
+      <br><br>
+      <input type="button" value="Convertir" onclick="convertir()">
+    </form>
+    <br>
+    <table>
+      <tr>
+        <th>Seguridad en decimal:</th>
+        <td id="seguridad-decimal"></td>
+      </tr>
+      <tr>
+        <th>Seguridad en binario:</th>
+        <td id="seguridad-binario"></td>
+      </tr>
+    </table>
+
+    <h1>Conversor de tipos de seguridad</h1>
+    <p>Seleccione uno o varios tipos de seguridad:</p>
+     <div>
+      <label><input type="checkbox" name="seguridad" value="DISABLED">DISABLED</label>
+      <br>
+      <label><input type="checkbox" name="seguridad" value="WPA">WPA</label>
+      <br>
+      <label><input type="checkbox" name="seguridad" value="WPA2">WPA2</label>
+      <br>
+      <label><input type="checkbox" name="seguridad" value="WPA_WPA2">WPA/WPA2</label>
+      <br>
+      <label> <input type="checkbox" name="seguridad" value="WPA_ENTERPRISE">WPA_ENTERPRISE</label>
+       <br>
+      <label> <input type="checkbox" name="seguridad" value="WPA2_ENTERPRISE">WPA2_ENTERPRISE</label>
+       <br>
+      <label> <input type="checkbox" name="seguridad" value="WPA_WPA2_ENTERPRISE">WPA_WPA2_ENTERPRISE</label>
+       <br>
+    </div>
+
+    <input type="button" value="Convertir" onclick="convertirSeleccionados()">
+    <p id="resultado"></p>
+
+    <script>
+      function tipos_seguridad_soportados(num) {
+        var seguridad = [];
+        if (num & 0b0001) {
+          seguridad.push("DISABLED");
+        }
+        if (num & 0b0010) {
+          seguridad.push("WPA");
+        }
+        if (num & 0b0100) {
+          seguridad.push("WPA2");
+        }
+        if (num & 0b01000) {
+          seguridad.push("WPA_ENTERPRISE");
+        }
+        if (num & 0b010000) {
+          seguridad.push("WPA2_ENTERPRISE");
+        }
+        if (num & 0b0100000) {
+          seguridad.push("WPA_WPA2");
+        }
+        if (num & 0b01000000) {
+          seguridad.push("WPA_WPA2_ENTERPRISE");
+        }
+        return seguridad;
+      }
+
+      function convertir() {
+        var decimal = document.getElementById("decimal").value;
+        var binario = document.getElementById("binario").value;
+
+        if (decimal !== "") {
+          var num = parseInt(decimal);
+          var seguridad = tipos_seguridad_soportados(num);
+          var seguridadDecimal = seguridad.join(" | ");
+          var seguridadBinario = "0b" + (num & 0b111).toString(2).padStart(3, "0");
+          document.getElementById("seguridad-decimal").textContent = seguridadDecimal;
+          document.getElementById("seguridad-binario").textContent = seguridadBinario;
+        } else if (binario !== "") {
+          var num = parseInt(binario, 2);
+          var seguridad = tipos_seguridad_soportados(num);
+          var seguridadDecimal = seguridad.join(" | ");
+          var seguridadBinario = "0b" + (num & 0b111).toString(2).padStart(3, "0");
+          document.getElementById("seguridad-decimal").textContent = seguridadDecimal;
+          document.getElementById("seguridad-binario").textContent = seguridadBinario;
+        } else {
+          alert("Por favor ingrese un número decimal o binario.");
+        }
+      }
+
+      function convertirSeleccionados() {
+        var seguridad = document.getElementsByName("seguridad");
+
+        var num = 0;
+        for (var i = 0; i < seguridad.length; i++) {
+
+          if (seguridad[i].checked) {
+                  console.log(seguridad[i].value);
+            if (seguridad[i].value === "DISABLED") {
+              num += 0b0001;
+            } else if (seguridad[i].value === "WPA") {
+              num += 0b0010;
+            } else if (seguridad[i].value === "WPA2") {
+              num += 0b0100;
+            }  else if (seguridad[i].value === "WPA_ENTERPRISE") {
+              num += 0b1000;
+            } else if (seguridad[i].value === "WPA2_ENTERPRISE") {
+              num += 0b10000;
+            } else if (seguridad[i].value === "WPA_WPA2") {
+              num += 0b100000;
+            }else if (seguridad[i].value === "WPA_WPA2_ENTERPRISE") {
+              num += 0b1000000;
+            }
+          }
+        }
+
+        console.log(num);
+        var resultado = document.getElementById("resultado");
+
+        if (num > 0) {
+          resultado.innerHTML = "<p> Número decimal: <b>" + num + " </b><br> Número binario: <b>" + num.toString(2) + "</b> <br> Tipos de seguridad soportados: <b>[" + tipos_seguridad_soportados(num).join(", ") + ']</b></p>';
+        } else if (binario !== "") {
+          resultado.innerHTML = "<p>Número decimal: " + parseInt(num, 2) + '</p>';
+          }
+          }
+    </script>
+  </body>
+</html>

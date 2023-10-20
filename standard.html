@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Pipo Del Giudice">
+    <link rel="icon" href="images/icon.png">
+    <title>Conversor de standard Wi-Fi</title>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-65DQH6XH4G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-65DQH6XH4G');
+</script>
+  </head>
+  <body>
+    <h1>Conversor de standard Wi-Fi</h1>
+    <form>
+      <label>
+        Número decimal:
+        <input type="text" id="decimal">
+      </label>
+      <br><br>
+      <label>
+        Número binario:
+        <input type="text" id="binario">
+      </label>
+      <br><br>
+      <input type="button" value="Convertir" onclick="convertir()">
+    </form>
+    <br>
+    <table>
+      <tr>
+        <th>standard en decimal:</th>
+        <td id="standard-decimal"></td>
+      </tr>
+      <tr>
+        <th>standard en binario:</th>
+        <td id="standard-binario"></td>
+      </tr>
+    </table>
+
+    <h1>Conversor de tipos de standard</h1>
+    <p>Seleccione uno o varios tipos de standard:</p>
+     <div>
+      <label><input type="checkbox" name="standard" value="bOnly">bOnly</label>
+      <br>
+      <label><input type="checkbox" name="standard" value="gOnly">gOnly</label>
+      <br>
+      <label><input type="checkbox" name="standard" value="nOnly">nOnly</label>
+      <br>
+      <label><input type="checkbox" name="standard" value="bgMixed">bgMixed</label>
+      <br>
+      <label> <input type="checkbox" name="standard" value="gnMixed">gnMixed</label>
+       <br>
+      <label> <input type="checkbox" name="standard" value="bgnMixed">bgnMixed</label>
+       <br>
+      <label> <input type="checkbox" name="standard" value="aOnly">aOnly</label>
+         <br> <label> <input type="checkbox" name="standard" value="acOnly">acOnly</label>
+         <br> <label> <input type="checkbox" name="standard" value="anMixed">anMixed</label>
+         <br> <label> <input type="checkbox" name="standard" value="nacOnly">nacOnly</label>
+         <br> <label> <input type="checkbox" name="standard" value="anacOnly">anacOnly</label>
+         <br> <label> <input type="checkbox" name="standard" value="auto">auto</label>
+       <br>
+    </div>
+
+    <input type="button" value="Convertir" onclick="convertirSeleccionados()">
+    <p id="resultado"></p>
+
+    <script>
+      function tipos_standard_soportados(num) {
+        var standard = [];
+        if (num & 0b0001) {
+          standard.push("bOnly");
+        }
+        if (num & 0b0010) {
+          standard.push("gOnly");
+        }
+        if (num & 0b0100) {
+          standard.push("nOnly");
+        }
+        if (num & 0b01000) {
+          standard.push("bgMixed");
+        }
+        if (num & 0b010000) {
+          standard.push("gnMixed");
+        }
+        if (num & 0b0100000) {
+          standard.push("bgnMixed");
+        }
+        if (num & 0b01000000) {
+          standard.push("aOnly");
+        }
+        if (num & 0b010000000) {
+          standard.push("acOnly");
+        }
+        if (num & 0b0100000000) {
+          standard.push("anMixed");
+        }
+        if (num & 0b01000000000) {
+          standard.push("nacOnly");
+        }
+        if (num & 0b010000000000) {
+          standard.push("anacOnly");
+        }
+        if( num & 0b0100000000000){
+          standard.push("auto");
+        }
+        return standard;
+      }
+
+      function convertir() {
+        var decimal = document.getElementById("decimal").value;
+        var binario = document.getElementById("binario").value;
+
+        if (decimal !== "") {
+          var num = parseInt(decimal);
+          var standard = tipos_standard_soportados(num);
+          var standardDecimal = standard.join(" | ");
+          var standardBinario = "0b" + (num & 0b111).toString(2).padStart(3, "0");
+          document.getElementById("standard-decimal").textContent = standardDecimal;
+          document.getElementById("standard-binario").textContent = standardBinario;
+        } else if (binario !== "") {
+          var num = parseInt(binario, 2);
+          var standard = tipos_standard_soportados(num);
+          var standardDecimal = standard.join(" | ");
+          var standardBinario = "0b" + (num & 0b111).toString(2).padStart(3, "0");
+          document.getElementById("standard-decimal").textContent = standardDecimal;
+          document.getElementById("standard-binario").textContent = standardBinario;
+        } else {
+          alert("Por favor ingrese un número decimal o binario.");
+        }
+      }
+
+      function convertirSeleccionados() {
+        var standard = document.getElementsByName("standard");
+
+        var num = 0;
+        for (var i = 0; i < standard.length; i++) {
+
+          if (standard[i].checked) {
+                  console.log(standard[i].value);
+            if (standard[i].value === "bOnly") {
+              num += 0b0001;
+            } else if (standard[i].value === "gOnly") {
+              num += 0b0010;
+            } else if (standard[i].value === "nOnly") {
+              num += 0b0100;
+            }  else if (standard[i].value === "bgMixed") {
+              num += 0b1000;
+            } else if (standard[i].value === "gnMixed") {
+              num += 0b10000;
+            } else if (standard[i].value === "bgnMixed") {
+              num += 0b100000;
+            }else if (standard[i].value === "aOnly") {
+              num += 0b1000000;
+            }else if (standard[i].value === "acOnly") {
+              num += 0b10000000;
+            }else if (standard[i].value === "anMixed") {
+              num += 0b100000000;
+            }else if (standard[i].value === "nacOnly") {
+              num += 0b1000000000;
+            }else if (standard[i].value === "anacOnly") {
+              num += 0b10000000000;
+            }else if (standard[i].value === "auto") {
+              num += 0b100000000000;
+            }
+          }
+        }
+
+        console.log(num);
+        var resultado = document.getElementById("resultado");
+
+        if (num > 0) {
+          resultado.innerHTML = "<p> Número decimal: <b>" + num + " </b><br> Número binario: <b>" + num.toString(2) + "</b> <br> Tipos de standard soportados: <b>[" + tipos_standard_soportados(num).join(", ") + ']</b></p>';
+        } else if (binario !== "") {
+          resultado.innerHTML = "<p>Número decimal: " + parseInt(num, 2) + '</p>';
+          }
+          }
+    </script>
+  </body>
+</html>

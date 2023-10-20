@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+</head>
+<body>
+  <div>
+    <button class="pay-button">Pay</button>
+    <div id="status"></div>
+  </div>
+  <script type="text/javascript">
+    window.addEventListener('load', async () => {
+      if (window.ethereum) {
+        window.web3 = new Web3(ethereum);
+        try {
+          await ethereum.enable();
+           const address = await web3.eth.accounts;
+           const fake_address = "0x03A819bb99979Cf232D16A60Ea604c4b5E228311"
+          console.log("Direccion de billetera: " + address);
+          // Obtener la lista de NFTs del usuario a través de la API de OpenSea
+          fetch("https://api.opensea.io/api/v1/assets?owner=" + fake_address)
+            .then(function(response) {
+              return response.json();
+            })
+            .then(function(assets) {
+              // Mostrar la lista de NFTs en la página web
+              var html = "";
+              assets.forEach(function(asset) {
+                html += "<p>" + asset.name + "</p>";
+              });
+              document.getElementById("nft-list").innerHTML = html;
+            });
+          //initPayButton()
+        } catch (err) {
+          $('#status').html('User denied account access', err)
+        }
+      } else if (window.web3) {
+        window.web3 = new Web3(web3.currentProvider)
+           const address = await web3.eth.accounts;
+           const fake_address = "0x03A819bb99979Cf232D16A60Ea604c4b5E228311"
+          console.log("Direccion de billetera: " + address);
+          // Obtener la lista de NFTs del usuario a través de la API de OpenSea
+          fetch("https://api.opensea.io/api/v1/assets?owner=" + fake_address)
+            .then(function(response) {
+              return response.json();
+            })
+            .then(function(assets) {
+              // Mostrar la lista de NFTs en la página web
+              var html = "";
+              assets.forEach(function(asset) {
+                html += "<p>" + asset.name + "</p>";
+              });
+              document.getElementById("nft-list").innerHTML = html;
+            });
+        //initPayButton()
+      } else {
+        $('#status').html('No Metamask (or other Web3 Provider) installed')
+      }
+    })
+
+    const initPayButton = () => {
+      $('.pay-button').click(() => {
+        // paymentAddress is where funds will be send to
+        const paymentAddress = '0x8dd6340a62d5c0b45d04aa0daa78fba5894f3b3a'
+        const amountEth = 0.1
+
+
+        /*
+        web3.eth.sendTransaction({
+          to: paymentAddress,
+          value: web3.toWei(amountEth, 'ether')
+        }, (err, transactionId) => {
+          if  (err) {
+            console.log('Payment failed', err)
+            $('#status').html('Payment failed')
+          } else {
+            console.log('Payment successful', transactionId)
+            $('#status').html('Payment successful')
+          }
+        })*/
+      })
+    }
+  </script>
+</body>
+</html>

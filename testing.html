@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<!-- Head -->
+<head>
+<script data-ad-client="ca-pub-3561826385481829" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<title>Pipo Del Giudice</title>
+<link rel="icon" href="images/icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="keywords" content="Professional CV a Responsive web template, Bootstrap Web, Pipo Del Giudice, Pipo, aplicaciones, Android, tecnologia, Argentina, Cordoba, Rio Cuarto, python, C++, C, UNRC, Universidad Nacional de Rio Cuarto, Taringa, bitcoin, binance, criptomonedas" />
+
+
+
+    <!-- Bootstrap core CSS -->
+    <link type="text/css" rel="stylesheet" href="css/cm-overlay.css" />
+    <!-- custom css theme files -->
+	<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" media="all">
+	<link rel="stylesheet" href="css/font-awesome.min.css" />
+	<link rel="stylesheet" href="css/style.css" type="text/css" media="all">
+<!-- //custom css theme files -->
+
+    <!-- Custom styles for this template -->
+    <link href="narrow-jumbotron.css" rel="stylesheet">
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-65DQH6XH4G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-65DQH6XH4G');
+</script>
+</head>
+<!-- Body -->
+<body>
+
+
+
+
+<div class="container">
+
+    <div class="jumbotron" id="info">
+    </div>
+    <br>
+    <div id="principal"></div>
+    <br>
+    <ul class="list-group" style="float: none; text-align: center; text-decoration-color: rgb(233, 28, 28); text-decoration-line: none;" id="Lista">
+    </ul>
+</div>
+
+<script>
+
+    function httpGetList(theUrl)
+      {
+        var xmlHttp = new XMLHttpRequest();
+        console.log(theUrl)
+        xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+        xmlHttp.send( null );
+        console.log(xmlHttp.status)
+        console.log(xmlHttp.responseText)
+        //console.log(JSON.stringify(xmlHttp.responseText));
+        //return JSON.stringify(xmlHttp.responseText);
+        return JSON.parse(xmlHttp.responseText);
+    }
+
+	let url = document.URL;
+	let params = (new URL(url)).searchParams;
+	console.log(params.get('ID').split('-')[0]);
+	var event_code=params.get('ID').split('-')[0]
+	var invite_code=params.get('ID').split('-')[1]
+	ID = params.get('ID');
+
+	var event = httpGetList("https://taxidriver-38912-default-rtdb.firebaseio.com/"+event_code+"/"+invite_code+".json");
+	if (event != null){
+        var Info = httpGetList("https://taxidriver-38912-default-rtdb.firebaseio.com/"+event_code+"/Info.json");
+        var contact_url = "https://api.whatsapp.com/send/?phone=" + Info.Contact + "&text=Hola+queria+consultarte+por+el+evento+" + Info.Title;
+
+        document.getElementById("info").innerHTML = '<h1 class="display-3">' + Info.Title + '</h1><p class="lead">' + Info.Description + '</p><p><a class="btn btn-lg btn-success" href="' + contact_url + '" role="button"> Contacto </a></p>';
+
+
+        var List = httpGetList("https://taxidriver-38912-default-rtdb.firebaseio.com/"+event_code+"/"+invite_code+".json");
+        console.log(List.Principal)
+        document.getElementById("principal").innerHTML = '<h2 class="display-3"> ' + List.Principal.Nombre + ' esta coordialmente invitado a '+Info.Title+'</h1>';
+        var table =''
+        lista = ''
+        //console.log(List.Invitados.length)
+        //if(List.Invitados.length>0){
+
+        lista += '<li class="list-group-item list-group-item-info">'+'Invitados'+'</li>';
+        lista += '<li class="list-group-item">'+List.Principal.Nombre+'</li>';
+         //}
+        if(List.hasOwnProperty('Invitados')){
+            for (x of List.Invitados) {
+              if (x != null){
+              lista += '<li class="list-group-item">'+x+'</li>'
+              }
+            }
+        }
+        document.getElementById("Lista").innerHTML = lista;
+	}
+	else{
+	    //document.getElementById("Auth").innerHTML = "Sabes que no";
+	    document.getElementById("info").innerHTML = '<p class="lead">' + 'No hay invitados registrado a ' + event_code +'-'+invite_code+ '</p>';
+	}
+
+
+</script>
+
+
+</body>
+<!-- //Body -->
+</html>

@@ -1,0 +1,150 @@
+
+.grid-container {
+  display: grid;
+  column-gap: 1px;
+  grid-template-columns: auto auto auto auto auto auto auto auto;
+  background-color: #2196F3;
+  padding: 10px;
+
+}
+.textWords {
+   word-wrap: break-word;
+}
+.grid-cards {
+  display: grid;
+  column-gap: 10px;
+  grid-template-columns: auto auto auto auto auto auto auto auto;
+  padding: 10px;
+
+}
+
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 5px;
+  font-size: 10px;
+  text-align: center;
+  width: 75px;
+}
+.grid-letters {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 5px;
+  font-size: 25px;
+  text-align: center;
+  width: 30px;
+  border-radius: 40px
+}
+
+.container-card{
+  width: 100px;
+  heigth: 100px;
+  background-color: rgba(125, 20, 255, 0.8);
+  border-radius: 110px
+
+  overflow-x: scroll;
+}
+
+
+
+@property --rotate {
+  syntax: "<angle>";
+  initial-value: 132deg;
+  inherits: false;
+}
+
+:root {
+  --card-height: 25vh;
+  --card-width: calc(var(--card-height) / 1.5);
+}
+
+p{
+  font-size: 14px;
+}
+
+
+body-card {
+  min-height: 40vh;
+  #background: #212534;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  box-sizing: border-box;
+}
+
+
+.card {
+  background: #191c29;
+  width: var(--card-width);
+  height: var(--card-height);
+  padding: 3px;
+  position: relative;
+  border-radius: 6px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  display: flex;
+  font-size: 1.5em;
+  color: rgb(88 199 250 / 100%);
+  cursor: pointer;
+  font-family: cursive;
+}
+
+
+.card::before {
+  content: "";
+  width: 104%;
+  height: 102%;
+  border-radius: 4px;
+  opacity: 100%;
+  background-image: linear-gradient(
+    var(--rotate)
+    , #5ddcff, #3c67e3 43%, #4e00c2);
+    position: absolute;
+    z-index: -1;
+    top: -1%;
+    left: -2%;
+    animation: spin 2.5s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    --rotate: 0deg;
+  }
+  100% {
+    --rotate: 360deg;
+  }
+}
+/*
+a {
+  color: #212534;
+  text-decoration: none;
+  font-family: sans-serif;
+  font-weight: bold;
+  margin-top: 2rem;
+}
+*/
+.grid-letters2 {
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 5px;
+  font-size: 10px;
+  text-align: center;
+  width: 10px;
+}
+/* Remove extra left and right margins, due to padding */
+.row {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.column {
+  float: left;
+  width: 90%;
+  padding: 0 10px;
+}

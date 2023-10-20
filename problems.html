@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Resolución de Problemas - MiWeb</title>
+	<style>
+		/*body {
+			font-family: Arial, sans-serif;
+			font-size: 14px;
+			line-height: 1.5;
+			margin: 0;
+			padding: 0;
+		}
+
+		h1 {
+			font-size: 24px;
+			margin: 20px 0;
+		}
+
+		ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		li {
+			margin-bottom: 10px;
+		}
+
+		h2 {
+			font-size: 18px;
+			margin-bottom: 5px;
+		}
+
+		p {
+			margin: 0;
+		}
+
+		.result {
+			padding: 10px;
+			background-color: #f2f2f2;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+		}
+
+			.result:hover {
+			background-color: #e6e6e6;
+			cursor: pointer;
+		}
+
+		form {
+			margin: 20px 0;
+		}
+
+		input[type="text"] {
+			width: 300px;
+			margin-bottom: 5px;
+			padding: 5px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+		}
+
+		input[type="submit"] {
+			background-color: #4CAF50;
+			color: white;
+			padding: 5px 10px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+
+		input[type="submit"]:hover {
+			background-color: #45a049;
+		}*/
+
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f2f2f2;
+			margin: 0;
+			padding: 0;
+		}
+
+		#logo {
+			display: block;
+			margin: 50px auto 30px;
+			width: 272px;
+			height: 92px;
+			background-image: url(https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png);
+			background-size: contain;
+			background-repeat: no-repeat;
+		}
+
+		#search {
+			display: block;
+			margin: 0 auto;
+			max-width: 650px;
+			padding: 0 20px;
+		}
+
+		#search-form {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			background-color: #fff;
+			border-radius: 24px;
+			box-shadow: 0 1px 6px rgba(32,33,36,0.28);
+			height: 44px;
+			padding: 0 16px;
+			width: 100%;
+			position: relative;
+		}
+
+		#search-input {
+			border: none;
+			font-size: 16px;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			outline: none;
+		}
+
+		#search-submit {
+			background-color: #f2f2f2;
+			border: none;
+			color: #5f6368;
+			font-size: 16px;
+			height: 100%;
+			padding: 0 16px;
+			position: absolute;
+			right: 0;
+			top: 0;
+			outline: none;
+			cursor: pointer;
+		}
+
+		#results {
+			margin: 50px auto;
+			max-width: 650px;
+			padding: 0 30px;
+			background-color: #fff;
+			border-radius: 12px;
+			box-shadow: 0 1px 6px rgba(32,33,36,0.28);
+		}
+
+		.result {
+			margin-top: 20px;
+			margin-bottom: 20px;
+		}
+
+		.result h2 {
+			color: #1a0dab;
+			font-size: 18px;
+			margin: 0 0 4px;
+		}
+
+		.result p {
+			color: #545454;
+			font-size: 14px;
+			margin: 0;
+		}
+
+				.result {
+			padding: 10px;
+			background-color: #f2f2f2;
+			border: 1px solid #ccc;
+			border-radius: 6px;
+		}
+
+			.result:hover {
+			background-color: #e6e6e6;
+			cursor: pointer;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="logo"></div>
+	<!-- <div class="search-container">
+		<form action="" method="get">
+			<input type="text" placeholder="Buscar en MiWeb..." name="q">
+			<button type="submit"><i class="fa fa-search"></i></button>
+		</form>
+	</div>-->
+
+
+	<div id="search">
+		<form id="search-form" method="get" action="/problems">
+			<input type="text" id="search-input" name="title" placeholder="Buscar en mi yo interior">
+			<button type="submit" id="search-submit">Buscar</button>
+		</form>
+	</div>
+
+	<div class="results-container">
+		<h2>Resultados de tus problemas "<span id="search-query"></span>"</h2>
+
+		<div id="results"></div>
+	</div>
+
+	<script>
+
+	// Obtener el formulario y el input de búsqueda
+		const searchForm = document.getElementById('search-form');
+		const searchInput = document.getElementById('search-input');
+
+		// Agregar un evento "submit" al formulario
+		searchForm.addEventListener('submit', function(event) {
+		  // Prevenir que se envíe el formulario por defecto
+		  event.preventDefault();
+
+		  // Obtener el valor del input de búsqueda
+		  const searchTerm = searchInput.value;
+
+		  // Redirigir al usuario a la URL correspondiente
+		  window.location.href = '/problems.html?q=' + encodeURIComponent(searchTerm);
+		});
+
+		// Obtener los parámetros de la URL
+		let queryString = window.location.search;
+		let urlParams = new URLSearchParams(queryString);
+		let query = urlParams.get('q');
+
+		// Mostrar la consulta de búsqueda en la página
+		let searchQueryElement = document.getElementById('search-query');
+		searchQueryElement.innerText = query;
+
+		// Crear una lista de resultados vacía
+		let results = [];
+
+		// Obtener los artículos de la búsqueda y agregarlos a la lista de resultados
+		for (let i = 1; i <= 10; i++) {
+			let articleTitle = urlParams.get('articulo' + i);
+			if (articleTitle !== null) {
+			  articleTitle = articleTitle.replace(/_/g, ' ');
+			}
+			let articleDesc = urlParams.get('descripcion' + i);
+			if (articleDesc !== null) {
+			  articleDesc = articleDesc.replace(/_/g, ' ');
+			}
+
+			let articleImage = urlParams.get('image' + i);
+
+			if (articleImage !== null) {
+			  articleImage = decodeURIComponent(articleImage);
+			}
+			console.log(articleImage);
+
+			if (articleTitle && articleDesc) {
+				results.push({
+					title: articleTitle,
+					description: articleDesc,
+					image: articleImage
+				});
+			}
+		}
+
+		console.log(results);
+		// Mostrar los resultados en la página
+		let resultsElement = document.getElementById('results');
+
+		if (results.length === 0) {
+			resultsElement.innerHTML = '<p>No se encontraron resultados.</p>';
+		} else {
+			for (let i = 0; i < results.length; i++) {
+				/*let resultElement = document.createElement('div');
+				resultElement.classList.add('result');
+				resultElement.innerHTML = '<h3>' + results[i].title + '</h3><p>' + results[i].description + '</p>';
+
+				resultsElement.appendChild(resultElement);
+ */
+				  let resultElement = document.createElement('div');
+
+				resultElement.classList.add('result');
+
+				let titleElement = document.createElement('h3');
+				titleElement.textContent = results[i].title;
+				resultElement.appendChild(titleElement);
+
+				let descriptionElement = document.createElement('p');
+				descriptionElement.textContent = results[i].description;
+				resultElement.appendChild(descriptionElement);
+
+				if (results[i].image != null) {
+				let imageElement = document.createElement('img');
+				imageElement.src = results[i].image;
+				resultElement.appendChild(imageElement);
+				}
+
+				resultsElement.appendChild(resultElement);
+			}
+		}
+	</script>
+</body>
+</html>
