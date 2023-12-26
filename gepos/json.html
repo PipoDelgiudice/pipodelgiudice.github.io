@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON to CSV Converter</title>
+</head>
+<body>
+    <h1>JSON to CSV Converter</h1>
+    <input type="file" id="jsonFile" accept=".json" required>
+    <button onclick="convertJSON()">Convertir</button>
+    <h2>CSV Resultado:</h2>
+    <pre id="csvResult"></pre>
+
+    <script>
+        function convertJSON() {
+            var input = document.getElementById('jsonFile');
+            var file = input.files[0];
+
+            if (!file) {
+                alert('Por favor, seleccione un archivo JSON.');
+                return;
+            }
+
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var jsonData = JSON.parse(e.target.result);
+                var csvData = convertToCSV(jsonData);
+                document.getElementById('csvResult').innerText = csvData;
+            };
+
+            reader.readAsText(file);
+        }
+
+        function convertToCSV(jsonData) {
+            var result = '';
+
+            // Obtener las claves del primer objeto para usarlas como encabezados CSV
+            var headers = Object.keys(jsonData[Object.keys(jsonData)[0]]);
+            result += headers.join(',') + '\n';
+
+            // Iterar sobre los objetos y construir las filas CSV
+            for (var i = 0; i < jsonData.length; i++) {
+                var row = [];
+                for (var j = 0; j < headers.length; j++) {
+                    row.push(jsonData[i][headers[j]]);
+                }
+                result += row.join(',') + '\n';
+            }
+
+            return result;
+        }
+    </script>
+</body>
+</html>

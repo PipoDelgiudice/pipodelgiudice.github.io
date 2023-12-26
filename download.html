@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Descargar Video desde URL</title>
+</head>
+<body>
+  <h1>Descargar Video</h1>
+  <form id="downloadForm">
+    <label for="videoUrl">URL del Video:</label>
+    <input type="text" id="videoUrl" placeholder="Inserta la URL del video">
+
+    <button type="button" onclick="obtenerFormatos()">Descargar</button>
+  </form>
+
+  <div id="formatos">
+    <!-- Aquí se mostrarán los botones de descarga -->
+  </div>
+
+  <script>
+    async function obtenerFormatos() {
+      const videoUrl = document.getElementById('videoUrl').value;
+      const apiUrl = `https://youtube-dl-web.vercel.app/_next/data/PbOv99VFHjh7d1YcpOw_T/result.json?f=bestvideo%2Bbestaudio%2Fbest&q=${encodeURIComponent(videoUrl)}`;
+
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        const formatos = data?.pageProps?.data?.formats || [];
+        const formatosDiv = document.getElementById('formatos');
+
+        formatosDiv.innerHTML = ''; // Limpiar contenido anterior
+
+        formatos.forEach(formato => {
+          const btn = document.createElement('button');
+          btn.textContent = `Descargar ${formato.ext.toUpperCase()} (${formato.format_note})`;
+
+          btn.addEventListener('click', () => {
+            descargar(formato.url, `${formato.id}.${formato.ext}`);
+          });
+
+          formatosDiv.appendChild(btn);
+        });
+      } catch (error) {
+        console.error('Error al obtener los formatos:', error);
+        alert('Hubo un error al obtener los formatos. Por favor, verifica la URL del video.');
+      }
+    }
+
+    function descargar(url, nombreArchivo) {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = nombreArchivo;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  </script>
+</body>
+</html>
