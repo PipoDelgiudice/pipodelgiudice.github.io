@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Calculadora de Cambio de Moneda</title>
+    <!-- PLUGINS CSS STYLE -->
+  <link rel="stylesheet" href="plugins/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="plugins/themify-icons/themify-icons.css">
+  <link rel="stylesheet" href="plugins/aos/aos.css">
+  <link href="css/popup.css" rel="stylesheet" type="text/css" />
+
+
+  <!-- CUSTOM CSS -->
+  <link href="css/style_project.css" rel="stylesheet">
+
+<!-- //custom css theme files -->
+
+    <!-- Custom styles for this template -->
+    <link href="narrow-jumbotron.css" rel="stylesheet">
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+</script>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-65DQH6XH4G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-65DQH6XH4G');
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a href="/" class="navbar-brand">Pipo</a>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav">
+                <a href="/inicio" class="nav-item nav-link active">Inicio</a>
+                <a href="/certificados.html" class="nav-item nav-link">Mis habilidades</a>
+
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Herramientas</a>
+                    <div class="dropdown-menu">
+                        <a href="./post_analizer.html" class="dropdown-item">Analizador de Post</a>
+                        <a href="./wodl.html" class="dropdown-item">Respuesta Binance Wodl!</a>
+                        <a href="./password.html" class="dropdown-item">Analizador de Contraseña</a>
+                        <a href="./history.html" class="dropdown-item">Creador de Historias</a>
+                    </div>
+                </div>
+
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Proyectos</a>
+                    <div class="dropdown-menu">
+                        <a href="./trazapp.html" class="dropdown-item">Trazapp</a>
+                        <a href="./wodl.html" class="dropdown-item">Respuesta Binance Wodl!</a>
+                        <a href="/post" class="dropdown-item">Mis Publicaciones</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<section class="section">
+
+	<div class="container">
+		<div class="row align-items-center">
+            <div id="taringa" class="col-md-12 order-2 order-md-1  ">
+                <h1>Calculadora de Cambio de Moneda</h1>
+                <form id="currencyConverter">
+                    <label for="currencyFrom">Nombre de la moneda de origen:</label>
+                    <input type="text" id="currencyFrom" value="pesos argentinos" required class="form-control"><br><br>
+
+                    <label for="rateFrom">Cotización dólar en pesos argentinos:</label>
+                    <input type="number" id="rateFrom" step="0.01" required class="form-control"><br><br>
+
+                    <label for="currencyTo">Nombre de la moneda de destino:</label>
+                    <input type="text" id="currencyTo" value="reales" required class="form-control"><br><br>
+
+                    <label for="rateTo">Cotización dólar en reales:</label>
+                    <input type="number" id="rateTo" step="0.01" required class="form-control"><br><br>
+
+                    <button type="button" onclick="calculate()" class="btn btn-primary">Calcular</button>
+                </form>
+
+                <p id="result"></p>
+                 <br><br>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <script>
+        document.getElementById('currencyFrom').addEventListener('change', function () {
+            const currencyFrom = document.getElementById('currencyFrom').value;
+            document.querySelector('label[for="rateFrom"]').textContent = `Cotización dólar en ${currencyFrom}`;
+        });
+
+        document.getElementById('currencyTo').addEventListener('change', function () {
+            const currencyTo = document.getElementById('currencyTo').value;
+            document.querySelector('label[for="rateTo"]').textContent = `Cotización dólar en ${currencyTo}`;
+        });
+
+        function calculate() {
+            const currencyFrom = document.getElementById('currencyFrom').value;
+            const currencyTo = document.getElementById('currencyTo').value;
+            const rateFrom = parseFloat(document.getElementById('rateFrom').value);
+            const rateTo = parseFloat(document.getElementById('rateTo').value);
+            if (!currencyFrom || !currencyTo || isNaN(rateFrom) || isNaN(rateTo)) {
+                            alert('Por favor, ingresa todos los datos requeridos.');
+                            return;
+            }
+            const resultFromTo = rateTo / rateFrom;
+            const resultToFrom = rateFrom / rateTo;
+
+            document.getElementById('result').innerHTML = `Comprando 1 ${currencyFrom} te costará aproximadamente ${resultFromTo.toFixed(4)} ${currencyTo}.<br>
+      Comprando 1 ${currencyTo} te costará aproximadamente ${resultToFrom.toFixed(2)} ${currencyFrom}.`;
+        }
+    </script>
+</body>
+</html>
