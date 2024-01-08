@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blockly Playground</title>
+  <!-- Cargar los recursos de Blockly desde unpkg -->
+  <script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
+  <script src="https://unpkg.com/blockly/blocks_compressed.js"></script>
+  <script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
+  <script src="https://unpkg.com/blockly/msg/en.js"></script>
+</head>
+<body>
+  <h1>Blockly Playground</h1>
+
+  <!-- Elemento donde se renderizará el Blockly workspace -->
+  <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+
+  <!-- Scripts para configurar y utilizar Blockly -->
+  <script>
+    // Crear un workspace de Blockly en el elemento con id 'blocklyDiv'
+    var workspace = Blockly.inject('blocklyDiv', {
+      toolbox: '<xml><block type="controls_if"></block></xml>' // Puedes configurar tu propio toolbox aquí
+    });
+
+    // Puedes agregar bloques adicionales, configuraciones, etc., según tus necesidades
+  </script>
+</body>
+</html>
