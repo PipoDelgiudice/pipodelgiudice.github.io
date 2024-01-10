@@ -98,11 +98,11 @@
             var amount = document.getElementById('amountInput').value * 1000;
 
             // Realizar la solicitud a la API con la cantidad de satoshis variable
-            fetch(`https://getalby.com/lnurlp/pipodelgiudice/callback?amount=${amount}&comment=Holamundo`)
+            fetch(`https://getalby.com/lnurlp/pipodelgiudice/callback?amount=${amount}&comment=Hola+mundo`)
                 .then(response => response.json())
                 .then(data => {
                     var lnurl = data.pr; // Obtener el lnurl de la respuesta de la API
-
+                    console.log(data);
                     // Mostrar el LNURL en la página
                     var lnurlContainer = document.getElementById('lnurlContainer');
                     var lnurlText = document.getElementById('lnurlText');
