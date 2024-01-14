@@ -2,12 +2,13 @@
   "version": "0.1.0",
   "url": "https://pipodelgiudice.github.io/data/TProfileV0_1_0.apk",
   "changelog": [
-    "Nuevas características agregadas"
+    "Recomendación de perfiles",
+    "Agregamos animaciones"
   ],
   "promotion": {
     "enable": true,
     "title": "¡Dame una Mano!",
-    "description": "No me gusta nada que la app esté llena de anuncios aburridos. Con tu apoyo, podemos seguir mejorando y añadir cosas geniales. ¡Así que, si te gusta lo que hacemos, invítanos un cafecito y/o un par de viejas. No hay anuncios aquí 😎☕️",
+    "description": "Con tu apoyo, podemos seguir mejorando y añadir cosas geniales. ¡Así que, si te gusta lo que hacemos, invítanos un cafecito y/o un par de viejas. No hay anuncios aquí 😎☕️",
     "url": "https://cafecito.app/pipodelgiudice",
     "textButton": "Tomá un cafecito"
   }
