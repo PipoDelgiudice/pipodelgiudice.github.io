@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HTML MQTT Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://pipodelgiudice.github.io/plugins/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="https://pipodelgiudice.github.io/plugins/themify-icons/themify-icons.css">
+    <link rel="stylesheet" href="https://pipodelgiudice.github.io/plugins/aos/aos.css">
+    <link href="https://pipodelgiudice.github.io/css/style_project.css" rel="stylesheet">
+</head>
+<body class="body-wrapper" data-spy="scroll" data-target=".privacy-nav">
+    <nav class="navbar main-nav navbar-expand-lg px-2 px-sm-0 py-2 py-lg-0">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><img src="https://pipodelgiudice.github.io/images/logoPipo.png" alt="logo"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="ti-menu"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item @@about">
+                    <a class="nav-link" href="https://pipodelgiudice.github.io">Inicio</a>
+                </li>
+                <li class="nav-item @@contact">
+                    <a class="nav-link" href="https://pipodelgiudice.github.io/#contact">Contacto</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section class="section">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <div class="col-md-12 text-center order-1 order-md-2">
+                <div id="messages" style="height: 300px; overflow-y: scroll;">
+                    <h2>Chat</h2>
+                    <div id="chatLog"></div>
+                    <input class="form-control form-control-lg" type="text" id="messageInput" placeholder="Escribe un mensaje..." onkeypress="handleKeyPress(event)">
+                    <button type="button" class="btn btn-primary" onclick="sendMessage()">Enviar</button>
+                    <!--<button onclick="vibrateScreen()">Vibrar</button>-->
+                </div>
+            </div>
+            <div class="col-md-6 order-2 order-md-1 text-center text-md-left">
+                <h1 class="text font-weight-bold mb-4">CHAT</h1>
+                <p class="text mb-5">Mensajes</p>
+                <div>
+                    <label for="red">Red:</label>
+                    <input type="range" id="red" min="0" max="255" step="1" value="0" onchange="sendColor()">
+                    <span id="redValue">0</span>
+                </div>
+                <div>
+                    <label for="green">Green:</label>
+                    <input type="range" id="green" min="0" max="255" step="1" value="0" onchange="sendColor()">
+                    <span id="greenValue">0</span>
+                </div>
+                <div>
+                    <label for="blue">Blue:</label>
+                    <input type="range" id="blue" min="0" max="255" step="1" value="0" onchange="sendColor()">
+                    <span id="blueValue">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    var clientId = generateClientId();
+    var client = new Paho.MQTT.Client("broker.hivemq.com", Number(8000), clientId);
+
+    client.onConnectionLost = function(responseObject) {
+        if (responseObject.errorCode !== 0) {
+            console.log("onConnectionLost:" + responseObject.errorMessage);
+        }
+    };
+
+    client.connect({onSuccess:onConnect});
+
+    function onConnect() {
+        console.log("onConnect");
+        var roomId = getRoomIdFromURL();
+        client.subscribe(roomId + "/background/color");
+        client.subscribe(roomId + "/chat");
+        client.subscribe(roomId + "/command");
+    }
+
+    function sendColor() {
+        var red = document.getElementById("red").value;
+        var green = document.getElementById("green").value;
+        var blue = document.getElementById("blue").value;
+        var color = [parseInt(red), parseInt(green), parseInt(blue)];
+        publishColor(color);
+        updateColorPreview(color);
+    }
+
+    function publishColor(color) {
+        var roomId = getRoomIdFromURL();
+        var topic = roomId + "/background/color";
+        var message = new Paho.MQTT.Message(JSON.stringify(color));
+        message.destinationName = topic;
+        client.send(message);
+    }
+
+    function updateColorPreview(color) {
+        var rgbString = "rgb(" + color.join(",") + ")";
+        document.body.style.backgroundColor = rgbString;
+    }
+
+    client.onMessageArrived = function(message) {
+        console.log("onMessageArrived:" + message.payloadString);
+        if (message.destinationName.endsWith("/chat")) {
+            var chatData = JSON.parse(message.payloadString);
+            addMessageToChat(chatData.user, chatData.message);
+        } else if (message.destinationName.endsWith("/command")) {
+            var commandData = JSON.parse(message.payloadString);
+            if (commandData.command === "vibrator" && commandData.user !== clientId) {
+                vibrateScreen();
+            }
+        } else {
+            var color = JSON.parse(message.payloadString);
+            updateColorSliders(color);
+            updateColorPreview(color);
+        }
+    };
+
+    function updateColorSliders(color) {
+        document.getElementById("red").value = color[0];
+        document.getElementById("green").value = color[1];
+        document.getElementById("blue").value = color[2];
+        document.getElementById("redValue").textContent = color[0];
+        document.getElementById("greenValue").textContent = color[1];
+        document.getElementById("blueValue").textContent = color[2];
+    }
+
+    function generateClientId() {
+        return "client" + Math.random().toString(16).substr(2, 8);
+    }
+
+    function getRoomIdFromURL() {
+        var urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('roomId');
+    }
+
+    function sendMessage() {
+        var messageInput = document.getElementById("messageInput");
+        var messageText = messageInput.value.trim();
+        if (messageText !== "") {
+            var roomId = getRoomIdFromURL();
+            var messageData = {
+                user: clientId,
+                message: messageText
+            };
+            var topic = roomId + "/chat";
+            var message = new Paho.MQTT.Message(JSON.stringify(messageData));
+            message.destinationName = topic;
+            client.send(message);
+            messageInput.value = "";
+        }
+    }
+
+    function addMessageToChat(user, message) {
+        var chatLog = document.getElementById("chatLog");
+        var messageElement = document.createElement("div");
+        messageElement.textContent = user + ": " + message;
+        if (user === clientId) {
+            messageElement.style.textAlign = "right";
+        } else {
+            messageElement.style.textAlign = "left";
+        }
+        chatLog.appendChild(messageElement);
+        if (chatLog.childNodes.length > 10) {
+            chatLog.removeChild(chatLog.childNodes[0]);
+        }
+    }
+
+    function vibrateScreen() {
+        if ("vibrate" in navigator) {
+            window.navigator.vibrate(200); // Vibrar durante 200ms
+        }
+    }
+
+    function handleKeyPress(event) {
+        if (event.keyCode === 13) { // Si se presiona Enter
+            sendMessage();
+        }
+    }
+</script>
+</body>
+</html>
