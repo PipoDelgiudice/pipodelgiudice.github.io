@@ -67,7 +67,7 @@
 
 <script>
     var clientId = generateClientId();
-    var client = new Paho.MQTT.Client("broker.hivemq.com", Number(8000), clientId);
+    var client = new Paho.MQTT.Client("broker.emqx.io", Number(8083), clientId);
 
     client.onConnectionLost = function(responseObject) {
         if (responseObject.errorCode !== 0) {
