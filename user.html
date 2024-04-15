@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de LNURL con Username y Código QR</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            max-width: 400px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="mb-4 text-center">Generador de LNURL con Username y Código QR</h2>
+
+    <form>
+        <div class="form-group">
+            <label for="usernameInput">Nombre de Usuario:</label>
+            <input type="text" class="form-control" id="usernameInput" placeholder="Ingresa tu nombre de usuario" required>
+        </div>
+
+        <div class="form-group">
+            <label for="amountInput">Cantidad de Satoshis:</label>
+            <input type="number" class="form-control" id="amountInput" placeholder="Satoshis a donar" value="100" min="1" required>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-block" onclick="generateLNURL()">Generar LNURL</button>
+    </form>
+
+    <div id="lnurlContainer" style="display: none;">
+        <hr>
+        <div id="thankYouContainer"></div>
+        <label for="lnurlText">LNURL:</label>
+        <textarea id="lnurlText" class="form-control mb-3" rows="5" readonly></textarea>
+        <img id="qrCodeImage" class="img-fluid mx-auto d-block mb-3" src="" alt="Código QR">
+        <button onclick="copyToClipboard()" class="btn btn-success btn-block">Copiar LNURL</button>
+    </div>
+</div>
+
+<script>
+    function generateLNURL() {
+        var username = document.getElementById('usernameInput').value;
+        var amount = document.getElementById('amountInput').value * 1000;
+        var appId = 'd0n4t3'; // ID de la aplicación
+
+        // Formatea la estructura JSON con appId y username
+        var metadata = {
+            appId: appId,
+            username: username
+        };
+
+        // Formatea el comentario para incluir el monto y la metadata codificada en JSON
+        var comment = `add mount user ${username} metadata ${JSON.stringify(metadata)}`;
+
+        // Formatea la URL para incluir el nombre de usuario, el comentario y el ID de la aplicación
+        var url = `https://getalby.com/lnurlp/pipodelgiudice/callback?amount=${amount}&comment=${encodeURIComponent(comment)}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                var lnurl = data.pr;
+                document.getElementById('lnurlText').value = lnurl;
+
+                // Actualiza la imagen del código QR con la URL del LNURL
+                var qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(lnurl)}`;
+                document.getElementById('qrCodeImage').src = qrCodeUrl;
+
+                document.getElementById('lnurlContainer').style.display = 'block';
+
+                // Desplaza la página hacia abajo hasta el botón de copiar
+                document.getElementById('lnurlContainer').scrollIntoView({ behavior: 'smooth' });
+
+                // Se obtiene el campo 'verify' del objeto 'data'
+                var verify = data.verify;
+                intervalId = setInterval(function() {
+                  checkVerification(verify);
+                }, 10000); // Intervalo de 10 segundos (10000 milisegundos)
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function copyToClipboard() {
+        var lnurlText = document.getElementById('lnurlText');
+        lnurlText.select();
+        document.execCommand('copy');
+        alert('¡LNURL copiado al portapapeles!');
+    }
+
+    function checkVerification(verify) {
+    fetch(verify)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'OK') {
+                if (data.settled) {
+                    // El pago ha sido recibido y está liquidado
+                    var username = document.getElementById('usernameInput').value;
+                    var amount = document.getElementById('amountInput').value;
+                    showThankYouMessage(username, amount);
+                    clearInterval(intervalId); // Detener la verificación periódica
+                } else {
+                    // El pago aún no ha sido liquidado
+                    console.log('El pago aún no ha sido liquidado.');
+                }
+            } else {
+                // No se pudo verificar el estado del pago
+                console.log('No se pudo verificar el estado del pago.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function showThankYouMessage(username, amount) {
+    var message = `Gracias ${username} por donar ${amount} satoshis`;
+    var thankYouElement = document.createElement('div');
+    thankYouElement.className = 'alert alert-success';
+    thankYouElement.textContent = message;
+    document.getElementById('thankYouContainer').appendChild(thankYouElement);
+}
+
+</script>
+
+</body>
+</html>
