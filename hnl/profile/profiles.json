@@ -13,7 +13,8 @@
       "ping": true,
       "traceroute": true,
       "remoteAccess": true
-    }
+    },
+    "clients": ["iplan"]
   },{
     "vendor": "Huawei",
     "model": "HG8247",
@@ -28,7 +29,8 @@
       "ping": true,
       "traceroute": true,
       "remoteAccess": true
-    }
+    },
+  "clients": ["iplan", "telecom"]
   },{
     "vendor": "Huawei",
     "model": "HG8247",
@@ -42,7 +44,8 @@
       "ping": true,
       "traceroute": true,
       "remoteAccess": true
-    }
+    },
+  "clients": ["iplan", "telecom","cablevideodigital"]
   },
   {
     "vendor": "Cisco",
@@ -57,6 +60,23 @@
       "neighbor": true,
       "ping": true,
       "traceroute": false
-    }
+    },
+  "clients": ["telecom"]
+  },{
+    "vendor": "Tp-LINK",
+    "model": "HG8247",
+    "version": "v1.0.0.1",
+    "capabilities": {
+      "dualBand": true,
+      "guestNetwork": false,
+      "assocDevices": true,
+      "speedTest": true,
+      "wifiOptimizer": false,
+      "neighbor": false,
+      "ping": true,
+      "traceroute": true,
+      "remoteAccess": true
+    },
+  "clients": ["iplan", "telecom", "telered", "supercanal","cablevideodigital"]
   }
 ]

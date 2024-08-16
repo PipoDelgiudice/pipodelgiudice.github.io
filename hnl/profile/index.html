@@ -10,6 +10,13 @@
     .icon {
       width: 20px;
       height: 20px;
+      object-fit: contain;
+    }
+    .client-icon {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+      margin-right: 5px;
     }
   </style>
 </head>
@@ -24,6 +31,19 @@
     <div class="col">
       <input type="text" id="searchModel" class="form-control" placeholder="Buscar por modelo">
     </div>
+   <div class="col">
+  <div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="clientDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+      Seleccionar Clientes
+    </button>
+    <ul class="dropdown-menu p-3" aria-labelledby="clientDropdown" style="max-height: 200px; overflow-y: auto;">
+      <div id="clientFilter">
+        <!-- Aquí se generarán las checkboxes con JavaScript -->
+      </div>
+    </ul>
+  </div>
+</div>
+
   </div>
 
   <table id="equipmentTable" class="table table-striped">
@@ -41,6 +61,7 @@
         <th onclick="sortTable(9)">Ping</th>
         <th onclick="sortTable(10)">Traceroute</th>
         <th onclick="sortTable(11)">Remote Access</th>
+        <th onclick="sortTable(12)">Clientes Instalados</th>
       </tr>
     </thead>
     <tbody id="tableBody">
@@ -52,12 +73,23 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
  <script>
+  const clientLogos = {
+    iplan: 'clientes/iplan.png',
+    telered: 'clientes/telered.png',
+    cablevideodigital: 'clientes/cvd.png',
+    supercanal: 'clientes/supercanal.png',
+    telecom: 'clientes/telecom.png'
+  };
+
+  const clients = Object.keys(clientLogos);
+
   function loadTableData(items) {
     const tableBody = document.getElementById('tableBody');
     tableBody.innerHTML = '';
 
     items.forEach(item => {
       const capabilities = item.capabilities;
+      const clients = item.clients || [];
 
       const row = `<tr>
                     <td>${item.vendor}</td>
@@ -72,6 +104,7 @@
                     <td><img src="${getImage(capabilities.ping)}" class="icon"></td>
                     <td><img src="${getImage(capabilities.traceroute)}" class="icon"></td>
                     <td><img src="${getImage(capabilities.remoteAccess !== undefined ? capabilities.remoteAccess : false)}" class="icon"></td>
+                    <td>${getClientsLogos(clients)}</td>
                   </tr>`;
 
       tableBody.innerHTML += row;
@@ -82,31 +115,53 @@
     return value ? 'check.png' : 'cross.png';
   }
 
+  function getClientsLogos(clients) {
+    return clients.map(client =>
+      `<img src="${clientLogos[client]}" class="client-icon" title="${client.charAt(0).toUpperCase() + client.slice(1)}">`
+    ).join(' ');
+  }
+
   function sortTable(columnIndex) {
     const rows = Array.from(document.getElementById('tableBody').rows);
     const sortedRows = rows.sort((a, b) => a.cells[columnIndex].innerText.localeCompare(b.cells[columnIndex].innerText));
     document.getElementById('tableBody').append(...sortedRows);
   }
 
-  document.getElementById('searchVendor').addEventListener('input', function() {
-    const searchTerm = this.value.toLowerCase();
-    fetch('profiles.json')
-      .then(response => response.json())
-      .then(data => {
-        const filteredData = data.filter(item => item.vendor.toLowerCase().includes(searchTerm));
-        loadTableData(filteredData);
-      });
-  });
+  function filterTable() {
+    const vendorTerm = document.getElementById('searchVendor').value.toLowerCase();
+    const modelTerm = document.getElementById('searchModel').value.toLowerCase();
+    const selectedClients = Array.from(document.querySelectorAll('input[name="client"]:checked')).map(cb => cb.value);
 
-  document.getElementById('searchModel').addEventListener('input', function() {
-    const searchTerm = this.value.toLowerCase();
     fetch('profiles.json')
       .then(response => response.json())
       .then(data => {
-        const filteredData = data.filter(item => item.model && item.model.toLowerCase().includes(searchTerm));
+        const filteredData = data.filter(item =>
+          item.vendor.toLowerCase().includes(vendorTerm) &&
+          (item.model && item.model.toLowerCase().includes(modelTerm)) &&
+          item.clients.some(client => selectedClients.includes(client.toLowerCase()))
+        );
         loadTableData(filteredData);
       });
-  });
+  }
+
+  function createClientCheckboxes() {
+    const clientFilter = document.getElementById('clientFilter');
+    clientFilter.innerHTML = clients.map(client =>
+      `<div class="form-check">
+        <input class="form-check-input" type="checkbox" value="${client}" id="client_${client}" name="client" checked>
+        <label class="form-check-label" for="client_${client}">${client.charAt(0).toUpperCase() + client.slice(1)}</label>
+      </div>`
+    ).join('');
+
+    document.querySelectorAll('input[name="client"]').forEach(cb => {
+      cb.addEventListener('change', filterTable);
+    });
+  }
+
+  document.getElementById('searchVendor').addEventListener('input', filterTable);
+  document.getElementById('searchModel').addEventListener('input', filterTable);
+
+  createClientCheckboxes(); // Llamar a esta función para generar las checkboxes
 
   fetch('profiles.json')
     .then(response => response.json())
