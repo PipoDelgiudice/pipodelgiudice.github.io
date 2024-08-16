@@ -1,0 +1,62 @@
+[
+  {
+    "vendor": "Huawei",
+    "model": "HG8245",
+    "version": "v1.0.0.1",
+    "capabilities": {
+      "dualBand": true,
+      "guestNetwork": false,
+      "assocDevices": true,
+      "speedTest": true,
+      "wifiOptimizer": false,
+      "neighbor": false,
+      "ping": true,
+      "traceroute": true,
+      "remoteAccess": true
+    }
+  },{
+    "vendor": "Huawei",
+    "model": "HG8247",
+    "version": "v1.0.0.1",
+    "capabilities": {
+      "dualBand": true,
+      "guestNetwork": false,
+      "assocDevices": true,
+      "speedTest": true,
+      "wifiOptimizer": false,
+      "neighbor": false,
+      "ping": true,
+      "traceroute": true,
+      "remoteAccess": true
+    }
+  },{
+    "vendor": "Huawei",
+    "model": "HG8247",
+    "capabilities": {
+      "dualBand": true,
+      "guestNetwork": false,
+      "assocDevices": true,
+      "speedTest": true,
+      "wifiOptimizer": false,
+      "neighbor": false,
+      "ping": true,
+      "traceroute": true,
+      "remoteAccess": true
+    }
+  },
+  {
+    "vendor": "Cisco",
+    "model": "C1000-48T-4G-L",
+    "version": "v15.2",
+    "capabilities": {
+      "dualBand": false,
+      "guestNetwork": true,
+      "assocDevices": false,
+      "speedTest": false,
+      "wifiOptimizer": true,
+      "neighbor": true,
+      "ping": true,
+      "traceroute": false
+    }
+  }
+]

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Equipos</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .icon {
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+</head>
+<body class="container my-4">
+
+  <h2 class="mb-4">Lista de Equipos</h2>
+
+  <div class="row mb-3">
+    <div class="col">
+      <input type="text" id="searchVendor" class="form-control" placeholder="Buscar por vendor">
+    </div>
+    <div class="col">
+      <input type="text" id="searchModel" class="form-control" placeholder="Buscar por modelo">
+    </div>
+  </div>
+
+  <table id="equipmentTable" class="table table-striped">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Vendor</th>
+        <th onclick="sortTable(1)">Model</th>
+        <th onclick="sortTable(2)">Version</th>
+        <th onclick="sortTable(3)">Dual Band</th>
+        <th onclick="sortTable(4)">Guest Network</th>
+        <th onclick="sortTable(5)">Assoc Devices</th>
+        <th onclick="sortTable(6)">Speed Test</th>
+        <th onclick="sortTable(7)">WiFi Optimizer</th>
+        <th onclick="sortTable(8)">Neighbor</th>
+        <th onclick="sortTable(9)">Ping</th>
+        <th onclick="sortTable(10)">Traceroute</th>
+        <th onclick="sortTable(11)">Remote Access</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      <!-- Aquí se insertarán las filas con JavaScript -->
+    </tbody>
+  </table>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+ <script>
+  function loadTableData(items) {
+    const tableBody = document.getElementById('tableBody');
+    tableBody.innerHTML = '';
+
+    items.forEach(item => {
+      const capabilities = item.capabilities;
+
+      const row = `<tr>
+                    <td>${item.vendor}</td>
+                    <td>${item.model || "*"}</td>
+                    <td>${item.version || "*"}</td>
+                    <td><img src="${getImage(capabilities.dualBand)}" class="icon"></td>
+                    <td><img src="${getImage(capabilities.guestNetwork)}" class="icon"></td>
+                    <td><img src="${getImage(capabilities.assocDevices)}" class="icon"></td>
+                    <td><img src="${getImage(capabilities.speedTest)}" class="icon"></td>
+                    <td><img src="${getImage(capabilities.wifiOptimizer)}" class="icon"></td>
+                    <td><img src="${getImage(capabilities.neighbor)}" class="icon"></td>
+                    <td><img src="${getImage(capabilities.ping)}" class="icon"></td>
+                    <td><img src="${getImage(capabilities.traceroute)}" class="icon"></td>
+                    <td><img src="${getImage(capabilities.remoteAccess !== undefined ? capabilities.remoteAccess : false)}" class="icon"></td>
+                  </tr>`;
+
+      tableBody.innerHTML += row;
+    });
+  }
+
+  function getImage(value) {
+    return value ? 'check.png' : 'cross.png';
+  }
+
+  function sortTable(columnIndex) {
+    const rows = Array.from(document.getElementById('tableBody').rows);
+    const sortedRows = rows.sort((a, b) => a.cells[columnIndex].innerText.localeCompare(b.cells[columnIndex].innerText));
+    document.getElementById('tableBody').append(...sortedRows);
+  }
+
+  document.getElementById('searchVendor').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    fetch('profiles.json')
+      .then(response => response.json())
+      .then(data => {
+        const filteredData = data.filter(item => item.vendor.toLowerCase().includes(searchTerm));
+        loadTableData(filteredData);
+      });
+  });
+
+  document.getElementById('searchModel').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    fetch('profiles.json')
+      .then(response => response.json())
+      .then(data => {
+        const filteredData = data.filter(item => item.model && item.model.toLowerCase().includes(searchTerm));
+        loadTableData(filteredData);
+      });
+  });
+
+  fetch('profiles.json')
+    .then(response => response.json())
+    .then(data => loadTableData(data));
+</script>
+</body>
+</html>
