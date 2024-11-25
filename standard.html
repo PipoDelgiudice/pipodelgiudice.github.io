@@ -60,11 +60,34 @@
       <label> <input type="checkbox" name="standard" value="bgnMixed">bgnMixed</label>
        <br>
       <label> <input type="checkbox" name="standard" value="aOnly">aOnly</label>
-         <br> <label> <input type="checkbox" name="standard" value="acOnly">acOnly</label>
-         <br> <label> <input type="checkbox" name="standard" value="anMixed">anMixed</label>
-         <br> <label> <input type="checkbox" name="standard" value="nacOnly">nacOnly</label>
-         <br> <label> <input type="checkbox" name="standard" value="anacOnly">anacOnly</label>
-         <br> <label> <input type="checkbox" name="standard" value="auto">auto</label>
+       <br>
+      <label> <input type="checkbox" name="standard" value="acOnly">acOnly</label>
+       <br>
+      <label> <input type="checkbox" name="standard" value="anMixed">anMixed</label>
+       <br>
+      <label> <input type="checkbox" name="standard" value="nacOnly">nacMixed</label>
+       <br>
+      <label> <input type="checkbox" name="standard" value="anacOnly">anacMixed</label>
+       <br>
+      <label> <input type="checkbox" name="standard" value="auto">auto</label>
+       <br>
+      <label><input type="checkbox" name="standard" value="axOnly">axOnly</label>
+       <br>
+      <label><input type="checkbox" name="standard" value="anacaxMixed">anacaxMixed</label>
+       <br>
+      <label><input type="checkbox" name="standard" value="acaxMixed">acaxMixed</label>
+       <br>
+      <label><input type="checkbox" name="standard" value="beOnly">beOnly</label>
+       <br>
+      <label><input type="checkbox" name="standard" value="axbeMixed">axbeMixed</label>
+       <br>
+      <label><input type="checkbox" name="standard" value="acaxbeMixed">acaxbeMixed</label>
+       <br>
+      <label><input type="checkbox" name="standard" value="anacaxbeMixed">anacaxbeMixed</label>
+       <br>
+      <label><input type="checkbox" name="standard" value="bgnaxMixed">bgnaxMixed</label>
+       <br>
+      <label><input type="checkbox" name="standard" value="nacaxMixed">nacaxMixed</label>
        <br>
     </div>
 
@@ -74,42 +97,27 @@
     <script>
       function tipos_standard_soportados(num) {
         var standard = [];
-        if (num & 0b0001) {
-          standard.push("bOnly");
-        }
-        if (num & 0b0010) {
-          standard.push("gOnly");
-        }
-        if (num & 0b0100) {
-          standard.push("nOnly");
-        }
-        if (num & 0b01000) {
-          standard.push("bgMixed");
-        }
-        if (num & 0b010000) {
-          standard.push("gnMixed");
-        }
-        if (num & 0b0100000) {
-          standard.push("bgnMixed");
-        }
-        if (num & 0b01000000) {
-          standard.push("aOnly");
-        }
-        if (num & 0b010000000) {
-          standard.push("acOnly");
-        }
-        if (num & 0b0100000000) {
-          standard.push("anMixed");
-        }
-        if (num & 0b01000000000) {
-          standard.push("nacOnly");
-        }
-        if (num & 0b010000000000) {
-          standard.push("anacOnly");
-        }
-        if( num & 0b0100000000000){
-          standard.push("auto");
-        }
+        if (num & 0b1) {standard.push("bOnly"); }
+        if (num & 0b10) {standard.push("gOnly"); }
+        if (num & 0b100) {standard.push("nOnly"); }
+        if (num & 0b1000) {standard.push("bgMixed"); }
+        if (num & 0b10000) {standard.push("gnMixed"); }
+        if (num & 0b100000) {standard.push("bgnMixed"); }
+        if (num & 0b1000000) {standard.push("aOnly"); }
+        if (num & 0b10000000) {standard.push("acOnly"); }
+        if (num & 0b100000000) {standard.push("anMixed"); }
+        if (num & 0b1000000000) {standard.push("nacMixed"); }
+        if (num & 0b10000000000) {standard.push("anacMixed"); }
+        if( num & 0b100000000000) {standard.push("auto"); }
+        if (num & 0b1000000000000) { standard.push("axOnly"); }
+        if (num & 0b10000000000000) { standard.push("nacaxMixed"); }
+        if (num & 0b100000000000000) { standard.push("anacaxMixed"); }
+        if (num & 0b1000000000000000) { standard.push("acaxMixed"); }
+        if (num & 0b10000000000000000) { standard.push("beOnly"); }
+        if (num & 0b100000000000000000) { standard.push("axbeMixed"); }
+        if (num & 0b1000000000000000000) { standard.push("acaxbeMixed"); }
+        if (num & 0b10000000000000000000) { standard.push("anacaxbeMixed"); }
+        if (num & 0b100000000000000000000) { standard.push("bgnaxMixed"); }
         return standard;
       }
 
@@ -140,35 +148,29 @@
         var standard = document.getElementsByName("standard");
 
         var num = 0;
-        for (var i = 0; i < standard.length; i++) {
-
+       for (var i = 0; i < standard.length; i++) {
           if (standard[i].checked) {
-                  console.log(standard[i].value);
-            if (standard[i].value === "bOnly") {
-              num += 0b0001;
-            } else if (standard[i].value === "gOnly") {
-              num += 0b0010;
-            } else if (standard[i].value === "nOnly") {
-              num += 0b0100;
-            }  else if (standard[i].value === "bgMixed") {
-              num += 0b1000;
-            } else if (standard[i].value === "gnMixed") {
-              num += 0b10000;
-            } else if (standard[i].value === "bgnMixed") {
-              num += 0b100000;
-            }else if (standard[i].value === "aOnly") {
-              num += 0b1000000;
-            }else if (standard[i].value === "acOnly") {
-              num += 0b10000000;
-            }else if (standard[i].value === "anMixed") {
-              num += 0b100000000;
-            }else if (standard[i].value === "nacOnly") {
-              num += 0b1000000000;
-            }else if (standard[i].value === "anacOnly") {
-              num += 0b10000000000;
-            }else if (standard[i].value === "auto") {
-              num += 0b100000000000;
-            }
+            if (standard[i].value === "bOnly") { num += 0b001; }
+            else if (standard[i].value === "gOnly") { num += 0b010; }
+            else if (standard[i].value === "nOnly") { num += 0b100; }
+            else if (standard[i].value === "bgMixed") { num += 0b1000; }
+            else if (standard[i].value === "gnMixed") { num += 0b10000; }
+            else if (standard[i].value === "bgnMixed") { num += 0b100000; }
+            else if (standard[i].value === "aOnly") { num += 0b1000000; }
+            else if (standard[i].value === "acOnly") { num += 0b10000000; }
+            else if (standard[i].value === "anMixed") { num += 0b100000000; }
+            else if (standard[i].value === "nacMixed") { num += 0b1000000000; }
+            else if (standard[i].value === "anacMixed") { num += 0b10000000000; }
+            else if (standard[i].value === "auto") { num += 0b100000000000; }
+            else if (standard[i].value === "axOnly") { num += 0b1000000000000; }
+            else if (standard[i].value === "nacaxMixed") { num += 0b10000000000000; }
+            else if (standard[i].value === "anacaxMixed") { num += 0b100000000000000; }
+            else if (standard[i].value === "acaxMixed") { num += 0b1000000000000000; }
+            else if (standard[i].value === "beOnly") { num += 0b10000000000000000; }
+            else if (standard[i].value === "axbeMixed") { num += 0b100000000000000000; }
+            else if (standard[i].value === "acaxbeMixed") { num += 0b1000000000000000000; }
+            else if (standard[i].value === "anacaxbeMixed") { num += 0b10000000000000000000; }
+            else if (standard[i].value === "bgnaxMixed") { num += 0b100000000000000000000; }
           }
         }
 
