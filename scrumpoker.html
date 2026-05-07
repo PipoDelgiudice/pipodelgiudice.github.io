@@ -8,28 +8,25 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <style>
     :root {
-      --bg:      #0d1117;
-      --surface: #161b27;
-      --card-bg: #1e2535;
-      --border:  #2a3347;
-      --primary: #6366f1;
+      --bg:       #0d1117;
+      --surface:  #161b27;
+      --card-bg:  #1e2535;
+      --border:   #2a3347;
+      --primary:  #6366f1;
       --primary-h:#4f52d9;
-      --success: #22c55e;
-      --warning: #f59e0b;
-      --danger:  #ef4444;
-      --text:    #e2e8f0;
-      --muted:   #64748b;
-      --radius:  12px;
+      --success:  #22c55e;
+      --warning:  #f59e0b;
+      --danger:   #ef4444;
+      --text:     #e2e8f0;
+      --muted:    #64748b;
+      --radius:   12px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
+      background: var(--bg); color: var(--text);
+      min-height: 100dvh; display: flex; flex-direction: column;
     }
 
     /* ── OVERLAY ─────────────────────────────── */
@@ -41,11 +38,9 @@
       z-index: 200;
     }
     .join-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 40px 36px;
-      width: min(440px, 94vw);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 36px;
+      width: min(460px, 94vw);
       box-shadow: 0 24px 64px rgba(0,0,0,.6);
     }
     .join-card h1 {
@@ -54,9 +49,24 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       margin-bottom: 6px;
     }
-    .join-card .subtitle { color: var(--muted); font-size: .9rem; margin-bottom: 28px; }
+    .join-card .subtitle { color: var(--muted); font-size: .9rem; margin-bottom: 22px; }
 
-    .field { margin-bottom: 18px; }
+    /* Tabs */
+    .tabs {
+      display: flex; gap: 4px; margin-bottom: 24px;
+      background: var(--bg); border-radius: 8px; padding: 4px;
+    }
+    .tab {
+      flex: 1; padding: 8px; border-radius: 6px; border: none;
+      background: none; color: var(--muted); font-size: .88rem; font-weight: 600;
+      cursor: pointer; transition: all .15s;
+    }
+    .tab.active { background: var(--primary); color: #fff; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .field { margin-bottom: 16px; }
     .field label {
       display: block; font-size: .78rem; font-weight: 600;
       text-transform: uppercase; letter-spacing: .6px;
@@ -81,15 +91,17 @@
     }
     .room-row .btn-gen:hover { border-color: var(--primary); color: var(--primary); }
 
-    .btn-join {
-      width: 100%; padding: 14px;
-      background: var(--primary); color: #fff;
-      border: none; border-radius: 8px;
-      font-size: 1rem; font-weight: 700; cursor: pointer;
-      transition: background .15s, transform .1s; margin-top: 4px;
+    .field-hint { font-size: .75rem; color: var(--muted); margin-top: 5px; }
+    .field-error { font-size: .8rem; color: var(--danger); margin-top: 8px; display: none; }
+    .field-error.show { display: block; }
+
+    .btn-main {
+      width: 100%; padding: 14px; background: var(--primary); color: #fff;
+      border: none; border-radius: 8px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: background .15s, transform .1s; margin-top: 4px;
     }
-    .btn-join:hover { background: var(--primary-h); }
-    .btn-join:active { transform: scale(.98); }
+    .btn-main:hover { background: var(--primary-h); }
+    .btn-main:active { transform: scale(.98); }
 
     /* ── HEADER ─────────────────────────────── */
     header {
@@ -116,15 +128,24 @@
       padding: 5px 10px; background: var(--card-bg);
       border: 1px solid var(--border); border-radius: 6px;
       color: var(--text); font-size: .82rem; cursor: pointer; outline: none;
+      transition: opacity .2s;
     }
+    .scale-pill:disabled { opacity: .35; cursor: not-allowed; }
+    .admin-badge {
+      display: none; align-items: center; gap: 5px;
+      background: rgba(99,102,241,.15); border: 1px solid rgba(99,102,241,.4);
+      border-radius: 20px; padding: 3px 10px;
+      font-size: .75rem; color: #a78bfa; font-weight: 600;
+    }
+    .admin-badge.show { display: flex; }
     .spacer { flex: 1; }
     .conn-dot {
       width: 9px; height: 9px; border-radius: 50%;
       background: var(--warning); transition: background .3s;
     }
-    .conn-dot.online      { background: var(--success); }
-    .conn-dot.offline     { background: var(--danger); }
-    .conn-dot.connecting  { animation: blink 1s infinite; }
+    .conn-dot.online     { background: var(--success); }
+    .conn-dot.offline    { background: var(--danger); }
+    .conn-dot.connecting { animation: blink 1s infinite; }
     @keyframes blink { 50% { opacity: .3; } }
 
     /* ── LAYOUT ─────────────────────────────── */
@@ -147,7 +168,7 @@
       border-radius: 8px; border: 1px solid transparent;
       transition: all .2s;
     }
-    .participant.voted  { border-color: var(--primary); background: rgba(99,102,241,.08); }
+    .participant.voted   { border-color: var(--primary); background: rgba(99,102,241,.08); }
     .participant.offline { opacity: .4; }
     .avatar {
       width: 32px; height: 32px; border-radius: 50%;
@@ -155,6 +176,7 @@
       display: flex; align-items: center; justify-content: center;
       font-size: .75rem; font-weight: 700; flex-shrink: 0; color: #fff;
     }
+    .avatar.admin-av { background: linear-gradient(135deg,#f59e0b,#f97316); }
     .p-info { flex: 1; min-width: 0; }
     .p-name {
       font-size: .84rem; font-weight: 600;
@@ -189,10 +211,10 @@
       width: 100%; max-width: 680px;
       display: flex; align-items: center; gap: 12px;
     }
-    .prog-label  { font-size: .85rem; color: var(--muted); white-space: nowrap; }
-    .prog-track  { flex: 1; height: 5px; background: var(--card-bg); border-radius: 3px; overflow: hidden; }
-    .prog-fill   { height: 100%; background: var(--primary); border-radius: 3px; transition: width .4s ease; }
-    .prog-count  { font-size: .85rem; color: var(--muted); white-space: nowrap; }
+    .prog-label { font-size: .85rem; color: var(--muted); white-space: nowrap; }
+    .prog-track { flex: 1; height: 5px; background: var(--card-bg); border-radius: 3px; overflow: hidden; }
+    .prog-fill  { height: 100%; background: var(--primary); border-radius: 3px; transition: width .4s ease; }
+    .prog-count { font-size: .85rem; color: var(--muted); white-space: nowrap; }
 
     /* Cards */
     .cards-grid {
@@ -210,15 +232,11 @@
       transition: transform .15s, box-shadow .15s, background .15s, color .15s;
       position: relative;
     }
-    .card .corner {
-      position: absolute; font-size: .55rem; font-weight: 700; color: #94a3b8;
-    }
+    .card .corner { position: absolute; font-size: .55rem; font-weight: 700; color: #94a3b8; }
     .card .tl { top: 5px; left: 7px; }
     .card .br { bottom: 5px; right: 7px; transform: rotate(180deg); }
-
     .card:hover:not(.disabled):not(.selected) {
-      transform: translateY(-10px);
-      box-shadow: 0 16px 32px rgba(0,0,0,.5);
+      transform: translateY(-10px); box-shadow: 0 16px 32px rgba(0,0,0,.5);
     }
     .card.selected {
       background: var(--primary); color: #fff;
@@ -238,14 +256,19 @@
     .btn-reveal { background: var(--success); color: #fff; }
     .btn-reveal:hover { background: #16a34a; }
     .btn-reset  { background: var(--card-bg); color: var(--text); border: 1px solid var(--border); }
-    .btn-reset:hover  { border-color: var(--primary); color: var(--primary); }
+    .btn-reset:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-waiting {
+      padding: 11px 24px; border-radius: 8px;
+      font-size: .9rem; font-weight: 600; color: var(--muted);
+      background: var(--card-bg); border: 1px dashed var(--border);
+      cursor: default;
+    }
 
     /* Results */
     .results {
       width: 100%; max-width: 680px;
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 22px 24px;
-      display: none;
+      border-radius: var(--radius); padding: 22px 24px; display: none;
     }
     .results.visible { display: block; }
     .results-title {
@@ -302,30 +325,58 @@
     <h1>🃏 Scrum Poker</h1>
     <p class="subtitle">Estimación colaborativa en tiempo real.</p>
 
-    <div class="field">
-      <label>Tu nombre</label>
-      <input id="iName" type="text" placeholder="ej: María García" maxlength="28" autofocus />
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('create')">👑 Crear sala</button>
+      <button class="tab"        onclick="switchTab('join')">🚪 Unirse</button>
     </div>
 
-    <div class="field">
-      <label>Escala de estimación</label>
-      <select id="iScale">
-        <option value="fibonacci">Fibonacci — 1, 2, 3, 5, 8, 13, 21…</option>
-        <option value="modified">Scrum clásico — 0, ½, 1, 2, 3, 5, 8, 13…</option>
-        <option value="tshirt">T-Shirt — XS, S, M, L, XL, XXL</option>
-        <option value="powers2">Potencias de 2 — 1, 2, 4, 8, 16, 32…</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Sala</label>
-      <div class="room-row">
-        <input id="iRoom" type="text" placeholder="Código de sala" />
-        <button class="btn-gen" onclick="genRoom()">🎲 Nueva</button>
+    <!-- Tab crear -->
+    <div class="tab-panel active" id="panelCreate">
+      <div class="field">
+        <label>Tu nombre</label>
+        <input id="cName" type="text" placeholder="ej: María García" maxlength="28" autofocus />
       </div>
+      <div class="field">
+        <label>Escala de estimación</label>
+        <select id="cScale">
+          <option value="fibonacci">Fibonacci — 1, 2, 3, 5, 8, 13, 21…</option>
+          <option value="modified">Scrum clásico — 0, ½, 1, 2, 3, 5, 8, 13…</option>
+          <option value="tshirt">T-Shirt — XS, S, M, L, XL, XXL</option>
+          <option value="powers2">Potencias de 2 — 1, 2, 4, 8, 16, 32…</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Contraseña de sala <span style="color:var(--muted);font-weight:400">(opcional)</span></label>
+        <input id="cPwd" type="password" placeholder="Sin contraseña" maxlength="64" />
+        <div class="field-hint">Si la dejás vacía, cualquiera con el enlace puede entrar.</div>
+      </div>
+      <div class="field">
+        <label>Nombre de sala</label>
+        <div class="room-row">
+          <input id="cRoom" type="text" placeholder="Código de sala" />
+          <button class="btn-gen" onclick="genRoom('cRoom')">🎲 Nueva</button>
+        </div>
+      </div>
+      <button class="btn-main" onclick="createRoom()">Crear sala →</button>
     </div>
 
-    <button class="btn-join" onclick="joinRoom()">Entrar a la sala →</button>
+    <!-- Tab unirse -->
+    <div class="tab-panel" id="panelJoin">
+      <div class="field">
+        <label>Tu nombre</label>
+        <input id="jName" type="text" placeholder="ej: Carlos López" maxlength="28" />
+      </div>
+      <div class="field">
+        <label>Código de sala</label>
+        <input id="jRoom" type="text" placeholder="ej: sprint-342" />
+      </div>
+      <div class="field">
+        <label>Contraseña <span style="color:var(--muted);font-weight:400">(si tiene)</span></label>
+        <input id="jPwd" type="password" placeholder="Vacío si no tiene" maxlength="64" />
+      </div>
+      <div class="field-error" id="joinError">⚠️ Contraseña incorrecta.</div>
+      <button class="btn-main" onclick="joinRoom()">Unirse a la sala →</button>
+    </div>
   </div>
 </div>
 
@@ -335,12 +386,13 @@
   <div class="room-pill" onclick="copyLink()" title="Copiar enlace de sala">
     🔗 <span id="hRoom">—</span>
   </div>
-  <select class="scale-pill" id="hScale" onchange="changeScale(this.value)">
+  <select class="scale-pill" id="hScale" onchange="changeScale(this.value)" disabled>
     <option value="fibonacci">Fibonacci</option>
     <option value="modified">Scrum clásico</option>
     <option value="tshirt">T-Shirt</option>
     <option value="powers2">Potencias de 2</option>
   </select>
+  <div class="admin-badge" id="adminBadge">👑 Admin</div>
   <div class="spacer"></div>
   <div class="conn-dot connecting" id="connDot" title="Conectando…"></div>
 </header>
@@ -365,9 +417,8 @@
 
     <div class="cards-grid" id="cardsGrid"></div>
 
-    <div class="actions">
-      <button class="btn btn-reveal" onclick="reveal()">Revelar cartas</button>
-      <button class="btn btn-reset"  onclick="newRound()">Nueva ronda</button>
+    <div class="actions" id="actionsBar">
+      <!-- se renderiza dinámicamente según rol -->
     </div>
 
     <div class="results" id="results">
@@ -391,23 +442,36 @@ const SCALES = {
   powers2:   ['1','2','4','8','16','32','64','?'],
 };
 
+// ─── IDENTITY (estable entre refrescos) ────────
+const ME = (() => {
+  let id = sessionStorage.getItem('pokerId');
+  if (!id) { id = 'u_' + Math.random().toString(36).slice(2, 10); sessionStorage.setItem('pokerId', id); }
+  return id;
+})();
+
 // ─── STATE ─────────────────────────────────────
-const ME    = 'u_' + Math.random().toString(36).slice(2, 10);
-let roomId  = '';
-let myName  = '';
-let myVote  = null;
-let game    = { scale: 'fibonacci', revealed: false, round: 1, story: '' };
-let peers   = {};   // { [id]: { name, hasVoted, vote, round, online } }
-let client  = null;
-let storyT       = null;
+let roomId        = '';
+let myName        = '';
+let myVote        = null;
+let isAdmin       = false;
+let pendingPwdHash = null;   // hash ingresado al unirse, para validar contra game state
+let game = { scale: 'fibonacci', revealed: false, round: 1, story: '', adminId: null, passwordHash: null };
+let peers         = {};
+let client        = null;
+let storyT        = null;
 let confettiFired = false;
 
 // ─── BOOTSTRAP ─────────────────────────────────
 (function init() {
-  const p = new URLSearchParams(location.search);
-  const r = p.get('room') || mkRoomId();
-  document.getElementById('iRoom').value = r;
-  if (!p.get('room')) setUrlRoom(r);
+  const p   = new URLSearchParams(location.search);
+  const r   = p.get('room');
+  const tab = r ? 'join' : 'create';
+  switchTab(tab);
+  if (r) {
+    document.getElementById('jRoom').value = r;
+  } else {
+    document.getElementById('cRoom').value = mkRoomId();
+  }
 })();
 
 function mkRoomId() {
@@ -415,8 +479,8 @@ function mkRoomId() {
   return w[Math.floor(Math.random() * w.length)] + '-' + (Math.floor(Math.random() * 900) + 100);
 }
 
-function genRoom() {
-  document.getElementById('iRoom').value = mkRoomId();
+function genRoom(inputId) {
+  document.getElementById(inputId).value = mkRoomId();
 }
 
 function setUrlRoom(id) {
@@ -425,30 +489,71 @@ function setUrlRoom(id) {
   history.replaceState({}, '', u);
 }
 
-// ─── JOIN ──────────────────────────────────────
-function joinRoom() {
-  const name  = document.getElementById('iName').value.trim();
-  const scale = document.getElementById('iScale').value;
-  const room  = document.getElementById('iRoom').value.trim().replace(/[^a-zA-Z0-9\-_]/g, '');
+// ─── TABS ──────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((el, i) => {
+    el.classList.toggle('active', (i === 0 && tab === 'create') || (i === 1 && tab === 'join'));
+  });
+  document.getElementById('panelCreate').classList.toggle('active', tab === 'create');
+  document.getElementById('panelJoin').classList.toggle('active', tab === 'join');
+}
+
+// ─── PASSWORD HASH (djb2 — no criptográfico, suficiente para uso interno) ──
+function hashPwd(s) {
+  if (!s) return null;
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = (Math.imul(h, 33) ^ s.charCodeAt(i)) >>> 0;
+  return h.toString(36);
+}
+
+// ─── CREAR SALA (admin) ────────────────────────
+function createRoom() {
+  const name = document.getElementById('cName').value.trim();
+  const room = document.getElementById('cRoom').value.trim().replace(/[^a-zA-Z0-9\-_]/g, '');
+  const pwd  = document.getElementById('cPwd').value;
 
   if (!name) return toast('⚠️ Ingresá tu nombre');
-  if (!room) return toast('⚠️ Ingresá un código de sala');
+  if (!room) return toast('⚠️ Ingresá un nombre de sala');
 
-  myName     = name;
-  game.scale = scale;
-  roomId     = room;
+  myName  = name;
+  roomId  = room;
+  isAdmin = true;
+  game.scale        = document.getElementById('cScale').value;
+  game.adminId      = ME;
+  game.passwordHash = hashPwd(pwd);
 
   setUrlRoom(room);
-  document.getElementById('hRoom').textContent = room;
-  document.getElementById('hScale').value      = scale;
-  document.getElementById('overlay').style.display = 'none';
+  openApp();
+  connect();
+}
 
-  // optimistic self-entry
-  peers[ME] = { name: myName, hasVoted: false, vote: null, round: game.round, online: true };
+// ─── UNIRSE (participante) ─────────────────────
+function joinRoom() {
+  const name = document.getElementById('jName').value.trim();
+  const room = document.getElementById('jRoom').value.trim().replace(/[^a-zA-Z0-9\-_]/g, '');
+  const pwd  = document.getElementById('jPwd').value;
+
+  if (!name) return toast('⚠️ Ingresá tu nombre');
+  if (!room) return toast('⚠️ Ingresá el código de sala');
+
+  myName         = name;
+  roomId         = room;
+  isAdmin        = false;
+  pendingPwdHash = hashPwd(pwd);
+
+  document.getElementById('joinError').classList.remove('show');
+  setUrlRoom(room);
+  openApp();
+  connect();
+}
+
+function openApp() {
+  document.getElementById('hRoom').textContent = roomId;
+  document.getElementById('overlay').style.display = 'none';
+  peers[ME] = { name: myName, hasVoted: false, vote: null, round: game.round, online: true, isAdmin };
   renderParticipants();
   renderCards();
-
-  connect();
+  applyAdminUI();
 }
 
 // ─── MQTT ──────────────────────────────────────
@@ -466,7 +571,9 @@ function pubUser(hasVoted, vote) {
   pub(T(`user/${ME}`), {
     clientId: ME, name: myName,
     hasVoted, vote,
-    round: game.round, online: true,
+    round: game.round,
+    isAdmin,
+    online: true,
   }, true);
 }
 
@@ -477,7 +584,7 @@ function pubGame(patch) {
 
 function connect() {
   setConn('connecting');
-  client = new Paho.MQTT.Client(BROKER, ME);
+  client = new Paho.MQTT.Client(BROKER, ME + '_' + Date.now().toString(36));
 
   client.onConnectionLost = function(r) {
     if (r.errorCode !== 0) {
@@ -501,7 +608,11 @@ function connect() {
       toast('🟢 Conectado');
       client.subscribe(T('game'));
       client.subscribe(T('user/#'));
-      pubUser(myVote !== null, null);
+      if (isAdmin) {
+        // admin publica el estado inicial de la sala
+        pubGame({});
+      }
+      pubUser(false, null);
     },
     onFailure() {
       setConn('offline');
@@ -515,16 +626,33 @@ function onMsg(msg) {
   let data;
   try { data = JSON.parse(msg.payloadString); } catch { return; }
 
-  if (msg.destinationName.endsWith('/game')) {
-    handleGame(data);
-  } else if (msg.destinationName.includes('/user/')) {
-    handleUser(data);
-  }
+  if (msg.destinationName.endsWith('/game'))       handleGame(data);
+  else if (msg.destinationName.includes('/user/')) handleUser(data);
 }
 
 // ─── GAME STATE HANDLER ────────────────────────
 function handleGame(data) {
   const wasRevealed = game.revealed;
+
+  // validar contraseña al recibir el primer game state (solo participantes)
+  if (!isAdmin && pendingPwdHash !== undefined && data.passwordHash) {
+    if (data.passwordHash !== pendingPwdHash) {
+      client.disconnect();
+      document.getElementById('overlay').style.display = 'flex';
+      document.getElementById('joinError').classList.add('show');
+      switchTab('join');
+      pendingPwdHash = undefined;
+      return;
+    }
+  }
+  pendingPwdHash = undefined;
+
+  // si el ME coincide con adminId (admin refrescó la página), restaurar rol
+  if (data.adminId === ME && !isAdmin) {
+    isAdmin = true;
+    applyAdminUI();
+  }
+
   game = { ...game, ...data };
 
   document.getElementById('hScale').value = game.scale;
@@ -532,13 +660,12 @@ function handleGame(data) {
   if (document.activeElement !== si) si.value = game.story || '';
 
   renderCards();
+  renderActions();
 
   if (game.revealed && !wasRevealed) {
-    // reveal: expose my real vote
     pubUser(myVote !== null, myVote);
     showResults();
   } else if (!game.revealed && wasRevealed) {
-    // new round reset
     myVote = null;
     peers[ME] = { ...peers[ME], hasVoted: false, vote: null, round: game.round };
     hideResults();
@@ -554,8 +681,11 @@ function handleUser(data) {
   if (!data.clientId) return;
 
   if (data.clientId === ME) {
-    // always keep self from local state
-    peers[ME] = { name: myName, hasVoted: myVote !== null, vote: game.revealed ? myVote : null, round: game.round, online: true };
+    peers[ME] = {
+      name: myName, hasVoted: myVote !== null,
+      vote: game.revealed ? myVote : null,
+      round: game.round, isAdmin, online: true,
+    };
   } else if (!data.online) {
     if (peers[data.clientId]) peers[data.clientId].online = false;
   } else {
@@ -564,6 +694,7 @@ function handleUser(data) {
       hasVoted: data.hasVoted && data.round === game.round,
       vote:     data.vote,
       round:    data.round,
+      isAdmin:  data.isAdmin || false,
       online:   true,
     };
   }
@@ -586,19 +717,20 @@ function vote(val) {
 }
 
 function reveal() {
+  if (!isAdmin) return;
   pubGame({ revealed: true });
-  // publish own vote immediately
   pubUser(myVote !== null, myVote);
 }
 
 function newRound() {
-  const nextRound = game.round + 1;
+  if (!isAdmin) return;
   myVote = null;
   pubUser(false, null);
-  pubGame({ revealed: false, round: nextRound, story: game.story });
+  pubGame({ revealed: false, round: game.round + 1, story: game.story });
 }
 
 function changeScale(scale) {
+  if (!isAdmin) return;
   game.scale = scale;
   pubGame({ scale });
   renderCards();
@@ -613,14 +745,33 @@ function debouncedStory() {
 }
 
 // ─── RENDER ────────────────────────────────────
+function applyAdminUI() {
+  const hScale = document.getElementById('hScale');
+  hScale.disabled = !isAdmin;
+  document.getElementById('adminBadge').classList.toggle('show', isAdmin);
+  renderActions();
+}
+
+function renderActions() {
+  const bar = document.getElementById('actionsBar');
+  if (isAdmin) {
+    bar.innerHTML = `
+      <button class="btn btn-reveal" onclick="reveal()">Revelar cartas</button>
+      <button class="btn btn-reset"  onclick="newRound()">Nueva ronda</button>
+    `;
+  } else {
+    bar.innerHTML = `<div class="btn-waiting">⏳ El admin revelará las cartas</div>`;
+  }
+}
+
 function renderCards() {
   const grid = document.getElementById('cardsGrid');
   grid.innerHTML = '';
   SCALES[game.scale].forEach(v => {
     const c = document.createElement('div');
     c.className = 'card' +
-      (myVote === v      ? ' selected'  : '') +
-      (game.revealed     ? ' disabled'  : '');
+      (myVote === v  ? ' selected' : '') +
+      (game.revealed ? ' disabled' : '');
     c.innerHTML = `<span class="corner tl">${esc(v)}</span>${esc(v)}<span class="corner br">${esc(v)}</span>`;
     if (!game.revealed) c.onclick = () => vote(v);
     grid.appendChild(c);
@@ -632,9 +783,11 @@ function renderParticipants() {
   list.innerHTML = '';
 
   Object.entries(peers).forEach(([id, p]) => {
-    const div  = document.createElement('div');
-    const isMe = id === ME;
-    const voted = p.hasVoted && p.round === game.round;
+    const isMe   = id === ME;
+    const voted  = p.hasVoted && p.round === game.round;
+    const admin  = p.isAdmin;
+
+    const div = document.createElement('div');
     div.className = 'participant' + (voted ? ' voted' : '') + (!p.online ? ' offline' : '');
 
     const initials = (p.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
@@ -647,9 +800,11 @@ function renderParticipants() {
     }
 
     div.innerHTML = `
-      <div class="avatar">${initials}</div>
+      <div class="avatar ${admin ? 'admin-av' : ''}">${initials}</div>
       <div class="p-info">
-        <div class="p-name">${esc(p.name)}${isMe ? ' <span style="color:var(--primary);font-size:.7rem">(vos)</span>' : ''}</div>
+        <div class="p-name">
+          ${admin ? '<span title="Admin">👑</span> ' : ''}${esc(p.name)}${isMe ? ' <span style="color:var(--primary);font-size:.7rem">(vos)</span>' : ''}
+        </div>
         <div class="p-status">${voted ? '✅ Votó' : (p.online ? '⏳ Pensando…' : '🔴 Desconectado')}</div>
       </div>
       <div class="vote-chip ${chipClass}">${chipText}</div>
@@ -663,10 +818,12 @@ function updateProgress() {
   const voted  = online.filter(p => p.hasVoted && p.round === game.round).length;
   const total  = online.length;
 
-  document.getElementById('progFill').style.width  = total ? `${(voted / total) * 100}%` : '0%';
-  document.getElementById('progCount').textContent  = `${voted}/${total}`;
-  document.getElementById('progLabel').textContent  =
-    voted === total && total > 0 ? '🎯 ¡Todos votaron!' : `⏳ Esperando ${total - voted} voto${total - voted !== 1 ? 's' : ''}…`;
+  document.getElementById('progFill').style.width = total ? `${(voted / total) * 100}%` : '0%';
+  document.getElementById('progCount').textContent = `${voted}/${total}`;
+  document.getElementById('progLabel').textContent =
+    voted === total && total > 0
+      ? '🎯 ¡Todos votaron!'
+      : `⏳ Esperando ${total - voted} voto${total - voted !== 1 ? 's' : ''}…`;
 }
 
 function showResults() {
@@ -675,13 +832,9 @@ function showResults() {
 
   const nums = withVote.map(p => parseFloat(p.vote)).filter(v => !isNaN(v));
 
-  // consenso: todos votaron el mismo valor
   const uniqueVotes = [...new Set(withVote.map(p => p.vote))];
   const consensus   = uniqueVotes.length === 1 && withVote.length > 1;
-  if (consensus && !confettiFired) {
-    confettiFired = true;
-    fireConfetti();
-  }
+  if (consensus && !confettiFired) { confettiFired = true; fireConfetti(); }
 
   let statsHtml = '';
   if (nums.length) {
@@ -690,22 +843,23 @@ function showResults() {
     const max = Math.max(...nums);
     statsHtml = `
       <div class="stat"><div class="stat-val">${avg}</div><div class="stat-lbl">Promedio</div></div>
-      <div class="stat"><div class="stat-val" style="color:var(--${min === max ? 'success' : 'warning'})">${min === max ? '✓' : max - min}</div><div class="stat-lbl">${min === max ? 'Consenso' : 'Diferencia'}</div></div>
+      <div class="stat">
+        <div class="stat-val" style="color:var(--${min === max ? 'success' : 'warning'})">${min === max ? '✓' : max - min}</div>
+        <div class="stat-lbl">${min === max ? 'Consenso' : 'Diferencia'}</div>
+      </div>
       <div class="stat"><div class="stat-val">${min}</div><div class="stat-lbl">Mínimo</div></div>
       <div class="stat"><div class="stat-val">${max}</div><div class="stat-lbl">Máximo</div></div>
     `;
   }
   document.getElementById('rStats').innerHTML = statsHtml;
 
-  // distribution
   const groups = {};
   withVote.forEach(p => {
     const k = p.vote ?? '?';
     if (!groups[k]) groups[k] = [];
     groups[k].push(p.name);
   });
-  const maxG = Math.max(...Object.values(groups).map(g => g.length));
-
+  const maxG   = Math.max(...Object.values(groups).map(g => g.length));
   const sorted = Object.entries(groups).sort((a, b) => {
     const na = parseFloat(a[0]), nb = parseFloat(b[0]);
     return (!isNaN(na) && !isNaN(nb)) ? na - nb : String(a[0]).localeCompare(String(b[0]));
@@ -728,17 +882,12 @@ function hideResults() {
 }
 
 function fireConfetti() {
-  const count  = 180;
-  const spread = 70;
-  const origin = { y: 0.6 };
-
-  confetti({ particleCount: count / 2, angle: 60,  spread, origin: { x: 0,   y: origin.y } });
-  confetti({ particleCount: count / 2, angle: 120, spread, origin: { x: 1,   y: origin.y } });
-
-  setTimeout(() => {
-    confetti({ particleCount: 80, angle: 90, spread: 120, origin: { x: 0.5, y: 0.5 },
-               colors: ['#6366f1','#a78bfa','#22c55e','#f59e0b','#ffffff'] });
-  }, 300);
+  confetti({ particleCount: 90, angle: 60,  spread: 70, origin: { x: 0,   y: 0.6 } });
+  confetti({ particleCount: 90, angle: 120, spread: 70, origin: { x: 1,   y: 0.6 } });
+  setTimeout(() => confetti({
+    particleCount: 80, angle: 90, spread: 120, origin: { x: 0.5, y: 0.5 },
+    colors: ['#6366f1','#a78bfa','#22c55e','#f59e0b','#ffffff'],
+  }), 300);
 }
 
 // ─── UTILS ─────────────────────────────────────
@@ -764,8 +913,7 @@ function copyLink() {
 }
 
 function esc(s) {
-  return String(s ?? '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 </script>
 </body>
