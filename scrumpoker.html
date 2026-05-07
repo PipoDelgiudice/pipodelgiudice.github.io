@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scrum Poker · Tiempo Real</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --bg:      #0d1117;
+      --surface: #161b27;
+      --card-bg: #1e2535;
+      --border:  #2a3347;
+      --primary: #6366f1;
+      --primary-h:#4f52d9;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger:  #ef4444;
+      --text:    #e2e8f0;
+      --muted:   #64748b;
+      --radius:  12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── OVERLAY ─────────────────────────────── */
+    #overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.85);
+      backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 200;
+    }
+    .join-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px 36px;
+      width: min(440px, 94vw);
+      box-shadow: 0 24px 64px rgba(0,0,0,.6);
+    }
+    .join-card h1 {
+      font-size: 1.75rem; font-weight: 800;
+      background: linear-gradient(135deg,#6366f1,#a78bfa);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .join-card .subtitle { color: var(--muted); font-size: .9rem; margin-bottom: 28px; }
+
+    .field { margin-bottom: 18px; }
+    .field label {
+      display: block; font-size: .78rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .6px;
+      color: var(--muted); margin-bottom: 7px;
+    }
+    .field input, .field select {
+      width: 100%; padding: 11px 14px;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text); font-size: .95rem;
+      outline: none; transition: border-color .15s;
+    }
+    .field input:focus, .field select:focus { border-color: var(--primary); }
+    .field select option { background: var(--bg); }
+
+    .room-row { display: flex; gap: 8px; }
+    .room-row input { flex: 1; }
+    .room-row .btn-gen {
+      padding: 11px 14px; background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: 8px;
+      color: var(--muted); cursor: pointer; font-size: .85rem;
+      transition: all .15s; white-space: nowrap;
+    }
+    .room-row .btn-gen:hover { border-color: var(--primary); color: var(--primary); }
+
+    .btn-join {
+      width: 100%; padding: 14px;
+      background: var(--primary); color: #fff;
+      border: none; border-radius: 8px;
+      font-size: 1rem; font-weight: 700; cursor: pointer;
+      transition: background .15s, transform .1s; margin-top: 4px;
+    }
+    .btn-join:hover { background: var(--primary-h); }
+    .btn-join:active { transform: scale(.98); }
+
+    /* ── HEADER ─────────────────────────────── */
+    header {
+      height: 58px; background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 14px; padding: 0 20px;
+      flex-shrink: 0;
+    }
+    .logo {
+      font-weight: 800; font-size: 1.1rem;
+      background: linear-gradient(135deg,#6366f1,#a78bfa);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      white-space: nowrap;
+    }
+    .room-pill {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 20px; padding: 4px 12px;
+      font-size: .8rem; color: var(--muted);
+      cursor: pointer; transition: all .15s; user-select: none;
+    }
+    .room-pill:hover { border-color: var(--primary); color: var(--text); }
+    .scale-pill {
+      padding: 5px 10px; background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: 6px;
+      color: var(--text); font-size: .82rem; cursor: pointer; outline: none;
+    }
+    .spacer { flex: 1; }
+    .conn-dot {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--warning); transition: background .3s;
+    }
+    .conn-dot.online      { background: var(--success); }
+    .conn-dot.offline     { background: var(--danger); }
+    .conn-dot.connecting  { animation: blink 1s infinite; }
+    @keyframes blink { 50% { opacity: .3; } }
+
+    /* ── LAYOUT ─────────────────────────────── */
+    main { flex: 1; display: flex; overflow: hidden; }
+
+    /* ── SIDEBAR ─────────────────────────────── */
+    .sidebar {
+      width: 220px; background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      flex-shrink: 0; overflow-y: auto;
+    }
+    .sidebar-title {
+      font-size: .72rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--muted); padding: 16px 16px 10px;
+    }
+    .participant {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 14px; margin: 0 8px 4px;
+      border-radius: 8px; border: 1px solid transparent;
+      transition: all .2s;
+    }
+    .participant.voted  { border-color: var(--primary); background: rgba(99,102,241,.08); }
+    .participant.offline { opacity: .4; }
+    .avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg,#6366f1,#a78bfa);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .75rem; font-weight: 700; flex-shrink: 0; color: #fff;
+    }
+    .p-info { flex: 1; min-width: 0; }
+    .p-name {
+      font-size: .84rem; font-weight: 600;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .p-status { font-size: .72rem; color: var(--muted); margin-top: 1px; }
+    .vote-chip {
+      min-width: 30px; height: 30px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .78rem; font-weight: 700; flex-shrink: 0;
+    }
+    .vote-chip.pending { background: var(--card-bg); border: 1px dashed var(--border); color: var(--muted); }
+    .vote-chip.hidden  { background: var(--primary); color: #fff; }
+    .vote-chip.shown   { background: var(--success); color: #fff; }
+
+    /* ── GAME AREA ─────────────────────────────── */
+    .game {
+      flex: 1; overflow-y: auto; padding: 28px 24px;
+      display: flex; flex-direction: column; align-items: center; gap: 24px;
+    }
+    .story-input {
+      width: 100%; max-width: 680px; padding: 12px 16px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text); font-size: .95rem; outline: none;
+      transition: border-color .15s;
+    }
+    .story-input:focus { border-color: var(--primary); }
+    .story-input::placeholder { color: var(--muted); }
+
+    /* Progress */
+    .prog-wrap {
+      width: 100%; max-width: 680px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .prog-label  { font-size: .85rem; color: var(--muted); white-space: nowrap; }
+    .prog-track  { flex: 1; height: 5px; background: var(--card-bg); border-radius: 3px; overflow: hidden; }
+    .prog-fill   { height: 100%; background: var(--primary); border-radius: 3px; transition: width .4s ease; }
+    .prog-count  { font-size: .85rem; color: var(--muted); white-space: nowrap; }
+
+    /* Cards */
+    .cards-grid {
+      width: 100%; max-width: 680px;
+      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    }
+    .card {
+      width: 72px; height: 104px;
+      background: #fff; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: 800; color: #1e293b;
+      cursor: pointer; user-select: none;
+      border: 3px solid transparent;
+      box-shadow: 0 2px 8px rgba(0,0,0,.35);
+      transition: transform .15s, box-shadow .15s, background .15s, color .15s;
+      position: relative;
+    }
+    .card .corner {
+      position: absolute; font-size: .55rem; font-weight: 700; color: #94a3b8;
+    }
+    .card .tl { top: 5px; left: 7px; }
+    .card .br { bottom: 5px; right: 7px; transform: rotate(180deg); }
+
+    .card:hover:not(.disabled):not(.selected) {
+      transform: translateY(-10px);
+      box-shadow: 0 16px 32px rgba(0,0,0,.5);
+    }
+    .card.selected {
+      background: var(--primary); color: #fff;
+      border-color: rgba(255,255,255,.25);
+      transform: translateY(-14px);
+      box-shadow: 0 16px 36px rgba(99,102,241,.55);
+    }
+    .card.selected .corner { color: rgba(255,255,255,.55); }
+    .card.disabled { opacity: .5; cursor: not-allowed; transform: none !important; box-shadow: none; }
+
+    /* Actions */
+    .actions { display: flex; gap: 10px; }
+    .btn {
+      padding: 11px 24px; border-radius: 8px; border: none;
+      font-size: .9rem; font-weight: 600; cursor: pointer; transition: all .15s;
+    }
+    .btn-reveal { background: var(--success); color: #fff; }
+    .btn-reveal:hover { background: #16a34a; }
+    .btn-reset  { background: var(--card-bg); color: var(--text); border: 1px solid var(--border); }
+    .btn-reset:hover  { border-color: var(--primary); color: var(--primary); }
+
+    /* Results */
+    .results {
+      width: 100%; max-width: 680px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 22px 24px;
+      display: none;
+    }
+    .results.visible { display: block; }
+    .results-title {
+      font-size: .72rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--muted); margin-bottom: 16px;
+    }
+    .stats { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+    .stat {
+      flex: 1; min-width: 80px; background: var(--card-bg);
+      border-radius: 10px; padding: 14px 12px; text-align: center;
+    }
+    .stat-val { font-size: 1.8rem; font-weight: 800; color: var(--primary); }
+    .stat-lbl { font-size: .72rem; color: var(--muted); margin-top: 3px; }
+    .dist { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
+    .dist-group { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .dist-val { font-size: 1rem; font-weight: 700; }
+    .dist-bar { width: 10px; border-radius: 5px; background: var(--primary); min-height: 6px; }
+    .dist-names { font-size: .7rem; color: var(--muted); text-align: center; max-width: 70px; line-height: 1.4; }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 20px; right: 20px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 11px 18px;
+      font-size: .85rem; color: var(--text);
+      box-shadow: 0 8px 32px rgba(0,0,0,.5);
+      opacity: 0; transform: translateY(6px);
+      transition: all .25s; pointer-events: none; z-index: 300;
+    }
+    .toast.show { opacity: 1; transform: none; }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .sidebar { width: 190px; }
+      .card { width: 62px; height: 90px; font-size: 1.2rem; }
+      .game { padding: 16px 12px; gap: 16px; }
+    }
+    @media (max-width: 480px) {
+      main { flex-direction: column; }
+      .sidebar {
+        width: 100%; border-right: none; border-bottom: 1px solid var(--border);
+        max-height: 120px; flex-direction: row; overflow-x: auto; padding: 8px;
+      }
+      .sidebar-title { display: none; }
+      .participant { flex-shrink: 0; margin: 0 4px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── JOIN OVERLAY ───────────────────────────── -->
+<div id="overlay">
+  <div class="join-card">
+    <h1>🃏 Scrum Poker</h1>
+    <p class="subtitle">Estimación colaborativa en tiempo real.</p>
+
+    <div class="field">
+      <label>Tu nombre</label>
+      <input id="iName" type="text" placeholder="ej: María García" maxlength="28" autofocus />
+    </div>
+
+    <div class="field">
+      <label>Escala de estimación</label>
+      <select id="iScale">
+        <option value="fibonacci">Fibonacci — 1, 2, 3, 5, 8, 13, 21…</option>
+        <option value="modified">Scrum clásico — 0, ½, 1, 2, 3, 5, 8, 13…</option>
+        <option value="tshirt">T-Shirt — XS, S, M, L, XL, XXL</option>
+        <option value="powers2">Potencias de 2 — 1, 2, 4, 8, 16, 32…</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Sala</label>
+      <div class="room-row">
+        <input id="iRoom" type="text" placeholder="Código de sala" />
+        <button class="btn-gen" onclick="genRoom()">🎲 Nueva</button>
+      </div>
+    </div>
+
+    <button class="btn-join" onclick="joinRoom()">Entrar a la sala →</button>
+  </div>
+</div>
+
+<!-- ── HEADER ─────────────────────────────────── -->
+<header>
+  <div class="logo">🃏 Scrum Poker</div>
+  <div class="room-pill" onclick="copyLink()" title="Copiar enlace de sala">
+    🔗 <span id="hRoom">—</span>
+  </div>
+  <select class="scale-pill" id="hScale" onchange="changeScale(this.value)">
+    <option value="fibonacci">Fibonacci</option>
+    <option value="modified">Scrum clásico</option>
+    <option value="tshirt">T-Shirt</option>
+    <option value="powers2">Potencias de 2</option>
+  </select>
+  <div class="spacer"></div>
+  <div class="conn-dot connecting" id="connDot" title="Conectando…"></div>
+</header>
+
+<!-- ── MAIN ──────────────────────────────────── -->
+<main>
+  <aside class="sidebar">
+    <div class="sidebar-title">Participantes</div>
+    <div id="pList"></div>
+  </aside>
+
+  <section class="game">
+    <input class="story-input" id="storyInp" type="text"
+           placeholder="📝 Historia / ticket que se está estimando…"
+           oninput="debouncedStory()" />
+
+    <div class="prog-wrap">
+      <span class="prog-label" id="progLabel">Esperando votos…</span>
+      <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+      <span class="prog-count" id="progCount">0/0</span>
+    </div>
+
+    <div class="cards-grid" id="cardsGrid"></div>
+
+    <div class="actions">
+      <button class="btn btn-reveal" onclick="reveal()">Revelar cartas</button>
+      <button class="btn btn-reset"  onclick="newRound()">Nueva ronda</button>
+    </div>
+
+    <div class="results" id="results">
+      <div class="results-title">Resultados</div>
+      <div class="stats" id="rStats"></div>
+      <div class="dist"  id="rDist"></div>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── CONFIG ────────────────────────────────────
+const BROKER = 'wss://broker.hivemq.com:8884/mqtt';
+const PREFIX = 'pipopoker/v2';
+const SCALES = {
+  fibonacci: ['1','2','3','5','8','13','21','34','55','89','?','☕'],
+  modified:  ['0','½','1','2','3','5','8','13','20','40','100','?','☕'],
+  tshirt:    ['XS','S','M','L','XL','XXL','?'],
+  powers2:   ['1','2','4','8','16','32','64','?'],
+};
+
+// ─── STATE ─────────────────────────────────────
+const ME    = 'u_' + Math.random().toString(36).slice(2, 10);
+let roomId  = '';
+let myName  = '';
+let myVote  = null;
+let game    = { scale: 'fibonacci', revealed: false, round: 1, story: '' };
+let peers   = {};   // { [id]: { name, hasVoted, vote, round, online } }
+let client  = null;
+let storyT       = null;
+let confettiFired = false;
+
+// ─── BOOTSTRAP ─────────────────────────────────
+(function init() {
+  const p = new URLSearchParams(location.search);
+  const r = p.get('room') || mkRoomId();
+  document.getElementById('iRoom').value = r;
+  if (!p.get('room')) setUrlRoom(r);
+})();
+
+function mkRoomId() {
+  const w = ['mesa','sprint','ronda','equipo','poker','scrum','cafe','agil'];
+  return w[Math.floor(Math.random() * w.length)] + '-' + (Math.floor(Math.random() * 900) + 100);
+}
+
+function genRoom() {
+  document.getElementById('iRoom').value = mkRoomId();
+}
+
+function setUrlRoom(id) {
+  const u = new URL(location);
+  u.searchParams.set('room', id);
+  history.replaceState({}, '', u);
+}
+
+// ─── JOIN ──────────────────────────────────────
+function joinRoom() {
+  const name  = document.getElementById('iName').value.trim();
+  const scale = document.getElementById('iScale').value;
+  const room  = document.getElementById('iRoom').value.trim().replace(/[^a-zA-Z0-9\-_]/g, '');
+
+  if (!name) return toast('⚠️ Ingresá tu nombre');
+  if (!room) return toast('⚠️ Ingresá un código de sala');
+
+  myName     = name;
+  game.scale = scale;
+  roomId     = room;
+
+  setUrlRoom(room);
+  document.getElementById('hRoom').textContent = room;
+  document.getElementById('hScale').value      = scale;
+  document.getElementById('overlay').style.display = 'none';
+
+  // optimistic self-entry
+  peers[ME] = { name: myName, hasVoted: false, vote: null, round: game.round, online: true };
+  renderParticipants();
+  renderCards();
+
+  connect();
+}
+
+// ─── MQTT ──────────────────────────────────────
+function T(s) { return `${PREFIX}/${roomId}/${s}`; }
+
+function pub(dest, payload, retained = false) {
+  if (!client || !client.isConnected()) return;
+  const msg = new Paho.MQTT.Message(JSON.stringify(payload));
+  msg.destinationName = dest;
+  msg.retained = retained;
+  client.send(msg);
+}
+
+function pubUser(hasVoted, vote) {
+  pub(T(`user/${ME}`), {
+    clientId: ME, name: myName,
+    hasVoted, vote,
+    round: game.round, online: true,
+  }, true);
+}
+
+function pubGame(patch) {
+  const g = { ...game, ...patch };
+  pub(T('game'), g, true);
+}
+
+function connect() {
+  setConn('connecting');
+  client = new Paho.MQTT.Client(BROKER, ME);
+
+  client.onConnectionLost = function(r) {
+    if (r.errorCode !== 0) {
+      setConn('offline');
+      toast('🔴 Conexión perdida. Reconectando…');
+      setTimeout(connect, 4000);
+    }
+  };
+
+  client.onMessageArrived = onMsg;
+
+  const lwt = new Paho.MQTT.Message(JSON.stringify({ clientId: ME, online: false }));
+  lwt.destinationName = T(`user/${ME}`);
+  lwt.retained = true;
+
+  client.connect({
+    willMessage: lwt,
+    keepAliveInterval: 30,
+    onSuccess() {
+      setConn('online');
+      toast('🟢 Conectado');
+      client.subscribe(T('game'));
+      client.subscribe(T('user/#'));
+      pubUser(myVote !== null, null);
+    },
+    onFailure() {
+      setConn('offline');
+      toast('🔴 Error de conexión. Reintentando…');
+      setTimeout(connect, 5000);
+    },
+  });
+}
+
+function onMsg(msg) {
+  let data;
+  try { data = JSON.parse(msg.payloadString); } catch { return; }
+
+  if (msg.destinationName.endsWith('/game')) {
+    handleGame(data);
+  } else if (msg.destinationName.includes('/user/')) {
+    handleUser(data);
+  }
+}
+
+// ─── GAME STATE HANDLER ────────────────────────
+function handleGame(data) {
+  const wasRevealed = game.revealed;
+  game = { ...game, ...data };
+
+  document.getElementById('hScale').value = game.scale;
+  const si = document.getElementById('storyInp');
+  if (document.activeElement !== si) si.value = game.story || '';
+
+  renderCards();
+
+  if (game.revealed && !wasRevealed) {
+    // reveal: expose my real vote
+    pubUser(myVote !== null, myVote);
+    showResults();
+  } else if (!game.revealed && wasRevealed) {
+    // new round reset
+    myVote = null;
+    peers[ME] = { ...peers[ME], hasVoted: false, vote: null, round: game.round };
+    hideResults();
+    renderCards();
+    renderParticipants();
+  }
+
+  updateProgress();
+}
+
+// ─── USER STATE HANDLER ────────────────────────
+function handleUser(data) {
+  if (!data.clientId) return;
+
+  if (data.clientId === ME) {
+    // always keep self from local state
+    peers[ME] = { name: myName, hasVoted: myVote !== null, vote: game.revealed ? myVote : null, round: game.round, online: true };
+  } else if (!data.online) {
+    if (peers[data.clientId]) peers[data.clientId].online = false;
+  } else {
+    peers[data.clientId] = {
+      name:     data.name || data.clientId,
+      hasVoted: data.hasVoted && data.round === game.round,
+      vote:     data.vote,
+      round:    data.round,
+      online:   true,
+    };
+  }
+
+  renderParticipants();
+  updateProgress();
+  if (game.revealed) showResults();
+}
+
+// ─── ACTIONS ───────────────────────────────────
+function vote(val) {
+  if (game.revealed) return;
+  myVote = val;
+  peers[ME] = { ...peers[ME], hasVoted: true, vote: null, round: game.round };
+  pubUser(true, null);
+  renderCards();
+  renderParticipants();
+  updateProgress();
+  toast(`✅ Votaste: ${val}`);
+}
+
+function reveal() {
+  pubGame({ revealed: true });
+  // publish own vote immediately
+  pubUser(myVote !== null, myVote);
+}
+
+function newRound() {
+  const nextRound = game.round + 1;
+  myVote = null;
+  pubUser(false, null);
+  pubGame({ revealed: false, round: nextRound, story: game.story });
+}
+
+function changeScale(scale) {
+  game.scale = scale;
+  pubGame({ scale });
+  renderCards();
+}
+
+function debouncedStory() {
+  clearTimeout(storyT);
+  storyT = setTimeout(() => {
+    game.story = document.getElementById('storyInp').value;
+    pubGame({});
+  }, 800);
+}
+
+// ─── RENDER ────────────────────────────────────
+function renderCards() {
+  const grid = document.getElementById('cardsGrid');
+  grid.innerHTML = '';
+  SCALES[game.scale].forEach(v => {
+    const c = document.createElement('div');
+    c.className = 'card' +
+      (myVote === v      ? ' selected'  : '') +
+      (game.revealed     ? ' disabled'  : '');
+    c.innerHTML = `<span class="corner tl">${esc(v)}</span>${esc(v)}<span class="corner br">${esc(v)}</span>`;
+    if (!game.revealed) c.onclick = () => vote(v);
+    grid.appendChild(c);
+  });
+}
+
+function renderParticipants() {
+  const list = document.getElementById('pList');
+  list.innerHTML = '';
+
+  Object.entries(peers).forEach(([id, p]) => {
+    const div  = document.createElement('div');
+    const isMe = id === ME;
+    const voted = p.hasVoted && p.round === game.round;
+    div.className = 'participant' + (voted ? ' voted' : '') + (!p.online ? ' offline' : '');
+
+    const initials = (p.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+
+    let chipClass = 'pending', chipText = '···';
+    if (game.revealed && voted && p.vote !== null) {
+      chipClass = 'shown'; chipText = esc(p.vote);
+    } else if (voted) {
+      chipClass = 'hidden'; chipText = '✓';
+    }
+
+    div.innerHTML = `
+      <div class="avatar">${initials}</div>
+      <div class="p-info">
+        <div class="p-name">${esc(p.name)}${isMe ? ' <span style="color:var(--primary);font-size:.7rem">(vos)</span>' : ''}</div>
+        <div class="p-status">${voted ? '✅ Votó' : (p.online ? '⏳ Pensando…' : '🔴 Desconectado')}</div>
+      </div>
+      <div class="vote-chip ${chipClass}">${chipText}</div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function updateProgress() {
+  const online = Object.values(peers).filter(p => p.online);
+  const voted  = online.filter(p => p.hasVoted && p.round === game.round).length;
+  const total  = online.length;
+
+  document.getElementById('progFill').style.width  = total ? `${(voted / total) * 100}%` : '0%';
+  document.getElementById('progCount').textContent  = `${voted}/${total}`;
+  document.getElementById('progLabel').textContent  =
+    voted === total && total > 0 ? '🎯 ¡Todos votaron!' : `⏳ Esperando ${total - voted} voto${total - voted !== 1 ? 's' : ''}…`;
+}
+
+function showResults() {
+  const withVote = Object.values(peers).filter(p => p.online && p.hasVoted && p.vote !== null && p.round === game.round);
+  if (!withVote.length) return;
+
+  const nums = withVote.map(p => parseFloat(p.vote)).filter(v => !isNaN(v));
+
+  // consenso: todos votaron el mismo valor
+  const uniqueVotes = [...new Set(withVote.map(p => p.vote))];
+  const consensus   = uniqueVotes.length === 1 && withVote.length > 1;
+  if (consensus && !confettiFired) {
+    confettiFired = true;
+    fireConfetti();
+  }
+
+  let statsHtml = '';
+  if (nums.length) {
+    const avg = (nums.reduce((a, b) => a + b, 0) / nums.length).toFixed(1);
+    const min = Math.min(...nums);
+    const max = Math.max(...nums);
+    statsHtml = `
+      <div class="stat"><div class="stat-val">${avg}</div><div class="stat-lbl">Promedio</div></div>
+      <div class="stat"><div class="stat-val" style="color:var(--${min === max ? 'success' : 'warning'})">${min === max ? '✓' : max - min}</div><div class="stat-lbl">${min === max ? 'Consenso' : 'Diferencia'}</div></div>
+      <div class="stat"><div class="stat-val">${min}</div><div class="stat-lbl">Mínimo</div></div>
+      <div class="stat"><div class="stat-val">${max}</div><div class="stat-lbl">Máximo</div></div>
+    `;
+  }
+  document.getElementById('rStats').innerHTML = statsHtml;
+
+  // distribution
+  const groups = {};
+  withVote.forEach(p => {
+    const k = p.vote ?? '?';
+    if (!groups[k]) groups[k] = [];
+    groups[k].push(p.name);
+  });
+  const maxG = Math.max(...Object.values(groups).map(g => g.length));
+
+  const sorted = Object.entries(groups).sort((a, b) => {
+    const na = parseFloat(a[0]), nb = parseFloat(b[0]);
+    return (!isNaN(na) && !isNaN(nb)) ? na - nb : String(a[0]).localeCompare(String(b[0]));
+  });
+
+  document.getElementById('rDist').innerHTML = sorted.map(([val, names]) => `
+    <div class="dist-group">
+      <div class="dist-val">${esc(val)}</div>
+      <div class="dist-bar" style="height:${Math.max(8, (names.length / maxG) * 64)}px"></div>
+      <div class="dist-names">${names.map(esc).join('<br>')}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('results').classList.add('visible');
+}
+
+function hideResults() {
+  document.getElementById('results').classList.remove('visible');
+  confettiFired = false;
+}
+
+function fireConfetti() {
+  const count  = 180;
+  const spread = 70;
+  const origin = { y: 0.6 };
+
+  confetti({ particleCount: count / 2, angle: 60,  spread, origin: { x: 0,   y: origin.y } });
+  confetti({ particleCount: count / 2, angle: 120, spread, origin: { x: 1,   y: origin.y } });
+
+  setTimeout(() => {
+    confetti({ particleCount: 80, angle: 90, spread: 120, origin: { x: 0.5, y: 0.5 },
+               colors: ['#6366f1','#a78bfa','#22c55e','#f59e0b','#ffffff'] });
+  }, 300);
+}
+
+// ─── UTILS ─────────────────────────────────────
+function setConn(state) {
+  const d = document.getElementById('connDot');
+  d.className = 'conn-dot ' + state;
+  d.title = { connecting: 'Conectando…', online: 'Conectado', offline: 'Desconectado' }[state] || '';
+}
+
+let toastT;
+function toast(msg, ms = 3000) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => el.classList.remove('show'), ms);
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(location.href)
+    .then(() => toast('🔗 Enlace copiado'))
+    .catch(() => toast('Copiá la URL del navegador'));
+}
+
+function esc(s) {
+  return String(s ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>
