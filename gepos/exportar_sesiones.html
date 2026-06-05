@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gepos — Exportar Sesiones</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.9.0/sql-asm.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #222; padding: 24px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { font-size: 1.6rem; margin-bottom: 4px; }
+        .sub { color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+        .card { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.08); margin-bottom: 16px; }
+        .card h2 { font-size: 1.1rem; margin-bottom: 12px; }
+        .file-area { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .file-area input[type=file] { flex: 1; min-width: 200px; }
+        button { background: #1a73e8; color: #fff; border: none; border-radius: 6px; padding: 8px 18px; font-size: .9rem; cursor: pointer; }
+        button:disabled { opacity: .5; cursor: default; }
+        button.danger { background: #d93025; }
+        button.secondary { background: #5f6368; }
+        .sessions { margin-top: 12px; }
+        .session-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .session-row:last-child { border-bottom: none; }
+        .session-row label { flex: 1; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .session-row input[type=checkbox] { width: 18px; height: 18px; }
+        .badge { font-size: .75rem; padding: 2px 8px; border-radius: 10px; background: #e8f0fe; color: #1a73e8; }
+        .badge.egreso { background: #fce8e6; color: #d93025; }
+        .badge.individual { background: #e6f4ea; color: #137333; }
+        .badge.individualTipoII, .badge.movimientoSimple, .badge.trabajoIndividual { background: #fef7e0; color: #b06000; }
+        .actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+        .counter { font-size: .85rem; color: #666; margin-left: auto; }
+        .msg { margin-top: 12px; padding: 10px 14px; border-radius: 6px; font-size: .9rem; }
+        .msg.ok { background: #e6f4ea; color: #137333; }
+        .msg.err { background: #fce8e6; color: #d93025; }
+        .msg.info { background: #e8f0fe; color: #1a73e8; }
+        pre { background: #f8f9fa; border-radius: 6px; padding: 12px; font-size: .8rem; overflow-x: auto; max-height: 400px; margin-top: 8px; }
+        .hidden { display: none; }
+        .select-all { font-size: .85rem; color: #1a73e8; cursor: pointer; margin-left: 4px; }
+        .filters { display: flex; gap: 10px; flex-wrap: wrap; margin: 8px 0; }
+        .filters label { font-size: .85rem; display: flex; align-items: center; gap: 4px; cursor: pointer; }
+        .status { font-size: .85rem; color: #666; margin-left: 8px; }
+        .loading { display: inline-block; width: 16px; height: 16px; border: 2px solid #ccc; border-top-color: #1a73e8; border-radius: 50%; animation: spin .6s linear infinite; margin-right: 8px; vertical-align: middle; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📋 Gepos — Exportar Sesiones</h1>
+    <p class="sub">Cargá un archivo SQLite (.db) de Gepos, seleccioná las sesiones y descargalas como JSON en el formato de la API.</p>
+
+    <div class="card">
+        <h2>1. Base de datos</h2>
+        <div class="file-area">
+            <input type="file" id="dbFileInput" accept=".db,.sqlite,.sqlite3">
+            <button id="loadBtn" onclick="loadDB()">Cargar</button>
+            <span id="loadStatus" class="status"></span>
+        </div>
+    </div>
+
+    <div class="card" id="sessionsCard">
+        <h2>2. Seleccionar sesiones</h2>
+        <div id="filters" class="filters hidden">
+            <label><input type="checkbox" checked onchange="applyFilters()"> ingreso</label>
+            <label><input type="checkbox" checked onchange="applyFilters()"> egreso</label>
+            <label><input type="checkbox" checked onchange="applyFilters()"> individual</label>
+            <label><input type="checkbox" checked onchange="applyFilters()"> movimientoSimple</label>
+            <label><input type="checkbox" checked onchange="applyFilters()"> trabajoIndividual</label>
+        </div>
+        <div id="actions" class="actions hidden">
+            <button onclick="selectAll(true)">Seleccionar todo</button>
+            <button class="secondary" onclick="selectAll(false)">Deseleccionar todo</button>
+            <span id="counter" class="counter"></span>
+        </div>
+        <div id="sessionList" class="sessions"></div>
+        <div id="exportActions" class="actions hidden">
+            <button id="exportBtn" onclick="exportSelected()">Exportar seleccionadas como JSON</button>
+        </div>
+        <div id="output"></div>
+    </div>
+</div>
+
+<script>
+let SQL; // sql.js instance
+let db;  // loaded database
+let allSessions = [];
+
+async function loadDB() {
+    const fileInput = document.getElementById('dbFileInput');
+    const status = document.getElementById('loadStatus');
+    const file = fileInput.files[0];
+
+    if (!file) { status.innerHTML = '⚠ Seleccioná un archivo .db'; return; }
+
+    status.innerHTML = '<span class="loading"></span> Cargando...';
+
+    try {
+        if (!SQL) {
+            SQL = await initSqlJs();
+        }
+
+        const buffer = await file.arrayBuffer();
+        db = new SQL.Database(new Uint8Array(buffer));
+
+        // verify tables exist
+        const tables = db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Sesiones'");
+        if (!tables.length) {
+            status.innerHTML = '❌ La base de datos no contiene una tabla "Sesiones".';
+            db = null;
+            return;
+        }
+
+        status.innerHTML = `✅ ${file.name} cargada (${(buffer.byteLength / 1024).toFixed(0)} KB)`;
+        loadSessions();
+    } catch (e) {
+        status.innerHTML = `❌ Error: ${e.message}`;
+        console.error(e);
+    }
+}
+
+function loadSessions() {
+    const stmt = db.exec(`
+        SELECT s.id, s.nombre, s.type, s."create", s.config,
+               (SELECT COUNT(*) FROM haciendaSession h WHERE h.sesionId = s.id) as animales
+        FROM Sesiones s
+        ORDER BY s.id
+    `);
+
+    allSessions = stmt[0].values.map(row => ({
+        id: row[0],
+        nombre: row[1],
+        type: row[2],
+        create: row[3],
+        config: row[4],
+        animalesCount: row[5],
+    }));
+
+    renderSessions();
+}
+
+function renderSessions() {
+    const list = document.getElementById('sessionList');
+    const filters = document.getElementById('filters');
+    const actions = document.getElementById('actions');
+    const exportActions = document.getElementById('exportActions');
+
+    if (allSessions.length === 0) {
+        list.innerHTML = '<div class="msg info">No hay sesiones en la base de datos.</div>';
+        filters.classList.add('hidden');
+        actions.classList.add('hidden');
+        exportActions.classList.add('hidden');
+        return;
+    }
+
+    filters.classList.remove('hidden');
+    actions.classList.remove('hidden');
+    exportActions.classList.remove('hidden');
+
+    applyFilters();
+}
+
+function getFiltered() {
+    const checks = document.querySelectorAll('#filters input[type=checkbox]');
+    const labels = ['ingreso', 'egreso', 'individualTipoI', 'movimientoSimple', 'trabajoIndividual'];
+    const active = [];
+    checks.forEach((c, i) => { if (c.checked) active.push(labels[i]); });
+
+    return allSessions.filter(s => {
+        const t = s.type.replace('Type.', '');
+        if (t === 'individualTipoII') return active.includes('individualTipoI');
+        return active.includes(t);
+    });
+}
+
+function applyFilters() {
+    const filtered = getFiltered();
+    const list = document.getElementById('sessionList');
+
+    list.innerHTML = filtered.map(s => {
+        const tipo = s.type.replace('Type.', '');
+        const badgeClass = tipo === 'ingreso' ? '' : tipo === 'egreso' ? 'egreso' : tipo === 'individualTipoI' || tipo === 'individualTipoII' ? 'individual' : 'individualTipoII';
+        const nombre = s.nombre || '—';
+        const fecha = s.create ? s.create.slice(0, 19) : '—';
+        return `<div class="session-row">
+            <label>
+                <input type="checkbox" class="session-cb" data-id="${s.id}" checked>
+                <span><strong>#${s.id}</strong> ${nombre}</span>
+                <span class="badge ${badgeClass}">${tipo}</span>
+                <span class="counter">${s.animalesCount} animales · ${fecha}</span>
+            </label>
+        </div>`;
+    }).join('');
+
+    updateCounter();
+}
+
+function selectAll(val) {
+    document.querySelectorAll('.session-cb').forEach(cb => cb.checked = val);
+    updateCounter();
+}
+
+function updateCounter() {
+    const total = getFiltered().length;
+    const sel = document.querySelectorAll('.session-cb:checked').length;
+    document.getElementById('counter').textContent = `${sel} de ${total} sesiones seleccionadas`;
+}
+
+function getSelectedSessions() {
+    const checked = new Set();
+    document.querySelectorAll('.session-cb:checked').forEach(cb => checked.add(+cb.dataset.id));
+    return allSessions.filter(s => checked.has(s.id));
+}
+
+function parseJSON(val) {
+    if (!val || val === '') return null;
+    try { return JSON.parse(val); } catch (_) { return null; }
+}
+
+function fmtDate(val) {
+    if (!val) return null;
+    return val;
+}
+
+// ---- Model transforms (mirror Dart toJsonGepos*) ----
+
+function catToJson(cat) {
+    if (!cat) return null;
+    return {ID: cat.ID ?? cat.id};
+}
+
+function razToJson(raz) {
+    if (!raz) return null;
+    return {ID: raz.ID ?? raz.id};
+}
+
+function insumoToJson(ins) {
+    return {ID: ins.ID ?? ins.idServer, Cant: ins.cantidadAplicada};
+}
+
+function tratamientoToJson(trt) {
+    const insumos = trt.insumos || trt.Insumos || [];
+    return {
+        ID: trt.ID ?? trt.idServer,
+        Insumos: insumos.filter(i => i.cantidadAplicada != null).map(insumoToJson),
+    };
+}
+
+function firstPesada(row) {
+    const raw = row.pesadas;
+    if (!raw) return [null, null];
+    const list = typeof raw === 'string' ? parseJSON(raw) : raw;
+    if (!list || !list.length) return [null, null];
+    return [list[0].peso, list[0].fecha || null];
+}
+
+function getSinCaravana(row) {
+    const egreso = typeof row.egreso === 'string' ? parseJSON(row.egreso) : row.egreso;
+    return egreso?.EgrSinCarv === 1;
+}
+
+// toJsonGeposIngres
+function animalIngreso(row) {
+    const cat = parseJSON(row.categoria);
+    const raz = parseJSON(row.raza);
+    const corral = parseJSON(row.corral);
+    const corralDest = parseJSON(row.corralDestino);
+    const trats = typeof row.tratamientos === 'string' ? parseJSON(row.tratamientos) : (row.tratamientos || null);
+    const estados = ['Bueno', 'Regular', 'Malo', 'Muy Malo'];
+    const estadoIdx = estados.indexOf(row.estado) + 1;
+    const [peso, fechaPeso] = firstPesada(row);
+
+    const obj = {
+        ID: row.idServer,
+        IngItm: row.idServer === 0 ? {ID: row.ingItm, TropaID: row.tropaId} : null,
+        CatID: cat?.ID ?? null,
+        RazID: raz?.ID ?? null,
+        RFID: row.rfid,
+        FechaRFID: row.fechaRfid,
+        CaravanaTxt: row.caravanaTxt,
+        Caravana: row.caravana,
+        CUIG: row.cuig,
+        Estado: estadoIdx || null,
+        Obs: row.obs,
+        RP: row.rp,
+        Peso: peso,
+        FechaPeso: fmtDate(fechaPeso),
+        CorralOrigen: corral?.ID ?? null,
+        CorralDestino: corralDest?.ID ?? null,
+        Tratamientos: trats ? trats.map(tratamientoToJson) : null,
+        Actualizado: fmtDate(row.actualizado),
+        Eliminar: row.eliminado ? 1 : 0,
+    };
+    return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v != null));
+}
+
+// toJsonGepos (for egreso/clasificacion)
+function animalEgreso(row) {
+    const cat = parseJSON(row.categoria);
+    const raz = parseJSON(row.raza);
+    const corral = parseJSON(row.corral);
+    const corralDest = parseJSON(row.corralDestino);
+    const trats = typeof row.tratamientos === 'string' ? parseJSON(row.tratamientos) : (row.tratamientos || null);
+    const [peso, fechaPeso] = firstPesada(row);
+
+    let modif = null;
+    if (row.cambios) {
+        modif = Object.fromEntries(Object.entries({
+            CatID: cat?.ID ?? null,
+            RazID: raz?.ID ?? null,
+            RFID: row.rfid,
+            CaravanaTXT: row.caravanaTxt,
+            CUIG: row.cuig,
+            RP: row.rp,
+        }).filter(([_, v]) => v != null));
+    }
+
+    const obj = {
+        ID: row.idServer,
+        Modif: modif,
+        FechaRFID: row.fechaRfid,
+        Peso: peso ?? 0,
+        FechaPeso: fmtDate(fechaPeso),
+        CorralOrigen: corral?.ID ?? null,
+        CorralDestino: corralDest?.ID ?? null,
+        Tratamientos: trats ? trats.map(tratamientoToJson) : null,
+        Actualizado: fmtDate(row.actualizado),
+        SinCaravana: getSinCaravana(row) ? 1 : 0,
+    };
+    return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v != null));
+}
+
+// toJsonGeposTrabajoIndividual
+function animalIndividual(row) {
+    const corral = parseJSON(row.corral);
+    const corralDest = parseJSON(row.corralDestino);
+    const trats = typeof row.tratamientos === 'string' ? parseJSON(row.tratamientos) : (row.tratamientos || null);
+
+    const obj = {
+        ID: row.idServer,
+        FechaRFID: row.fechaRfid,
+        CausaID: 0,
+        Obs: null,
+        Fotos: null,
+        CorralOrigen: corral?.ID ?? null,
+        CorralDestino: corralDest?.ID ?? 0,
+        Tratamientos: trats ? trats.map(tratamientoToJson) : null,
+        Actualizado: fmtDate(row.actualizado),
+    };
+    return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v != null));
+}
+
+function corralToJsonApi(c) {
+    if (!c) return null;
+    return {
+        Id: c.ID ?? c.idServer,
+        Cant: c.cabezasCorral || 0,
+        Completo: (c.cabezasCorral === c.cabezasMaximas) ? 1 : 0,
+    };
+}
+
+// ---- Session formatters ----
+
+function fmtIngreso(s, animales) {
+    const cfg = parseJSON(s.config) || {};
+    const desb = cfg.desbaste || 0;
+    const rp = [0, 1].includes(cfg.pesoIndiv) ? 1 : 0;
+    return {
+        id: s.id,
+        nombre: s.nombre,
+        Desbaste: desb / 100,
+        RegPeso: rp,
+        Hacienda: animales.map(animalIngreso),
+        Procesar: s.processInServer ?? 1,
+    };
+}
+
+function fmtClasif(s, animales) {
+    const cfg = parseJSON(s.config) || {};
+    const desb = cfg.desbaste || 0;
+    const rp = [0, 1].includes(cfg.pesoIndiv) ? 1 : 0;
+    const origenes = cfg.corral || cfg.corralesOrigen || [];
+    return {
+        id: s.id,
+        nombre: s.nombre,
+        Desbaste: desb / 100,
+        Origen: (Array.isArray(origenes) ? origenes : []).map(corralToJsonApi),
+        RegPeso: rp,
+        Hacienda: animales.map(animalEgreso),
+        Procesar: s.processInServer ?? 1,
+    };
+}
+
+function fmtIndividual(s, animales, tipo) {
+    return {
+        id: s.id,
+        nombre: s.nombre,
+        Tipo: tipo,
+        Hacienda: animales.map(animalIndividual),
+        Procesar: s.processInServer ?? 1,
+    };
+}
+
+function getAnimales(sessionId) {
+    const stmt = db.exec(`SELECT * FROM haciendaSession WHERE sesionId = ${sessionId} ORDER BY id`);
+    if (!stmt.length) return [];
+    const cols = stmt[0].columns;
+    return stmt[0].values.map(row => {
+        const obj = {};
+        cols.forEach((c, i) => { obj[c] = row[i]; });
+        return obj;
+    });
+}
+
+// ---- Export ----
+
+async function exportSelected() {
+    const selected = getSelectedSessions();
+    const output = document.getElementById('output');
+
+    if (!selected.length) {
+        output.innerHTML = '<div class="msg err">No hay sesiones seleccionadas.</div>';
+        return;
+    }
+
+    // Get establId — la columna se llama id_server en el schema real
+    const est = db.exec("SELECT id_server, id FROM establecimientos LIMIT 1");
+    let establId = 0;
+    if (est.length) {
+        establId = est[0].values[0][0] || est[0].values[0][1];
+    }
+
+    const ingresos = [];
+    const clasificacion = [];
+    const individual = [];
+
+    for (const s of selected) {
+        const tipo = s.type.replace('Type.', '');
+        const animales = getAnimales(s.id);
+
+        if (tipo === 'ingreso') {
+            ingresos.push(fmtIngreso(s, animales));
+        } else if (tipo === 'egreso' || tipo === 'clasificacion') {
+            clasificacion.push(fmtClasif(s, animales));
+        } else if (tipo === 'individualTipoI' || tipo === 'individualTipoII') {
+            individual.push(fmtIndividual(s, animales, tipo === 'individualTipoI' ? 1 : 2));
+        } else if (tipo === 'trabajoIndividual') {
+            individual.push(fmtIndividual(s, animales, 1));
+        } else if (tipo === 'movimientoSimple') {
+            individual.push(fmtIndividual(s, animales, 2));
+        }
+    }
+
+    const now = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    const fechaapp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+
+    const payload = {
+        token: null,
+        fechaapp: fechaapp,
+        establID: establId,
+    };
+    if (ingresos.length) payload.Ingr = ingresos;
+    if (individual.length) payload.Indiv = individual;
+    if (clasificacion.length) payload.Clasif = clasificacion;
+
+    const json = JSON.stringify(payload, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const ts = `${pad(now.getDate())}-${pad(now.getMonth()+1)}-${now.getFullYear()}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Sesiones_${ts}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    const total = ingresos.length + clasificacion.length + individual.length;
+    output.innerHTML = `<div class="msg ok">✅ ${total} sesión(es) exportadas · ${(blob.size / 1024).toFixed(1)} KB</div>
+    <details><summary>Ver JSON</summary><pre>${escapeHtml(json.slice(0, 5000))}${json.length > 5000 ? '...' : ''}</pre></details>`;
+}
+
+function escapeHtml(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+</script>
+</body>
+</html>
