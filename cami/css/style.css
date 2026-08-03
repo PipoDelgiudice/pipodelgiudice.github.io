@@ -28,23 +28,55 @@ html {
   scroll-snap-type: y proximity;
 }
 
+@media (max-width: 768px) {
+  html {
+    scroll-snap-type: none;
+  }
+  .chapter, .proposal-section {
+    scroll-snap-align: none;
+  }
+}
+
 body {
   font-family: var(--font-sans);
   background: var(--charcoal);
   color: var(--cream);
   overflow-x: hidden;
   line-height: 1.6;
+  /* Pulido mobile: sin flash azul al tocar, texto nítido, sin reescalado raro */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
 }
+
+/* Que nada tenga el highlight azul de tap por defecto */
+button, a, .nav-dot, .carousel-dot, .letter, .polaroid {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Fade-in suave de fotos: arrancan invisibles y aparecen al terminar de cargar */
+img {
+  opacity: 0;
+  transition: opacity 0.7s var(--transition-smooth);
+}
+
+img.loaded {
+  opacity: 1;
+}
+
+/* Seguro: si el JS de fade-in no corre, que las fotos se vean igual */
+.no-js-fade img { opacity: 1; }
 
 .chapter {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   position: relative;
-  padding: 4rem 1.5rem;
+  padding: 5rem 1.5rem 4rem;
   scroll-snap-align: start;
-  overflow: hidden;
 }
 
 .chapter-bg {
@@ -53,9 +85,7 @@ body {
   z-index: 0;
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
   transform: scale(1.1);
-  transition: transform 0.1s var(--transition-smooth);
   will-change: transform;
 }
 
@@ -437,33 +467,47 @@ body {
 /* Nav dots */
 .nav-dots {
   position: fixed;
-  right: 1rem;
+  right: calc(0.75rem + env(safe-area-inset-right));
   top: 50%;
   transform: translateY(-50%);
   z-index: 100;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.4rem;
 }
 
+/* El dot visible mide 10px, pero el área tocable es 28px (accesible al dedo) */
 .nav-dot {
-  width: 10px;
-  height: 10px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: rgba(253, 246, 240, 0.3);
+  background: transparent;
   cursor: pointer;
   transition: all 0.4s var(--transition-smooth);
   border: none;
   padding: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.nav-dot.active {
+.nav-dot::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(253, 246, 240, 0.3);
+  transition: all 0.4s var(--transition-smooth);
+}
+
+.nav-dot.active::before {
   background: var(--gold);
   box-shadow: 0 0 12px rgba(212, 168, 83, 0.6);
   transform: scale(1.3);
 }
 
-.nav-dot:hover {
+.nav-dot:hover::before {
   background: var(--rose);
 }
 
@@ -474,7 +518,8 @@ body {
   left: 0;
   right: 0;
   z-index: 99;
-  padding: 1rem 1.5rem;
+  /* Safe area: respeta notch / barra de estado del teléfono */
+  padding: calc(1rem + env(safe-area-inset-top)) calc(1.5rem + env(safe-area-inset-right)) 1rem calc(1.5rem + env(safe-area-inset-left));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -485,7 +530,8 @@ body {
 .header.scrolled {
   background: rgba(44, 36, 36, 0.95);
   backdrop-filter: blur(10px);
-  padding: 0.6rem 1.5rem;
+  padding-top: calc(0.6rem + env(safe-area-inset-top));
+  padding-bottom: 0.6rem;
 }
 
 .header-logo {
@@ -572,11 +618,12 @@ body {
 
 /* Responsive */
 @media (max-width: 480px) {
-  .chapter { padding: 3rem 1rem; }
+  .chapter { padding: 3rem 1rem calc(3rem + env(safe-area-inset-bottom)); }
   .memory-grid { grid-template-columns: 1fr; }
   .memory-grid .polaroid { max-width: 250px; margin: 0 auto; }
-  .nav-dots { right: 0.5rem; gap: 0.4rem; }
-  .nav-dot { width: 8px; height: 8px; }
+  .nav-dots { right: calc(0.35rem + env(safe-area-inset-right)); gap: 0.2rem; }
+  /* Área tocable se mantiene grande; solo achico el puntito visible */
+  .nav-dot::before { width: 8px; height: 8px; }
 }
 
 @media (min-width: 768px) {
@@ -646,10 +693,10 @@ body {
 .carousel {
   position: relative;
   width: 100%;
-  max-width: 300px;
+  max-width: 440px;
   margin: 2rem auto;
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .carousel-track {
@@ -660,25 +707,50 @@ body {
 .carousel .polaroid {
   flex: 0 0 100%;
   margin: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
   transform: none !important;
   opacity: 1 !important;
 }
 
-.carousel .polaroid img,
-.carousel .polaroid .placeholder-img {
+/* Marco de la foto: alto fijo para que el carrusel no salte de altura.
+   La foto se ve COMPLETA (contain) y el fondo es la misma imagen difuminada. */
+.carousel .photo-frame {
+  position: relative;
   width: 100%;
-  height: 220px;
-  object-fit: cover;
-  object-position: center top;
+  height: 340px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #1a1414;
+}
+
+/* Fondo: la propia foto, difuminada y ampliada para rellenar los costados */
+.carousel .photo-frame .bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(24px) brightness(0.5);
+  transform: scale(1.15);
+}
+
+/* Foto nítida y completa, centrada sobre el fondo */
+.carousel .photo-frame img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   display: block;
 }
 
 .carousel .polaroid .caption {
   font-family: var(--font-hand);
-  color: var(--charcoal);
+  color: var(--cream);
   text-align: center;
   font-size: 1rem;
-  margin-top: 0.6rem;
+  margin-top: 0.8rem;
   padding: 0 0.5rem;
 }
 
@@ -729,4 +801,178 @@ body {
 
 .text-reveal.revealed span {
   transform: translateY(0);
+}
+
+/* ============================================ */
+/* Momento final: botón "Sí, quiero"            */
+/* ============================================ */
+.proposal-actions {
+  margin: 2rem 0 1rem;
+}
+
+.btn-yes {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  color: var(--charcoal);
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  border: none;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 8px 30px rgba(212, 168, 83, 0.4);
+  transition: all 0.4s var(--transition-smooth);
+  animation: btnPulse 2.5s ease-in-out infinite;
+}
+
+.btn-yes:hover {
+  transform: scale(1.08);
+  box-shadow: 0 12px 40px rgba(212, 168, 83, 0.6);
+}
+
+.btn-yes:active {
+  transform: scale(0.98);
+}
+
+@keyframes btnPulse {
+  0%, 100% { box-shadow: 0 8px 30px rgba(212, 168, 83, 0.4); }
+  50% { box-shadow: 0 8px 44px rgba(232, 160, 180, 0.6); }
+}
+
+/* Overlay de celebración */
+.celebration {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #3d2a3d 0%, #1a1212 100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s var(--transition-smooth);
+}
+
+.celebration.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.celebration-inner {
+  text-align: center;
+  padding: 2rem;
+  transform: scale(0.85);
+  transition: transform 1.2s var(--transition-smooth);
+}
+
+.celebration.active .celebration-inner {
+  transform: scale(1);
+}
+
+.celebration-ring {
+  font-size: 5rem;
+  animation: ringGlow 2s ease-in-out infinite;
+}
+
+.celebration-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  color: var(--white);
+  margin: 1rem 0 0.5rem;
+}
+
+.celebration-sub {
+  font-family: var(--font-hand);
+  font-size: clamp(1.5rem, 6vw, 2.5rem);
+  color: var(--rose);
+}
+
+.celebration-date {
+  font-family: var(--font-serif);
+  color: var(--gold);
+  letter-spacing: 3px;
+  margin-top: 1.5rem;
+  opacity: 0.8;
+}
+
+/* ============================================ */
+/* Nieve navideña (propuesta final)             */
+/* ============================================ */
+.snowflake {
+  position: fixed;
+  top: -20px;
+  color: var(--white);
+  z-index: 2;
+  pointer-events: none;
+  animation: snowFall linear forwards;
+}
+
+@keyframes snowFall {
+  0% { transform: translateY(-20px) translateX(0) rotate(0deg); }
+  100% { transform: translateY(105vh) translateX(30px) rotate(360deg); }
+}
+
+/* ============================================ */
+/* Confeti / pétalos del "Sí"                   */
+/* ============================================ */
+.confetti-piece {
+  position: fixed;
+  top: -30px;
+  z-index: 9999;
+  pointer-events: none;
+  animation: confettiFall ease-in forwards;
+}
+
+@keyframes confettiFall {
+  0% { transform: translateY(-30px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(105vh) rotate(540deg); opacity: 0.2; }
+}
+
+/* ============================================ */
+/* Cartas interactivas                          */
+/* ============================================ */
+.letter {
+  cursor: pointer;
+}
+
+.letter-closed p,
+.letter-closed .signature {
+  filter: blur(6px);
+  opacity: 0.5;
+  transition: filter 1s var(--transition-smooth), opacity 1s var(--transition-smooth);
+}
+
+.letter-closed::after {
+  content: '✉ Tocá para abrir';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-hand);
+  font-size: 1.4rem;
+  color: var(--gold);
+  background: rgba(44, 36, 36, 0.35);
+  border-radius: 4px;
+  transition: opacity 0.8s var(--transition-smooth);
+  z-index: 2;
+}
+
+.letter-open p,
+.letter-open .signature {
+  filter: blur(0);
+  opacity: 1;
+}
+
+.letter-open::after {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Respeto por prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .btn-yes { animation: none; }
+  .ring, .celebration-ring { animation: none; }
+  .letter-closed p,
+  .letter-closed .signature { filter: none; opacity: 1; }
+  .letter-closed::after { display: none; }
 }

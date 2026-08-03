@@ -2,10 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2c2424">
   <title>Nuestra Historia — Cami 💍</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💍</text></svg>">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=4">
 </head>
 <body>
 
@@ -24,9 +25,14 @@
     <button class="music-toggle" aria-label="Reproducir música">♪</button>
   </header>
 
+  <!-- Música de fondo — reemplazá el src por tu canción en assets/audio/ -->
+  <audio id="bg-music" loop preload="none">
+    <source src="assets/audio/cancion.mp3" type="audio/mpeg">
+  </audio>
+
   <!-- Navigation Dots -->
   <nav class="nav-dots" aria-label="Navegación por capítulos">
-    <button class="nav-dot active" data-index="0" aria-label="Capítulo 1"></button>
+     <button class="nav-dot active" data-index="0" aria-label="Capítulo 1"></button>
     <button class="nav-dot" data-index="1" aria-label="Capítulo 2"></button>
     <button class="nav-dot" data-index="2" aria-label="Capítulo 3"></button>
     <button class="nav-dot" data-index="3" aria-label="Capítulo 4"></button>
@@ -34,7 +40,8 @@
     <button class="nav-dot" data-index="5" aria-label="Capítulo 6"></button>
     <button class="nav-dot" data-index="6" aria-label="Capítulo 7"></button>
     <button class="nav-dot" data-index="7" aria-label="Capítulo 8"></button>
-    <button class="nav-dot" data-index="8" aria-label="Propuesta"></button>
+    <button class="nav-dot" data-index="8" aria-label="Capítulo 9"></button>
+    <button class="nav-dot" data-index="9" aria-label="Propuesta"></button>
   </nav>
 
   <!-- ============================================ -->
@@ -125,6 +132,19 @@
         no hicieron más que confirmar: no importaba cuál fuera el destino, porque lo que
         realmente hacía especial cada lugar eras vos. ❤️
       </p>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- CHAPTER 4: Las Aventuras                    -->
+  <!-- ============================================ -->
+  <section class="chapter" id="capitulo-4">
+    <div class="chapter-bg" style="background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);"></div>
+    <div class="chapter-content">
+      <p class="chapter-number">Capítulo IV</p>
+      <h2 class="chapter-title">Las Aventuras</h2>
+      <p class="chapter-subtitle">Viajando por el Mundo</p>
+      <div class="divider"></div>
       <div class="timeline">
         <div class="timeline-item">
           <div class="timeline-date">2018</div>
@@ -171,6 +191,46 @@
         Y con vos, cualquier lado es casa.
       </p>
 
+      <!-- Carrusel de recuerdos de viajes -->
+      <div class="carousel" id="travel-carousel">
+        <div class="carousel-track">
+          <div class="polaroid">
+            <div class="photo-frame">
+              <div class="bg" style="background-image:url('images/viajes/riodelossauces.webp')"></div>
+              <img src="images/viajes/riodelossauces.webp" alt="Río de los Sauces" loading="lazy">
+            </div>
+            <p class="caption">Río de los Sauces — el lugar que siempre nos encuentra volviendo</p>
+          </div>
+          <div class="polaroid">
+            <div class="photo-frame">
+              <div class="bg" style="background-image:url('images/viajes/carlospaz.webp')"></div>
+              <img src="images/viajes/carlospaz.webp" alt="Carlos Paz" loading="lazy">
+            </div>
+            <p class="caption">Carlos Paz — uno más de la familia</p>
+          </div>
+          <div class="polaroid">
+            <div class="photo-frame">
+              <div class="bg" style="background-image:url('images/viajes/Brasil2020.webp')"></div>
+              <img src="images/viajes/Brasil2020.webp" alt="Brasil 2020" loading="lazy">
+            </div>
+            <p class="caption">Brasil — nuestra primera gran aventura solos</p>
+          </div>
+          <div class="polaroid">
+            <div class="photo-frame">
+              <div class="bg" style="background-image:url('images/viajes/Brasil2020-2.webp')"></div>
+              <img src="images/viajes/Brasil2020-2.webp" alt="Brasil 2020" loading="lazy">
+            </div>
+            <p class="caption">Playas nuevas, misma felicidad</p>
+          </div>
+        </div>
+        <div class="carousel-dots">
+          <button class="carousel-dot active" data-slide="0" aria-label="Foto 1"></button>
+          <button class="carousel-dot" data-slide="1" aria-label="Foto 2"></button>
+          <button class="carousel-dot" data-slide="2" aria-label="Foto 3"></button>
+          <button class="carousel-dot" data-slide="3" aria-label="Foto 4"></button>
+        </div>
+      </div>
+
       <div class="polaroid" style="max-width: 250px;">
         <img src="images/cami mayonesa2021-3.webp" alt="Cami y la mayonesa" loading="lazy">
         <p class="caption">La mayonesa casera que tanto te gusta — felicidad en su estado más puro</p>
@@ -181,10 +241,10 @@
   <!-- ============================================ -->
   <!-- CHAPTER 5: Construyendo Sueños              -->
   <!-- ============================================ -->
-  <section class="chapter" id="capitulo-4">
+  <section class="chapter" id="capitulo-5">
     <div class="chapter-bg" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);"></div>
     <div class="chapter-content">
-      <p class="chapter-number">Capítulo IV</p>
+      <p class="chapter-number">Capítulo V</p>
       <h2 class="chapter-title">Construyendo Sueños</h2>
       <p class="chapter-subtitle">Proyectos &amp; Logros</p>
       <div class="divider"></div>
@@ -213,10 +273,10 @@
   <!-- ============================================ -->
   <!-- CHAPTER 6: Crecer Juntos                    -->
   <!-- ============================================ -->
-  <section class="chapter" id="capitulo-5">
+  <section class="chapter" id="capitulo-6">
     <div class="chapter-bg" style="background: linear-gradient(135deg, #2b1b3a 0%, #1a1a3e 50%, #2b1b3a 100%);"></div>
     <div class="chapter-content">
-      <p class="chapter-number">Capítulo V</p>
+      <p class="chapter-number">Capítulo VI</p>
       <h2 class="chapter-title">Crecer Juntos</h2>
       <p class="chapter-subtitle">Evolucionando en Pareja</p>
       <div class="divider"></div>
@@ -239,10 +299,10 @@
   <!-- ============================================ -->
   <!-- CHAPTER 7: Nuestro Hogar                    -->
   <!-- ============================================ -->
-  <section class="chapter" id="capitulo-6">
+  <section class="chapter" id="capitulo-7">
     <div class="chapter-bg" style="background: linear-gradient(135deg, #3a1c1c 0%, #4a2525 50%, #3a1c1c 100%);"></div>
     <div class="chapter-content">
-      <p class="chapter-number">Capítulo VI</p>
+      <p class="chapter-number">Capítulo VII</p>
       <h2 class="chapter-title">Nuestro Hogar</h2>
       <p class="chapter-subtitle">El Lugar Donde Todo Sucede</p>
       <div class="divider"></div>
@@ -271,10 +331,10 @@
   <!-- ============================================ -->
   <!-- CHAPTER 8: Lo Que Todavía Soñamos           -->
   <!-- ============================================ -->
-  <section class="chapter" id="capitulo-7">
+  <section class="chapter" id="capitulo-8">
     <div class="chapter-bg" style="background: linear-gradient(135deg, #0d0d2b 0%, #1a1a4e 50%, #0d0d2b 100%);"></div>
     <div class="chapter-content">
-      <p class="chapter-number">Capítulo VII</p>
+      <p class="chapter-number">Capítulo VIII</p>
       <h2 class="chapter-title">Lo Que Todavía Soñamos</h2>
       <p class="chapter-subtitle">El Futuro Nos Espera</p>
       <div class="divider"></div>
@@ -295,10 +355,10 @@
   <!-- ============================================ -->
   <!-- CHAPTER 9: Cartas                           -->
   <!-- ============================================ -->
-  <section class="chapter" id="capitulo-8">
+  <section class="chapter" id="capitulo-9">
     <div class="chapter-bg" style="background: linear-gradient(135deg, #2c1810 0%, #3d2415 50%, #2c1810 100%);"></div>
     <div class="chapter-content">
-      <p class="chapter-number">Capítulo VIII</p>
+      <p class="chapter-number">Capítulo IX</p>
       <h2 class="chapter-title">Cartas</h2>
       <p class="chapter-subtitle">Lo Que Nunca Me Canso de Decirte</p>
       <div class="divider"></div>
@@ -329,6 +389,7 @@
   <!-- ============================================ -->
   <!-- CHAPTER 10: Propuesta Final                 -->
   <!-- ============================================ -->
+  <!-- (nieve, pétalos y botón "Sí" se inyectan por JS) -->
   <section class="proposal-section" id="propuesta">
     <div class="chapter-content">
       <div class="polaroid" style="max-width: 200px; margin: 0 auto 2rem; transform: none;">
@@ -351,15 +412,29 @@
 
       <div class="proposal-name">¿Querés casarte conmigo?</div>
 
+      <div class="proposal-actions">
+        <button class="btn-yes" type="button">Sí, quiero 💍</button>
+      </div>
+
       <div class="divider"></div>
 
       <p class="chapter-text" style="font-size: 0.9rem; opacity: 0.6;">
         Esta historia recién empieza.
       </p>
     </div>
+
+    <!-- Overlay de celebración (se activa al decir que sí) -->
+    <div class="celebration" aria-hidden="true">
+      <div class="celebration-inner">
+        <div class="celebration-ring">💍</div>
+        <h2 class="celebration-title">¡Dijiste que sí!</h2>
+        <p class="celebration-sub">Te amo, Cami. Para siempre.</p>
+        <div class="celebration-date">08 . 04 . 2018 — ∞</div>
+      </div>
+    </div>
   </section>
 
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=5"></script>
 
 </body>
 </html>
