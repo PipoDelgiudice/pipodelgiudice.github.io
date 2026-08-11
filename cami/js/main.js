@@ -72,8 +72,11 @@
 
   // --- Intersection Observer for scroll reveals ---
   const observerOptions = {
-    threshold: 0.2,
-    rootMargin: '0px 0px -50px 0px',
+    // threshold bajo: con que asome un cachito del capítulo alcanza para revelar.
+    // Con 0.2 los capítulos MÁS ALTOS que la pantalla (ej: Las Aventuras) nunca
+    // llegaban al 20% visible y quedaban invisibles ("una línea nomás").
+    threshold: 0.05,
+    rootMargin: '0px 0px -10% 0px',
   };
 
   const observer = new IntersectionObserver((entries) => {
@@ -108,14 +111,12 @@
     }
   });
 
-  // --- Safety net ---
-  // Si el navegador no soporta IntersectionObserver o por lo que sea no dispara,
-  // NUNCA queremos que el contenido quede invisible (arranca con opacity:0).
-  // Este seguro fuerza a mostrar todo lo del primer viewport de inmediato, y
-  // como red final revela absolutamente todo a los 4s. En un teléfono normal
-  // esto no se nota porque el observer ya reveló suave. Es puro seguro de vida.
-  function forceVisible(scope) {
-    scope.querySelectorAll(
+  // --- Safety net (reforzado) ---
+  // El contenido arranca con opacity:0 y se revela con .visible. Si el observer
+  // no dispara para algún capítulo (pasa con capítulos MÁS ALTOS que la pantalla),
+  // ese capítulo quedaría invisible ("una línea nomás"). Esto lo evita SIEMPRE.
+  function revealAll(scope) {
+    (scope || document).querySelectorAll(
       '.chapter, .proposal-section, .chapter-number, .chapter-title, ' +
       '.chapter-subtitle, .chapter-text, .polaroid, .timeline-item, .letter, ' +
       '.proposal-name, .proposal-text'
@@ -123,15 +124,28 @@
   }
 
   if (!('IntersectionObserver' in window)) {
-    forceVisible(document);
+    revealAll(document);
   } else {
-    // Red de seguridad: si algo del primer capítulo no se reveló en 1.2s, lo mostramos.
-    setTimeout(() => {
-      const firstTitle = document.querySelector('.chapter-title');
-      if (firstTitle && !firstTitle.classList.contains('visible')) {
-        forceVisible(document);
-      }
-    }, 1200);
+    // Fallback por scroll: cualquier capítulo cuyo TOP ya pasó el borde inferior
+    // de la pantalla se revela sí o sí, aunque el observer no lo haya tocado.
+    function revealOnScroll() {
+      const vh = window.innerHeight;
+      document.querySelectorAll('.chapter, .proposal-section').forEach((sec) => {
+        const rect = sec.getBoundingClientRect();
+        if (rect.top < vh * 0.9 && rect.bottom > 0) {
+          sec.classList.add('visible');
+          sec.querySelectorAll(
+            '.chapter-number, .chapter-title, .chapter-subtitle, .chapter-text, ' +
+            '.polaroid, .timeline-item, .letter, .proposal-name, .proposal-text'
+          ).forEach((el) => el.classList.add('visible'));
+        }
+      });
+    }
+    window.addEventListener('scroll', revealOnScroll, { passive: true });
+    // Corremos una vez al cargar para revelar lo que ya está en pantalla.
+    setTimeout(revealOnScroll, 300);
+    // Red final absoluta: a los 4s, todo visible pase lo que pase.
+    setTimeout(() => revealAll(document), 4000);
   }
 
   // --- Parallax effect on backgrounds (solo desktop) ---
@@ -295,71 +309,6 @@
     // Si el audio termina o se pausa por fuera, sincronizamos el botón
     bgMusic.addEventListener('pause', () => setMusicUI(false));
     bgMusic.addEventListener('play', () => setMusicUI(true));
-  }
-
-  // --- Auto carousel (travels chapter) ---
-  const carousel = document.getElementById('travel-carousel');
-  if (carousel) {
-    const track = carousel.querySelector('.carousel-track');
-    const dots = carousel.querySelectorAll('.carousel-dot');
-    const slides = track.querySelectorAll('.polaroid');
-    let currentSlide = 0;
-    let carouselInterval = null;
-    const intervalTime = 4000;
-
-    function goToSlide(index) {
-      currentSlide = index;
-      track.style.transform = `translateX(-${index * 100}%)`;
-      dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === index);
-      });
-    }
-
-    function nextSlide() {
-      goToSlide((currentSlide + 1) % slides.length);
-    }
-
-    function startCarousel() {
-      stopCarousel();
-      carouselInterval = setInterval(nextSlide, intervalTime);
-    }
-
-    function stopCarousel() {
-      if (carouselInterval) {
-        clearInterval(carouselInterval);
-        carouselInterval = null;
-      }
-    }
-
-    // Dot clicks
-    dots.forEach((dot) => {
-      dot.addEventListener('click', () => {
-        stopCarousel();
-        goToSlide(parseInt(dot.dataset.slide));
-        startCarousel();
-      });
-    });
-
-    // Pause on hover/touch
-    carousel.addEventListener('mouseenter', stopCarousel);
-    carousel.addEventListener('mouseleave', startCarousel);
-    carousel.addEventListener('touchstart', stopCarousel, { passive: true });
-    carousel.addEventListener('touchend', startCarousel, { passive: true });
-
-    // Start only when visible (IntersectionObserver)
-    const carouselObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            startCarousel();
-          } else {
-            stopCarousel();
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-    carouselObserver.observe(carousel);
   }
 
   // --- Nieve en la propuesta final ---

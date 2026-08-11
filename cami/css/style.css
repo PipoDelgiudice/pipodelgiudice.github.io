@@ -26,6 +26,8 @@
 html {
   scroll-behavior: smooth;
   scroll-snap-type: y proximity;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 @media (max-width: 768px) {
@@ -284,6 +286,44 @@ img.loaded {
   object-position: center top;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* Placeholder elegante: se ve intencional mientras no está la foto real.
+   Comparte tamaño con .timeline-photos img para que el layout sea consistente. */
+.photo-placeholder {
+  flex: 1 1 100px;
+  max-width: 220px;
+  aspect-ratio: 3 / 4;
+  border-radius: 4px;
+  border: 1px dashed rgba(212, 168, 83, 0.35);
+  background: linear-gradient(135deg, rgba(232,160,180,0.08), rgba(212,168,83,0.08));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  text-align: center;
+  padding: 0.5rem;
+  color: rgba(253, 246, 240, 0.75);
+}
+
+.photo-placeholder .ph-icon {
+  font-size: 1.8rem;
+  opacity: 0.9;
+}
+
+.photo-placeholder .ph-place {
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  color: var(--gold);
+  line-height: 1.1;
+}
+
+.photo-placeholder .ph-year {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  opacity: 0.7;
 }
 
 @media (max-width: 480px) {
@@ -621,9 +661,9 @@ img.loaded {
   .chapter { padding: 3rem 1rem calc(3rem + env(safe-area-inset-bottom)); }
   .memory-grid { grid-template-columns: 1fr; }
   .memory-grid .polaroid { max-width: 250px; margin: 0 auto; }
-  .nav-dots { right: calc(0.35rem + env(safe-area-inset-right)); gap: 0.2rem; }
-  /* Área tocable se mantiene grande; solo achico el puntito visible */
-  .nav-dot::before { width: 8px; height: 8px; }
+  /* En mobile los dots del costado molestan y causaban scroll horizontal.
+     Se navega deslizando con el dedo — no hacen falta. Los ocultamos. */
+  .nav-dots { display: none; }
 }
 
 @media (min-width: 768px) {
@@ -689,76 +729,58 @@ img.loaded {
   background: linear-gradient(135deg, #3d2a2e 0%, var(--charcoal) 100%);
 }
 
-/* Carousel */
-.carousel {
-  position: relative;
+/* ============================================ */
+/* Grilla de fotos de viajes — simple y sólida    */
+/* Se ven TODAS de un vistazo. Sin deslizar, sin  */
+/* animaciones, sin bugs. A prueba de balas.       */
+/* ============================================ */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin: 2rem 0;
   width: 100%;
-  max-width: 440px;
-  margin: 2rem auto;
-  overflow: hidden;
-  border-radius: 8px;
+  max-width: 100%;
 }
 
-.carousel-track {
-  display: flex;
-  transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
-}
-
-.carousel .polaroid {
-  flex: 0 0 100%;
+.grid-photo {
   margin: 0;
-  padding: 0;
-  background: transparent;
-  box-shadow: none;
-  transform: none !important;
-  opacity: 1 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
-/* Marco de la foto: alto fijo para que el carrusel no salte de altura.
-   La foto se ve COMPLETA (contain) y el fondo es la misma imagen difuminada. */
-.carousel .photo-frame {
-  position: relative;
+.grid-photo img {
   width: 100%;
-  height: 340px;
-  overflow: hidden;
-  border-radius: 8px;
-  background: #1a1414;
-}
-
-/* Fondo: la propia foto, difuminada y ampliada para rellenar los costados */
-.carousel .photo-frame .bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  filter: blur(24px) brightness(0.5);
-  transform: scale(1.15);
-}
-
-/* Foto nítida y completa, centrada sobre el fondo */
-.carousel .photo-frame img {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
   display: block;
+  /* Estas fotos NO dependen del reveal por observer: siempre visibles */
+  opacity: 1;
 }
 
-.carousel .polaroid .caption {
+.grid-photo figcaption {
   font-family: var(--font-hand);
   color: var(--cream);
   text-align: center;
-  font-size: 1rem;
-  margin-top: 0.8rem;
-  padding: 0 0.5rem;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  opacity: 0.9;
+}
+
+/* En pantallas muy chicas, una sola columna para que las fotos se vean grandes */
+@media (max-width: 360px) {
+  .photo-grid { grid-template-columns: 1fr; }
 }
 
 .carousel-dots {
   display: flex;
   justify-content: center;
   gap: 0.5rem;
-  margin-top: 1rem;
+  margin-top: 0.8rem;
 }
 
 .carousel-dot {
