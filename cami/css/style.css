@@ -33,6 +33,11 @@ html {
 @media (max-width: 768px) {
   html {
     scroll-snap-type: none;
+    /* En mobile no hay navegación programática (los nav dots están ocultos),
+       así que smooth solo interfiere con el scroll nativo del dedo. */
+    scroll-behavior: auto;
+    /* Corta el efecto de "rebote" al llegar al principio/final */
+    overscroll-behavior-y: none;
   }
   .chapter, .proposal-section {
     scroll-snap-align: none;
@@ -88,7 +93,15 @@ img.loaded {
   background-size: cover;
   background-position: center;
   transform: scale(1.1);
-  will-change: transform;
+}
+
+/* will-change crea una capa de compositor por capítulo. Solo vale la pena
+   donde el parallax realmente corre (desktop, ver main.js). En mobile eran
+   ~9 capas GPU permanentes sin ningún beneficio: puro jank de scroll. */
+@media (min-width: 769px) {
+  .chapter-bg {
+    will-change: transform;
+  }
 }
 
 .chapter-bg::after {
@@ -600,16 +613,19 @@ img.loaded {
   color: var(--charcoal);
 }
 
-/* Progress bar */
+/* Progress bar
+   Se anima con transform: scaleX() (ver main.js), no con width: scaleX corre
+   en el compositor y no dispara layout en cada frame de scroll. */
 .progress-bar {
   position: fixed;
   top: 0;
   left: 0;
-  width: 0;
+  width: 100%;
   height: 3px;
   background: linear-gradient(90deg, var(--rose), var(--gold));
   z-index: 101;
-  transition: width 0.3s var(--transition-smooth);
+  transform: scaleX(0);
+  transform-origin: left center;
 }
 
 /* Decorative divider */

@@ -123,69 +123,105 @@
     ).forEach((el) => el.classList.add('visible'));
   }
 
+  // Fallback por scroll: cualquier capítulo cuyo TOP ya pasó el borde inferior
+  // de la pantalla se revela sí o sí, aunque el observer no lo haya tocado.
+  // OJO: llama a getBoundingClientRect() por sección → fuerza reflow. Por eso
+  // NO se engancha al scroll (ver el bucle rAF más abajo).
+  function revealOnScroll() {
+    const vh = window.innerHeight;
+    document.querySelectorAll('.chapter, .proposal-section').forEach((sec) => {
+      const rect = sec.getBoundingClientRect();
+      if (rect.top < vh * 0.9 && rect.bottom > 0) {
+        sec.classList.add('visible');
+        sec.querySelectorAll(
+          '.chapter-number, .chapter-title, .chapter-subtitle, .chapter-text, ' +
+          '.polaroid, .timeline-item, .letter, .proposal-name, .proposal-text'
+        ).forEach((el) => el.classList.add('visible'));
+      }
+    });
+  }
+
   if (!('IntersectionObserver' in window)) {
     revealAll(document);
   } else {
-    // Fallback por scroll: cualquier capítulo cuyo TOP ya pasó el borde inferior
-    // de la pantalla se revela sí o sí, aunque el observer no lo haya tocado.
-    function revealOnScroll() {
-      const vh = window.innerHeight;
-      document.querySelectorAll('.chapter, .proposal-section').forEach((sec) => {
-        const rect = sec.getBoundingClientRect();
-        if (rect.top < vh * 0.9 && rect.bottom > 0) {
-          sec.classList.add('visible');
-          sec.querySelectorAll(
-            '.chapter-number, .chapter-title, .chapter-subtitle, .chapter-text, ' +
-            '.polaroid, .timeline-item, .letter, .proposal-name, .proposal-text'
-          ).forEach((el) => el.classList.add('visible'));
-        }
-      });
-    }
-    window.addEventListener('scroll', revealOnScroll, { passive: true });
     // Corremos una vez al cargar para revelar lo que ya está en pantalla.
     setTimeout(revealOnScroll, 300);
     // Red final absoluta: a los 4s, todo visible pase lo que pase.
     setTimeout(() => revealAll(document), 4000);
   }
 
-  // --- Parallax effect on backgrounds (solo desktop) ---
   const parallaxBgs = document.querySelectorAll('.chapter-bg');
-  const isMobile = window.matchMedia('(max-width: 768px)').matches;
-  if (!isMobile) {
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-      parallaxBgs.forEach((bg) => {
-        const speed = 0.3;
-        const rect = bg.parentElement.getBoundingClientRect();
-        const offset = rect.top * speed;
-        bg.style.transform = `translateY(${offset}px) scale(1.1)`;
-      });
+  // Live query: si el teléfono rota, .matches se actualiza solo.
+  const mobileQuery = window.matchMedia('(max-width: 768px)');
+  const sections = document.querySelectorAll('.chapter, .proposal-section');
+  const navDots = document.querySelectorAll('.nav-dot');
+  const header = document.querySelector('.header');
+  const progressBar = document.querySelector('.progress-bar');
+
+  // --- Parallax (solo desktop) ---
+  function updateParallax() {
+    parallaxBgs.forEach((bg) => {
+      const rect = bg.parentElement.getBoundingClientRect();
+      bg.style.transform = `translateY(${rect.top * 0.3}px) scale(1.1)`;
     });
   }
 
-  // --- Nav dots ---
-  const sections = document.querySelectorAll('.chapter, .proposal-section');
-  const navDots = document.querySelectorAll('.nav-dot');
-
-  const updateActiveDot = () => {
+  // --- Nav dots (ocultos en mobile por CSS, ver .nav-dots display:none) ---
+  function updateActiveDot() {
     const scrollPos = window.scrollY + window.innerHeight / 2;
     let activeIndex = 0;
-
     sections.forEach((section, i) => {
       const top = section.offsetTop;
-      const bottom = top + section.offsetHeight;
-      if (scrollPos >= top && scrollPos < bottom) {
+      if (scrollPos >= top && scrollPos < top + section.offsetHeight) {
         activeIndex = i;
       }
     });
-
     navDots.forEach((dot, i) => {
       dot.classList.toggle('active', i === activeIndex);
     });
-  };
+  }
 
-  window.addEventListener('scroll', updateActiveDot, { passive: true });
-  window.addEventListener('resize', updateActiveDot);
+  // --- UN SOLO listener de scroll, coalescido con requestAnimationFrame ---
+  // Antes había 5 listeners separados (3 de ellos sin passive), cada uno
+  // corriendo en CADA evento de scroll y varios forzando reflow con
+  // getBoundingClientRect()/offsetTop. En mobile eso es jank puro.
+  // Ahora: un listener passive que agenda UN callback por frame.
+  let ticking = false;
+
+  function onScrollFrame() {
+    ticking = false;
+    const scrollY = window.scrollY;
+
+    if (header) {
+      header.classList.toggle('scrolled', scrollY > 100);
+    }
+
+    // Progress bar: transform en vez de width (no dispara layout)
+    if (progressBar) {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? Math.min(scrollY / docHeight, 1) : 0;
+      progressBar.style.transform = `scaleX(${progress})`;
+    }
+
+    // Lo caro (reflows) solo donde se usa y se ve.
+    // En mobile el parallax no corre y los nav dots están ocultos (CSS),
+    // así que nos ahorramos getBoundingClientRect()/offsetTop por sección.
+    if (!mobileQuery.matches) {
+      updateParallax();
+      updateActiveDot();
+    }
+  }
+
+  function requestScrollFrame() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(onScrollFrame);
+    }
+  }
+
+  window.addEventListener('scroll', requestScrollFrame, { passive: true });
+  window.addEventListener('resize', requestScrollFrame, { passive: true });
+  requestScrollFrame();
 
   // Nav dot click - smooth scroll
   navDots.forEach((dot) => {
@@ -193,21 +229,6 @@
       const index = parseInt(dot.dataset.index);
       sections[index].scrollIntoView({ behavior: 'smooth' });
     });
-  });
-
-  // --- Header scroll effect ---
-  const header = document.querySelector('.header');
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('scrolled', window.scrollY > 100);
-  });
-
-  // --- Progress bar ---
-  const progressBar = document.querySelector('.progress-bar');
-  window.addEventListener('scroll', () => {
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = (scrollTop / docHeight) * 100;
-    progressBar.style.width = `${progress}%`;
   });
 
   // --- Floating hearts ---
