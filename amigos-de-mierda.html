@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#09090b">
+<meta name="description" content="Amigos de Mierda — juego de cartas para jugar con amigos.">
+<title>Amigos de Mierda</title>
+<style>
+:root{
+  --bg:#09090b;
+  --surface:#111114;
+  --surface2:#18181c;
+  --surface3:#222229;
+  --text:#f5f5f5;
+  --muted:#a1a1aa;
+  --border:#2b2b32;
+  --accent:#8b5cf6;
+  --accent2:#a78bfa;
+  --danger:#ef4444;
+  --success:#22c55e;
+  --shadow:0 25px 80px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,#21133c 0,#09090b 42%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{width:min(1100px,100%);margin:auto;padding:22px 18px 40px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),#ec4899);font-size:22px;box-shadow:0 10px 30px rgba(139,92,246,.28)}
+.brand h1{font-size:20px;margin:0;letter-spacing:-.5px}
+.brand small{display:block;color:var(--muted);margin-top:2px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.btn{border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:11px;padding:10px 14px;transition:.18s ease}
+.btn:hover{transform:translateY(-1px);background:var(--surface3)}
+.btn.primary{border-color:transparent;background:linear-gradient(135deg,var(--accent),#7c3aed);box-shadow:0 8px 25px rgba(124,58,237,.25)}
+.btn.danger{color:#fecaca;border-color:#4b1d1d}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.panel{background:rgba(17,17,20,.82);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);backdrop-filter:blur(14px)}
+.setup{padding:22px}
+.setup h2{margin:0 0 7px;font-size:24px}
+.setup p{margin:0 0 20px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+label{font-size:13px;color:#d4d4d8;font-weight:600}
+input{width:100%;background:#0d0d10;color:var(--text);border:1px solid var(--border);border-radius:10px;padding:11px 12px;outline:none}
+input:focus{border-color:var(--accent)}
+.name-row{display:grid;grid-template-columns:1fr auto;gap:8px}
+.participants{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;min-height:34px}
+.chip{display:flex;align-items:center;gap:7px;background:var(--surface3);border:1px solid var(--border);border-radius:999px;padding:7px 10px;font-size:13px}
+.chip button{border:0;background:none;color:var(--muted);padding:0;font-size:16px}
+.mode-row{display:flex;gap:8px;flex-wrap:wrap}
+.mode{padding:10px 13px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--muted)}
+.mode.active{color:white;border-color:var(--accent);background:rgba(139,92,246,.15)}
+.timer-settings{display:none;margin-top:10px}
+.timer-settings.show{display:block}
+.start-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
+.deck-info{color:var(--muted);font-size:13px}
+
+.game{display:none}
+.game.active{display:block}
+.statusbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 12px rgba(34,197,94,.7)}
+.timer{font-variant-numeric:tabular-nums;font-weight:800;font-size:22px;min-width:70px;text-align:right}
+.timer.warning{color:#f59e0b}
+.timer.finished{color:var(--danger);animation:pulse .7s infinite}
+@keyframes pulse{50%{transform:scale(1.06);opacity:.65}}
+
+.card-stage{perspective:1400px;min-height:500px;display:grid;place-items:center;padding:10px 0 20px}
+.card-wrap{width:min(640px,94vw);height:470px;position:relative;transform-style:preserve-3d}
+.card-wrap.dealing{animation:deal .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes deal{
+  0%{opacity:0;transform:translateY(60px) rotate(-4deg) scale(.9)}
+  100%{opacity:1;transform:translateY(0) rotate(0) scale(1)}
+}
+.card{position:absolute;inset:0;border-radius:28px;padding:38px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;background:
+  radial-gradient(circle at 20% 10%,rgba(167,139,250,.18),transparent 28%),
+  linear-gradient(145deg,#24202f,#111114 62%);
+border:1px solid #3a3448;box-shadow:0 35px 90px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.05)}
+.card:before,.card:after{content:"";position:absolute;border:1px solid rgba(167,139,250,.11);border-radius:50%;pointer-events:none}
+.card:before{width:330px;height:330px;right:-170px;top:-160px}
+.card:after{width:250px;height:250px;left:-160px;bottom:-150px}
+.card-top{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center}
+.card-number{font-size:12px;color:#c4b5fd;letter-spacing:1.2px;text-transform:uppercase}
+.card-suit{font-size:22px;opacity:.75}
+.question{position:relative;z-index:1;font-size:clamp(25px,4.2vw,39px);line-height:1.15;font-weight:800;letter-spacing:-1.1px;max-width:560px}
+.card-bottom{position:relative;z-index:1;color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:10px}
+.card-wrap.removing{animation:discard .45s ease forwards}
+@keyframes discard{
+  to{opacity:0;transform:translate(260px,-40px) rotate(12deg) scale(.88)}
+}
+
+.controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:-5px}
+.big-btn{padding:13px 20px;border-radius:12px}
+.vote-panel{margin-top:18px;padding:18px;display:none}
+.vote-panel.show{display:block;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.vote-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:13px}
+.vote-head h3{margin:0;font-size:16px}
+.vote-total{color:var(--muted);font-size:13px}
+.voters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px}
+.voter{border:1px solid var(--border);background:var(--surface2);border-radius:12px;padding:11px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.voter-name{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vote-controls{display:flex;align-items:center;gap:7px}
+.vote-controls button{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--surface3);color:white}
+.vote-count{min-width:20px;text-align:center;font-weight:800}
+
+.empty-votes{color:var(--muted);font-size:13px;padding:8px 0}
+.finish-card{margin-top:12px;display:flex;justify-content:flex-end}
+
+.ranking{display:none;padding:20px}
+.ranking.show{display:block}
+.ranking h2{margin:0 0 4px}
+.ranking-sub{color:var(--muted);margin:0 0 18px;font-size:13px}
+.rank-list{display:flex;flex-direction:column;gap:9px}
+.rank-row{background:var(--surface2);border:1px solid var(--border);border-radius:13px;overflow:hidden}
+.rank-main{display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:10px;padding:12px 14px}
+.position{font-size:18px;font-weight:900;color:#c4b5fd}
+.rank-name{font-weight:750}
+.rank-score{font-size:20px;font-weight:900}
+.rank-bar{height:3px;background:rgba(139,92,246,.18)}
+.rank-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#ec4899);width:var(--w)}
+.details{padding:0 14px 13px;display:none}
+.rank-row.open .details{display:block}
+.details-item{font-size:12px;color:#d4d4d8;padding:6px 0;border-top:1px solid #25252b}
+.details-item span{color:var(--muted);margin-left:6px}
+.no-data{color:var(--muted);padding:15px 0}
+
+.session-history{margin-top:18px}
+.history-list{display:flex;flex-direction:column;gap:8px}
+.history-item{padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--surface2)}
+.history-q{font-size:14px;font-weight:650}
+.history-votes{margin-top:7px;color:var(--muted);font-size:12px}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;padding:18px;z-index:20}
+.modal-backdrop.show{display:flex}
+.modal{width:min(600px,100%);max-height:90vh;overflow:auto;background:#121216;border:1px solid var(--border);border-radius:20px;padding:22px;box-shadow:var(--shadow)}
+.modal h2{margin:0 0 8px}
+.modal p{color:var(--muted)}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.time-up{text-align:center;padding:30px 10px}
+.time-up .alarm{font-size:56px;animation:pulse .7s infinite}
+.time-up h2{font-size:32px;margin:8px 0}
+.time-up p{margin:0}
+
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#24242a;border:1px solid var(--border);border-radius:999px;padding:10px 15px;font-size:13px;z-index:30;transition:.25s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media(max-width:700px){
+  .app{padding:14px 12px 30px}
+  .topbar{align-items:flex-start}
+  .brand h1{font-size:17px}
+  .grid{grid-template-columns:1fr}
+  .field.full{grid-column:auto}
+  .card-stage{min-height:430px}
+  .card-wrap{height:400px}
+  .card{padding:26px}
+  .question{font-size:26px}
+  .card-bottom{font-size:11px}
+  .statusbar{align-items:flex-start}
+  .start-row{align-items:stretch;flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🃏</div>
+      <div>
+        <h1>Amigos de Mierda</h1>
+        <small>Cartas · votos · ranking</small>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="rankingBtn" style="display:none">Ranking</button>
+      <button class="btn danger" id="restartBtn" style="display:none">Reiniciar</button>
+    </div>
+  </header>
+
+  <section class="panel setup" id="setup">
+    <h2>Prepará la partida</h2>
+    <p>Elegí cómo jugar. Los nombres son opcionales y permiten llevar el ranking automáticamente.</p>
+
+    <div class="grid">
+      <div class="field full">
+        <label>Participantes</label>
+        <div class="name-row">
+          <input id="nameInput" placeholder="Nombre del amigo y Enter" maxlength="24" autocomplete="off">
+          <button class="btn" id="addName">Agregar</button>
+        </div>
+        <div class="participants" id="participants"></div>
+      </div>
+
+      <div class="field">
+        <label>Modo de juego</label>
+        <div class="mode-row">
+          <button class="mode active" data-mode="manual">Sin temporizador</button>
+          <button class="mode" data-mode="timer">Con temporizador</button>
+        </div>
+        <div class="timer-settings" id="timerSettings">
+          <div class="name-row">
+            <input id="timerInput" type="number" min="5" max="600" value="45">
+            <div style="display:grid;place-items:center;color:var(--muted)">segundos</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Partida</label>
+        <div style="color:var(--muted);font-size:13px;line-height:1.5">
+          <strong style="color:#e4e4e7">109 cartas</strong> disponibles.<br>
+          Una carta usada queda descartada durante esta sesión.
+        </div>
+      </div>
+    </div>
+
+    <div class="start-row">
+      <div class="deck-info">Podés reiniciar la partida cuando quieras.</div>
+      <button class="btn primary" id="startBtn">Comenzar partida</button>
+    </div>
+  </section>
+
+  <main class="game" id="game">
+    <div class="statusbar">
+      <div class="status"><span class="dot"></span><span id="progress">Carta 1 de 109</span></div>
+      <div class="timer" id="timer"></div>
+    </div>
+
+    <section class="card-stage">
+      <div class="card-wrap dealing" id="cardWrap">
+        <article class="card">
+          <div class="card-top">
+            <span class="card-number" id="cardNumber">CARTA 001</span>
+            <span class="card-suit">♠</span>
+          </div>
+          <div class="question" id="question"></div>
+          <div class="card-bottom">
+            <span id="cardHint">Lean la carta y voten.</span>
+            <span id="usedCount"></span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="controls">
+      <button class="btn primary big-btn" id="voteBtn">Terminar carta y votar</button>
+      <button class="btn big-btn" id="nextBtn" style="display:none">Descartar y sacar otra</button>
+    </div>
+
+    <section class="panel vote-panel" id="votePanel">
+      <div class="vote-head">
+        <h3>¿A quién votan?</h3>
+        <span class="vote-total" id="voteTotal">0 votos</span>
+      </div>
+      <div class="voters" id="voters"></div>
+      <div class="finish-card">
+        <button class="btn primary" id="saveVotesBtn">Guardar votos y descartar carta</button>
+      </div>
+    </section>
+
+    <section class="panel ranking" id="rankingPanel">
+      <h2>Ranking de la partida</h2>
+      <p class="ranking-sub">Podés abrir cada jugador para ver en qué cartas recibió sus votos.</p>
+      <div class="rank-list" id="rankList"></div>
+      <div class="session-history">
+        <h3>Cartas jugadas</h3>
+        <div class="history-list" id="historyList"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="timeModal">
+  <div class="modal time-up">
+    <div class="alarm">⏱️</div>
+    <h2>¡Se terminó el tiempo!</h2>
+    <p>Todos deben votar.</p>
+    <div class="modal-actions">
+      <button class="btn primary" id="startVotingFromTimer">Ir a votar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="confirmRestart">
+  <div class="modal">
+    <h2>¿Reiniciar la partida?</h2>
+    <p>Se eliminarán las cartas jugadas y todos los votos de esta sesión.</p>
+    <div class="modal-actions">
+      <button class="btn" id="cancelRestart">Cancelar</button>
+      <button class="btn danger" id="confirmRestartBtn">Reiniciar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const QUESTIONS = [{"id": "q001", "question": "¿Quién se pide lo más caro de la carta y se hace el boludo para dividir la cuenta entre todos?"}, {"id": "q002", "question": "Uno de nosotros se hace el boludo, pero está secretamente resentido por el resultado de otra tarjeta. ¿Quién?"}, {"id": "q003", "question": "Atropellamos a alguien. ¿Quién propone echarse a la fuga?"}, {"id": "q004", "question": "En todo grupo de amigos hay alguien que se viste para el ojete. En el nuestro es..."}, {"id": "q005", "question": "¿Quién de nosotros es secretamente un supervillano?"}, {"id": "q006", "question": "¿Quién de nosotros es en realidad un robot?"}, {"id": "q007", "question": "¿Quién de nosotros pide plata prestada sabiendo que nunca la va a devolver?"}, {"id": "q008", "question": "Jamás tocaría la ropa interior de... ¿Quién?"}, {"id": "q009", "question": "Nos eligen senadores a todos. ¿Quién hace más guita cobrando coimas?"}, {"id": "q010", "question": "¿Quién se va a casar con alguien que todavía no nació?"}, {"id": "q011", "question": "¿Quién mea en la pileta?"}, {"id": "q012", "question": "¿Quién tiene más chances de ir a la cárcel por un crimen que no cometió?"}, {"id": "q013", "question": "Ganamos la lotería y dividimos el premio entre todos. ¿Quién es el primero en perder todo lo que ganó?"}, {"id": "q014", "question": "A partir de este año van a entregar un Nobel a la falta de aseo personal. ¿Quién de nosotros va a ser nominado seguro?"}, {"id": "q015", "question": "Viajamos todos a Las Vegas. ¿Quién vuelve casado?"}, {"id": "q016", "question": "Uno de nosotros hace 10 años tenía un futuro muy prometedor. ¿Quién?"}, {"id": "q017", "question": "Somos todos cómplices de un crimen y nos están interrogando. ¿Quién es el primero en quebrar y confesar?"}, {"id": "q018", "question": "A uno de nosotros le encuentran una colección de chicles masticados por sus ex. ¿A quién?"}, {"id": "q019", "question": "Si nos hiciéramos mafiosos, ¿quién sería el capo?"}, {"id": "q020", "question": "Uno de nosotros admira secretamente a Hitler. ¿Quién?"}, {"id": "q021", "question": "Somos los protagonistas de un thriller de suspenso. Al final, ¿quién es el asesino?"}, {"id": "q022", "question": "Un amigo en común necesita con urgencia dadores de sangre. ¿Quién dice que fue y no fue?"}, {"id": "q023", "question": "Llegó el apocalipsis Zombie. ¿Quién muere primero?"}, {"id": "q024", "question": "¿Con quién te harías el dormido para no tener que escucharlo hablar en un viaje muy largo?"}, {"id": "q025", "question": "Nos anotamos en un programa de talentos. ¿Quién se va en el primer capítulo?"}, {"id": "q026", "question": "¡Escándalo! Reveladoras fotos de una orgía de octogenarios. También estaba uno de nosotros. ¿Quién?"}, {"id": "q027", "question": "¿A quién no querrías jamás como jefe?"}, {"id": "q028", "question": "Uno de nosotros está envejeciendo peor que los demás. ¿Quién?"}, {"id": "q029", "question": "En el futuro cercano, uno de nosotros va a morir víctima de un ajuste de cuentas. ¿Quién?"}, {"id": "q030", "question": "Uno de nosotros tiene el fetiche de comer caca. ¿Quién?"}, {"id": "q031", "question": "Uno de nosotros debutó a los 11. ¿Quién?"}, {"id": "q032", "question": "Nos invitan a comer a la mesa de la Señora. ¿Quién discute a los gritos con ella?"}, {"id": "q033", "question": "¿Quién quisieras que nunca adopte un hijo tuyo?"}, {"id": "q034", "question": "Todos tenemos nuestras cosas, pero uno de nosotros es realmente inmaduro para su edad. ¿Quién?"}, {"id": "q035", "question": "¿Quién se considera mucho más inteligente de lo que en verdad es?"}, {"id": "q036", "question": "Si todos nos dedicáramos a vivir del stand up, ¿quién se muere de hambre primero?"}, {"id": "q037", "question": "Vuelve la colimba. ¿Quién se pega un tiro en el pie para no hacerla?"}, {"id": "q038", "question": "Tenés que pegarle una trompada en la cara a uno de nosotros. ¿A quién?"}, {"id": "q039", "question": "¿Quién de nosotros se cree mejor que todos los demás?"}, {"id": "q040", "question": "De un día para el otro, el mundo se queda sin Internet. ¿Quién se mata primero?"}, {"id": "q041", "question": "Somos los biólogos más capaces del planeta. ¿Quién inventa un virus para después vender la cura?"}, {"id": "q042", "question": "Estás en una situación complicada. ¿A quién no le pedís consejo?"}, {"id": "q043", "question": "¿Quién de nosotros odia su vida?"}, {"id": "q044", "question": "¿Quién de nosotros cree que la Tierra es plana?"}, {"id": "q045", "question": "¿A quién de nosotros no te animarías a hacer enojar?"}, {"id": "q046", "question": "¿Quién lee la Biblia?"}, {"id": "q047", "question": "Vamos a jugar a un juego nuevo. ¿Quién tarda más en entender las reglas?"}, {"id": "q048", "question": "Alquilamos una casa en la costa y está todo listo. ¿Quién se baja a último momento?"}, {"id": "q049", "question": "Uno de nosotros tiene un hijo no reconocido. ¿Quién?"}, {"id": "q050", "question": "Uno de nosotros tiene una doble vida. ¿Quién?"}, {"id": "q051", "question": "¡Nos acabamos de enterar de un secreto tremendo! ¿Quién es el primero en contarlo?"}, {"id": "q052", "question": "Trabajamos en una cadena de comida rápida. ¿Quién escupe en la comida?"}, {"id": "q053", "question": "El día que la ciencia descubra cómo agregarnos otro set de genitales, ¿quién es el primero en la fila?"}, {"id": "q054", "question": "Todos tenemos un equipo a cargo, ¿quién maltrata más a sus empleados?"}, {"id": "q055", "question": "Uno de nosotros, secretamente, le desea la muerte a todos los demás. ¿Quién?"}, {"id": "q056", "question": "Nos despertamos en una isla desierta sin ningún tipo de alimento. ¿Quién propone que nos comamos a uno de nosotros?"}, {"id": "q057", "question": "Uno de nosotros no entiende la gracia de este juego, pero se ríe de compromiso para no quedar como el ojete. ¿Quién?"}, {"id": "q058", "question": "Estamos todos en cuarentena contagiados con un virus mortal e intratable. ¿Quién se escapa y genera una epidemia?"}, {"id": "q059", "question": "A todos nos da miedo subirnos al auto cuando maneja..."}, {"id": "q060", "question": "Escalando el monte Everest, nos topamos con el yeti. Para nuestro asombro, es increíblemente parecido a..."}, {"id": "q061", "question": "Necesitamos a alguien para comandar a nuestras tropas. Por favor, que no sea..."}, {"id": "q062", "question": "Fuimos apóstoles. ¿Quién fue Judas?"}, {"id": "q063", "question": "Nos ofrecen darnos mil dólares por cada cucharada de mierda que comamos. ¿Quién está dispuesto a hacerse rico?"}, {"id": "q064", "question": "Somos estrellas de rock. ¿Quién es el primero en morir de sobredosis?"}, {"id": "q065", "question": "Estamos en un avión sin control y quedan paracaídas para todos excepto uno. ¿Quién es el primero en agarrar un paracaídas y salvarse?"}, {"id": "q066", "question": "Somos miembros de una banda de forajidos buscados en el Lejano Oeste. ¿La cabeza de quién vale menos?"}, {"id": "q067", "question": "Somos la nueva camada de oficiales de policía. ¿Quién es el primer caso de gatillo fácil?"}, {"id": "q068", "question": "¿Quién se cagó?"}, {"id": "q069", "question": "Solo vas a poder abrazar a uno de nosotros por el resto de tu vida. ¿A quién?"}, {"id": "q070", "question": "Fui asesinado. ¿Quién me mató?"}, {"id": "q071", "question": "Me parece bien que en Argentina se permita el matrimonio entre dos personas del mismo género. ¿Piensan todos menos...?"}, {"id": "q072", "question": "Nos tiramos todos en paracaídas. ¿A quién no se le abre?"}, {"id": "q073", "question": "Uno de nosotros en una vida pasada fue traficante de esclavos. ¿Quién?"}, {"id": "q074", "question": "Uno de nosotros cree que el mundo sería mejor sin salud pública. ¿Quién?"}, {"id": "q075", "question": "Somos candidatos a presidente. ¿Quién consigue menos votos?"}, {"id": "q076", "question": "Si todos fuésemos presidentes de un país, ¿quién sería el primero en imponer la pena de muerte?"}, {"id": "q077", "question": "Uno de nosotros no cree en la igualdad de género. ¿Quién?"}, {"id": "q078", "question": "¿Quién se gana una enorme fortuna en el casino y desaparece de nuestras vidas por completo?"}, {"id": "q079", "question": "Uno de nosotros siempre quiso ser gendarme para poder reprimir con balas de goma. ¿Quién?"}, {"id": "q080", "question": "¿Quién invitaría a una ex pareja a tomar un café y mentiría descaradamente sobre su vida actual?"}, {"id": "q081", "question": "Volvemos de vacaciones y uno de nosotros tiene unos kilitos de más. ¿Quién se lo hace notar inmediatamente?"}, {"id": "q082", "question": "Satán nos ofrece cumplir todos nuestros deseos a cambio de nuestra alma. ¿Quién agarra?"}, {"id": "q083", "question": "Descubren la fórmula para la inmortalidad. ¿A quién se la niegan para beneficio de toda la humanidad?"}, {"id": "q084", "question": "Uno de nosotros está enamorado secretamente de otro de nosotros. ¿Quién?"}, {"id": "q085", "question": "Cada uno publica un libro con su propia autobiografía. ¿Cuál te interesa menos?"}, {"id": "q086", "question": "Estamos en la cárcel, ¿quién es el primero en prostituirse por protección?"}, {"id": "q087", "question": "Ponen nuestros rostros en billetes. ¿A quién le toca el billete más bajo?"}, {"id": "q088", "question": "¿Quién de nosotros tendría sexo con un animal?"}, {"id": "q089", "question": "¿Quién de nosotros se masturbó más veces el año pasado?"}, {"id": "q090", "question": "¿Con quién de nosotros JAMÁS participarías en un trío?"}, {"id": "q091", "question": "Uno de ustedes quiere garchar conmigo. ¿Quién?"}, {"id": "q092", "question": "Uno de nosotros es MUY irresponsable a la hora de cuidarse durante el sexo. ¿Quién?"}, {"id": "q093", "question": "Uno de nosotros tuvo gonorrea, clamidia y sífilis. ¿Quién?"}, {"id": "q094", "question": "De ahora en más, siempre que tengas un orgasmo, vas a ver la cara de uno de nosotros. Ojalá que no sea la de..."}, {"id": "q095", "question": "¿Quién es el más egoísta en la cama?"}, {"id": "q096", "question": "Uno de nosotros se masturba mirando a su pareja con otras personas. ¿Quién?"}, {"id": "q097", "question": "¿A quién le daría menos culpa acostarse con la expareja de un amigo?"}, {"id": "q098", "question": "Por un millón de dólares, uno de nosotros se cogería a uno de sus padres. ¿Quién?"}, {"id": "q099", "question": "¿Quién de nosotros JAMÁS participaría en una orgía?"}, {"id": "q100", "question": "Uno de nosotros lo excita la idea de acostarse con personas casadas. ¿A quién?"}, {"id": "q101", "question": "Uno de nosotros se masturba pensando en el/la presidente. ¿Quién?"}, {"id": "q102", "question": "Ya es posible la clonación humana. ¿Quién se clona para poder coger consigo mismo?"}, {"id": "q103", "question": "Los genitales de uno de nosotros son el molde de juguetes sexuales. ¿Los de quién?"}, {"id": "q104", "question": "De ahora en más, siempre que tengas un orgasmo, vas a ver la cara de uno de nosotros. Ojalá que no sea la de..."}, {"id": "q105", "question": "¿A quién le encantaría organizar una orgía entre nosotros ahora mismo?"}, {"id": "q106", "question": "¿A quién le da asquito hacer sexo oral?"}, {"id": "q107", "question": "Uno de nosotros es, secretamente, una estrella porno conocida como \"Beso Negro\" Jones. ¿Quién?"}, {"id": "q108", "question": "Uno de nosotros fue virgen por mucho más tiempo del que reconoce. ¿Quién?"}, {"id": "q109", "question": "¿En el historial porno de quién encontraríamos las cosas más raras?"}];
+
+const state = {
+  participants: [],
+  mode: "manual",
+  timerSeconds: 45,
+  deck: [],
+  current: null,
+  currentVotes: {},
+  history: [],
+  timerId: null,
+  remaining: 0,
+  voting: false
+};
+
+const $ = id => document.getElementById(id);
+
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function saveSession(){
+  localStorage.setItem("amigos_mierda_session", JSON.stringify({
+    participants: state.participants,
+    mode: state.mode,
+    timerSeconds: state.timerSeconds,
+    deck: state.deck,
+    current: state.current,
+    currentVotes: state.currentVotes,
+    history: state.history
+  }));
+}
+
+function loadSession(){
+  try{
+    const raw=localStorage.getItem("amigos_mierda_session");
+    if(!raw) return false;
+    const s=JSON.parse(raw);
+    if(!s.deck || !s.current) return false;
+    Object.assign(state,s);
+    return true;
+  }catch(e){ return false; }
+}
+
+function showToast(msg){
+  $("toast").textContent=msg;
+  $("toast").classList.add("show");
+  clearTimeout(showToast.t);
+  showToast.t=setTimeout(()=>$("toast").classList.remove("show"),1800);
+}
+
+function renderParticipants(){
+  $("participants").innerHTML="";
+  state.participants.forEach((name,i)=>{
+    const chip=document.createElement("div");
+    chip.className="chip";
+    chip.innerHTML=`<span>${escapeHtml(name)}</span><button aria-label="Eliminar">×</button>`;
+    chip.querySelector("button").onclick=()=>{
+      state.participants.splice(i,1);
+      renderParticipants();
+    };
+    $("participants").appendChild(chip);
+  });
+}
+
+function addParticipant(){
+  const input=$("nameInput");
+  const name=input.value.trim();
+  if(!name) return;
+  if(state.participants.some(n=>n.toLowerCase()===name.toLowerCase())){
+    showToast("Ese nombre ya está agregado");
+    return;
+  }
+  state.participants.push(name);
+  input.value="";
+  renderParticipants();
+  input.focus();
+}
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+
+function startGame(){
+  state.mode=document.querySelector(".mode.active").dataset.mode;
+  state.timerSeconds=Math.max(5,Math.min(600,Number($("timerInput").value)||45));
+  state.deck=shuffle(QUESTIONS.map(q=>q.id));
+  state.current=null;
+  state.currentVotes={};
+  state.history=[];
+  state.voting=false;
+  localStorage.removeItem("amigos_mierda_session");
+  $("setup").style.display="none";
+  $("game").classList.add("active");
+  $("restartBtn").style.display="";
+  $("rankingBtn").style.display="";
+  drawCard();
+}
+
+function getQuestion(id){
+  return QUESTIONS.find(q=>q.id===id);
+}
+
+function drawCard(){
+  clearInterval(state.timerId);
+  state.voting=false;
+  state.currentVotes={};
+
+  if(state.deck.length===0){
+    finishDeck();
+    return;
+  }
+
+  state.current=state.deck.shift();
+  const q=getQuestion(state.current);
+  $("question").textContent=q.question;
+  $("cardNumber").textContent=`CARTA ${q.id.replace("q","")}`;
+  $("progress").textContent=`Carta ${state.history.length+1} de ${QUESTIONS.length}`;
+  $("usedCount").textContent=`${state.deck.length} restantes`;
+  $("cardHint").textContent=state.participants.length ? "Lean la carta y decidan entre todos." : "Lean la carta y continúen cuando terminen.";
+  $("votePanel").classList.remove("show");
+  $("voteBtn").style.display="";
+  $("nextBtn").style.display="none";
+  $("rankingPanel").classList.remove("show");
+
+  const wrap=$("cardWrap");
+  wrap.classList.remove("dealing","removing");
+  void wrap.offsetWidth;
+  wrap.classList.add("dealing");
+
+  if(state.mode==="timer") startTimer();
+  else $("timer").textContent="";
+  saveSession();
+}
+
+function startTimer(){
+  state.remaining=state.timerSeconds;
+  renderTimer();
+  state.timerId=setInterval(()=>{
+    state.remaining--;
+    renderTimer();
+    if(state.remaining<=0){
+      clearInterval(state.timerId);
+      state.timerId=null;
+      $("timeModal").classList.add("show");
+      $("timer").classList.add("finished");
+    }
+  },1000);
+}
+
+function renderTimer(){
+  const min=Math.floor(state.remaining/60);
+  const sec=state.remaining%60;
+  $("timer").textContent=`${min}:${String(sec).padStart(2,"0")}`;
+  $("timer").classList.toggle("warning",state.remaining<=10);
+  $("timer").classList.remove("finished");
+}
+
+function openVoting(){
+  $("timeModal").classList.remove("show");
+  clearInterval(state.timerId);
+  state.timerId=null;
+  $("timer").classList.remove("finished");
+  state.voting=true;
+  $("voteBtn").style.display="none";
+  $("votePanel").classList.add("show");
+  renderVoters();
+}
+
+function renderVoters(){
+  const box=$("voters");
+  box.innerHTML="";
+  if(!state.participants.length){
+    box.innerHTML='<div class="empty-votes">No agregaste participantes. Podés descartar la carta sin registrar votos.</div>';
+    $("voteTotal").textContent="0 votos";
+    return;
+  }
+
+  state.participants.forEach(name=>{
+    const count=state.currentVotes[name]||0;
+    const row=document.createElement("div");
+    row.className="voter";
+    row.innerHTML=`
+      <span class="voter-name">${escapeHtml(name)}</span>
+      <span class="vote-controls">
+        <button data-action="minus" aria-label="Quitar voto">−</button>
+        <span class="vote-count">${count}</span>
+        <button data-action="plus" aria-label="Agregar voto">+</button>
+      </span>`;
+    row.querySelector('[data-action="minus"]').onclick=()=>{
+      state.currentVotes[name]=Math.max(0,(state.currentVotes[name]||0)-1);
+      renderVoters();
+    };
+    row.querySelector('[data-action="plus"]').onclick=()=>{
+      state.currentVotes[name]=(state.currentVotes[name]||0)+1;
+      renderVoters();
+    };
+    box.appendChild(row);
+  });
+  const total=Object.values(state.currentVotes).reduce((a,b)=>a+b,0);
+  $("voteTotal").textContent=`${total} voto${total===1?"":"s"}`;
+}
+
+function saveVotes(){
+  clearInterval(state.timerId);
+  const q=getQuestion(state.current);
+  const votes=Object.entries(state.currentVotes)
+    .filter(([,count])=>count>0)
+    .map(([name,count])=>({name,count}));
+
+  state.history.push({
+    id:q.id,
+    question:q.question,
+    votes
+  });
+
+  const wrap=$("cardWrap");
+  wrap.classList.remove("dealing");
+  wrap.classList.add("removing");
+
+  setTimeout(()=>{
+    state.voting=false;
+    state.current=null;
+    state.currentVotes={};
+    $("votePanel").classList.remove("show");
+    $("nextBtn").style.display="";
+    $("voteBtn").style.display="none";
+    updateRanking();
+    saveSession();
+    if(state.deck.length===0){
+      $("nextBtn").textContent="Ver resultado final";
+    }else{
+      $("nextBtn").textContent="Sacar otra carta";
+    }
+  },430);
+}
+
+function skipVoteAndDiscard(){
+  if(state.current) {
+    state.currentVotes={};
+    saveVotes();
+  }
+}
+
+function finishDeck(){
+  clearInterval(state.timerId);
+  $("timer").textContent="";
+  $("voteBtn").style.display="none";
+  $("nextBtn").style.display="none";
+  $("question").textContent="¡Se terminaron todas las cartas!";
+  $("cardHint").textContent="La partida está completa.";
+  $("usedCount").textContent="0 restantes";
+  updateRanking(true);
+  $("rankingPanel").classList.add("show");
+  saveSession();
+}
+
+function updateRanking(forceShow=false){
+  const scores={};
+  state.participants.forEach(n=>scores[n]=0);
+  state.history.forEach(card=>{
+    card.votes.forEach(v=>{
+      if(scores[v.name]===undefined) scores[v.name]=0;
+      scores[v.name]+=v.count;
+    });
+  });
+
+  const sorted=Object.entries(scores).sort((a,b)=>b[1]-a[1] || a[0].localeCompare(b[0]));
+  const max=sorted[0]?.[1]||0;
+  const list=$("rankList");
+
+  if(!state.participants.length){
+    list.innerHTML='<div class="no-data">Agregá participantes al iniciar una nueva partida para usar el ranking.</div>';
+  }else{
+    list.innerHTML="";
+    sorted.forEach(([name,score],index)=>{
+      const row=document.createElement("div");
+      row.className="rank-row";
+      const cards=state.history.filter(c=>c.votes.some(v=>v.name===name && v.count>0));
+      const details=cards.map(c=>{
+        const v=c.votes.find(x=>x.name===name);
+        return `<div class="details-item">${escapeHtml(c.question)} <span>+${v.count}</span></div>`;
+      }).join("");
+      row.innerHTML=`
+        <div class="rank-main">
+          <div class="position">#${index+1}</div>
+          <div class="rank-name">${escapeHtml(name)}</div>
+          <div class="rank-score">${score}</div>
+        </div>
+        <div class="rank-bar"><i style="--w:${max?Math.round(score/max*100):0}%"></i></div>
+        <div class="details">${details || '<div class="details-item">Todavía no recibió votos.</div>'}</div>`;
+      row.querySelector(".rank-main").onclick=()=>row.classList.toggle("open");
+      list.appendChild(row);
+    });
+  }
+
+  $("historyList").innerHTML=state.history.length ? state.history.map((c,i)=>{
+    const votes=c.votes.length ? c.votes.map(v=>`${escapeHtml(v.name)} (${v.count})`).join(" · ") : "Sin votos registrados";
+    return `<div class="history-item"><div class="history-q">${i+1}. ${escapeHtml(c.question)}</div><div class="history-votes">${votes}</div></div>`;
+  }).join("") : '<div class="no-data">Todavía no hay cartas jugadas.</div>';
+
+  if(forceShow) $("rankingPanel").classList.add("show");
+}
+
+function toggleRanking(){
+  const panel=$("rankingPanel");
+  panel.classList.toggle("show");
+  if(panel.classList.contains("show")) updateRanking();
+  panel.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+function resetGame(){
+  clearInterval(state.timerId);
+  localStorage.removeItem("amigos_mierda_session");
+  $("confirmRestart").classList.remove("show");
+  $("game").classList.remove("active");
+  $("setup").style.display="";
+  $("restartBtn").style.display="none";
+  $("rankingBtn").style.display="none";
+  $("rankingPanel").classList.remove("show");
+  state.deck=[];
+  state.current=null;
+  state.history=[];
+  state.currentVotes={};
+}
+
+$("addName").onclick=addParticipant;
+$("nameInput").addEventListener("keydown",e=>{if(e.key==="Enter") addParticipant()});
+document.querySelectorAll(".mode").forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll(".mode").forEach(x=>x.classList.remove("active"));
+    btn.classList.add("active");
+    state.mode=btn.dataset.mode;
+    $("timerSettings").classList.toggle("show",state.mode==="timer");
+  };
+});
+$("startBtn").onclick=startGame;
+$("voteBtn").onclick=openVoting;
+$("startVotingFromTimer").onclick=openVoting;
+$("saveVotesBtn").onclick=saveVotes;
+$("nextBtn").onclick=drawCard;
+$("rankingBtn").onclick=toggleRanking;
+$("restartBtn").onclick=()=>$("confirmRestart").classList.add("show");
+$("cancelRestart").onclick=()=>$("confirmRestart").classList.remove("show");
+$("confirmRestartBtn").onclick=resetGame;
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){
+    $("timeModal").classList.remove("show");
+    $("confirmRestart").classList.remove("show");
+  }
+  if(e.code==="Space" && state.current && !state.voting && $("timeModal").classList.contains("show")===false){
+    e.preventDefault();
+    openVoting();
+  }
+});
+
+// Si existe una sesión guardada, ofrecer continuar sin cambiar silenciosamente la partida.
+if(loadSession()){
+  $("setup").style.display="none";
+  $("game").classList.add("active");
+  $("restartBtn").style.display="";
+  $("rankingBtn").style.display="";
+  renderParticipants();
+  const q=getQuestion(state.current);
+  if(q){
+    $("question").textContent=q.question;
+    $("cardNumber").textContent=`CARTA ${q.id.replace("q","")}`;
+    $("progress").textContent=`Carta ${state.history.length+1} de ${QUESTIONS.length}`;
+    $("usedCount").textContent=`${state.deck.length} restantes`;
+    if(state.mode==="timer"){
+      // Una sesión recuperada no continúa contando un timer que podría haber vencido.
+      $("timer").textContent="";
+    }
+  } else {
+    drawCard();
+  }
+}
+</script>
+</body>
+</html>
